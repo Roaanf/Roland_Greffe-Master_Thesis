@@ -1,0 +1,524 @@
+/*
+ * GigaVoxels - GigaSpace
+ *
+ * Website: http://gigavoxels.inrialpes.fr/
+ *
+ * Contributors: GigaVoxels Team
+ *
+ * BSD 3-Clause License:
+ *
+ * Copyright (C) 2007-2015 INRIA - LJK (CNRS - Grenoble University), All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * 3. Neither the name of the organization nor the names  of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL COPYRIGHT HOLDER BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+/** 
+ * @version 1.0
+ */
+
+#ifndef BVHTRIANGLES_HCU
+#define BVHTRIANGLES_HCU
+
+/******************************************************************************
+ ******************************* INCLUDE SECTION ******************************
+ ******************************************************************************/
+
+// CUDA
+#include <cuda.h>
+
+// Cuda SDK
+#include <helper_math.h>
+
+// LOKI
+#include <loki/Typelist.h>
+#include <loki/HierarchyGenerators.h>
+#include <loki/TypeManip.h>
+#include <loki/NullType.h>
+
+/******************************************************************************
+ ************************* DEFINE AND CONSTANT SECTION ************************
+ ******************************************************************************/
+
+/******************************************************************************
+ ***************************** TYPE DEFINITION ********************************
+ ******************************************************************************/
+
+/******************************************************************************
+ ******************************** CLASS USED **********************************
+ ******************************************************************************/
+
+/******************************************************************************
+ ****************************** CLASS DEFINITION ******************************
+ ******************************************************************************/
+
+/** 
+ * @struct AABB
+ *
+ * @brief The AABB struct provides an axis-aligned bounding box
+ */
+struct AABB
+{
+	/**************************************************************************
+	 ***************************** PUBLIC SECTION *****************************
+	 **************************************************************************/
+
+	/****************************** INNER TYPES *******************************/
+
+	/******************************* ATTRIBUTES *******************************/
+
+	/**
+	 * AABBox min point
+	 */
+	float3 pMin;
+
+	/**
+	 * AABBox max point
+	 */
+	float3 pMax;
+
+	/******************************** METHODS *********************************/
+
+	/**
+	 * Initialize
+	 */
+	void init( float3 pmin, float3 pmax )
+	{
+		pMin = pmin;
+		pMax = pmax;
+	}
+
+	/**
+	 * Get the size
+	 *
+	 * @return the size
+	 */
+	__host__ __device__
+	inline float3 size()
+	{
+		return pMax - pMin;
+	}
+
+	/**
+	 * Get the largest size
+	 *
+	 * @return the largest size
+	 */
+	__host__ __device__
+	inline float maxSize()
+	{
+		float3 s = size();
+		return maxcc( s.x, maxcc( s.y, s.z ) );
+	}
+
+	/**
+	 * Get the center
+	 *
+	 * @return the center
+	 */
+	__host__ __device__
+	inline float3 center()
+	{
+		return pMin + size() / make_float3( 2.0f );
+	}
+
+	/**
+	 * ...
+	 */
+	/*float getSurface(){
+		return 2.0f*(size.x*size.y) + 2.0f*(size.x*size.z) + 2.0f*(size.y*size.z);
+	}*/
+
+	/**************************************************************************
+	 **************************** PROTECTED SECTION ***************************
+	 **************************************************************************/
+
+protected:
+
+	/****************************** INNER TYPES *******************************/
+
+	/******************************* ATTRIBUTES *******************************/
+
+	/******************************** METHODS *********************************/
+
+	/**************************************************************************
+	 ***************************** PRIVATE SECTION ****************************
+	 **************************************************************************/
+
+private:
+
+	/****************************** INNER TYPES *******************************/
+
+	/******************************* ATTRIBUTES *******************************/
+
+	/******************************** METHODS *********************************/
+
+};
+
+/** 
+ * @struct VolTreeBVHNodeUser
+ *
+ * @brief The VolTreeBVHNodeUser struct provides the description of a node
+ *
+ * Node has an AABBox, an address with integrated flags in its first 2 bits.
+ */
+struct VolTreeBVHNodeUser
+{
+	/**************************************************************************
+	 ***************************** PUBLIC SECTION *****************************
+	 **************************************************************************/
+
+	/****************************** INNER TYPES *******************************/
+
+	/******************************* ATTRIBUTES *******************************/
+
+	/**
+	 * ...
+	 */
+	uint subNodesDataIdx;
+
+	/**
+	 * Axis aligned bounding box
+	 */
+	AABB bbox;
+
+	/**
+	 * ...
+	 */
+	uint escapeIdx;
+
+	/******************************** METHODS *********************************/
+
+	/**
+	 * Set the node as emty
+	 */
+	__host__ __device__
+	void setEmptyNode()
+	{
+		subNodesDataIdx = 0;
+	}
+
+	/**
+	 * Flag the node as containing data
+	 */
+	__host__ __device__
+	void setDataIdx( uint idx )
+	{
+		// idx & ~(0xC0000000) only take the first 30 bits
+		// | 0x40000000 add the flags to the 31th bits
+		subNodesDataIdx = ( idx & ~(0xC0000000) ) | 0x40000000;
+	}
+
+	/**
+	 * ...
+	 */
+	__host__ __device__
+	void setSubNodeIdx( uint idx )
+	{
+		subNodesDataIdx = idx & ~(0xC0000000);
+	}
+
+	/**
+	 * Tell wheter or not the node stores data
+	 */
+	__host__ __device__
+	bool isDataType()
+	{
+		// Check the 31-th bit
+		return subNodesDataIdx & 0x40000000;
+	}
+
+	/**
+	 * Tell wheter or not the node is a simple node without data
+	 *
+	 * @return a flag telling wheter or not the node is a simple node without datas
+	 */
+	__host__ __device__
+	bool isNodeType()
+	{
+		return !( isDataType() );
+	}
+
+	/**
+	 * ...
+	 */
+	__host__ __device__
+	bool isLinkActive() const
+	{
+		return subNodesDataIdx & ~(0xC0000000);
+	}
+
+	/**
+	 * ...
+	 */
+	__host__ __device__
+	uint getSubNodeIdx() const
+	{
+		return subNodesDataIdx & ~(0xC0000000);
+	}
+
+	/**
+	 * ...
+	 */
+	__host__ __device__
+	uint getDataIdx() const
+	{
+		return subNodesDataIdx & ~(0xC0000000);
+	}
+
+	/**
+	 * ...
+	 *
+	 * Set the 32-th bit to 1
+	 */
+	__host__ __device__
+	void setCPULink()
+	{
+		subNodesDataIdx = subNodesDataIdx | 0x80000000;
+	}
+
+	/**
+	 * ...
+	 *
+	 * Set the 32-th bit to 0
+	 */
+	__host__ __device__
+	void setGPULink()
+	{
+		subNodesDataIdx = subNodesDataIdx & ~(0x80000000);
+	}
+
+	/**
+	 * ...
+	 */
+	__host__ __device__
+	bool isCPULink() const
+	{
+		return subNodesDataIdx & 0x80000000;
+	}
+
+	/**
+	 * ...
+	 */
+	__host__ __device__
+	bool isGPULink() const
+	{
+		return !isCPULink();
+	}
+
+	/**
+	 * ...
+	 */
+	__host__ __device__
+	bool hasSubNodes()
+	{
+		return isNodeType() && getSubNodeIdx() /*&& !isCPULink()*/;
+	}
+
+	/**
+	 * Get the AABBox min
+	 *
+	 * @return the AABBox min
+	 */
+	__host__ __device__
+	float3 bbMin()
+	{
+		return bbox.pMin;
+	}
+
+	/**
+	 * Get the AABBox max
+	 *
+	 * @return the AABBox max
+	 */
+	__host__ __device__
+	float3 bbMax()
+	{
+		return bbox.pMax;
+	}
+
+	/**************************************************************************
+	 **************************** PROTECTED SECTION ***************************
+	 **************************************************************************/
+
+protected:
+
+	/****************************** INNER TYPES *******************************/
+
+	/******************************* ATTRIBUTES *******************************/
+
+	/******************************** METHODS *********************************/
+
+	/**************************************************************************
+	 ***************************** PRIVATE SECTION ****************************
+	 **************************************************************************/
+
+private:
+
+	/****************************** INNER TYPES *******************************/
+
+	/******************************* ATTRIBUTES *******************************/
+
+	/******************************** METHODS *********************************/
+
+}; // 8  x 4Bytes	 = 32B
+
+/** 
+ * @struct VolTreeBVHNodeStorage
+ *
+ * @brief The VolTreeBVHNodeStorage struct provides ...
+ */
+struct VolTreeBVHNodeStorage
+{
+	/**************************************************************************
+	 ***************************** PUBLIC SECTION *****************************
+	 **************************************************************************/
+
+	/****************************** INNER TYPES *******************************/
+
+	/**
+	 * ...
+	 */
+	enum
+	{
+		numWords = 32
+	};
+
+	/******************************* ATTRIBUTES *******************************/
+
+	/**
+	 * ...
+	 */
+	uchar words[ numWords ];	// maybe uchar2 would be better -> 1 node/half warp -> 2 nodes/warp -> 1 warp per nodetile request
+
+	/******************************** METHODS *********************************/
+
+	/**************************************************************************
+	 **************************** PROTECTED SECTION ***************************
+	 **************************************************************************/
+
+protected:
+
+	/****************************** INNER TYPES *******************************/
+
+	/******************************* ATTRIBUTES *******************************/
+
+	/******************************** METHODS *********************************/
+
+	/**************************************************************************
+	 ***************************** PRIVATE SECTION ****************************
+	 **************************************************************************/
+
+private:
+
+	/****************************** INNER TYPES *******************************/
+
+	/******************************* ATTRIBUTES *******************************/
+
+	/******************************** METHODS *********************************/
+
+};
+
+/** 
+ * @struct VolTreeBVHNodeStorageUINT
+ *
+ * @brief The VolTreeBVHNodeStorageUINT struct provides ...
+ */
+struct VolTreeBVHNodeStorageUINT
+{
+	/**************************************************************************
+	 ***************************** PUBLIC SECTION *****************************
+	 **************************************************************************/
+
+	/****************************** INNER TYPES *******************************/
+
+	/******************************* ATTRIBUTES *******************************/
+
+	/**
+	 * ...
+	 */
+	enum
+	{
+		numWords = 8
+	};
+
+	/**
+	 * ...
+	 */
+	uint words[ numWords ];
+
+	/******************************** METHODS *********************************/
+
+	/**************************************************************************
+	 **************************** PROTECTED SECTION ***************************
+	 **************************************************************************/
+
+protected:
+
+	/****************************** INNER TYPES *******************************/
+
+	/******************************* ATTRIBUTES *******************************/
+
+	/******************************** METHODS *********************************/
+
+	/**************************************************************************
+	 ***************************** PRIVATE SECTION ****************************
+	 **************************************************************************/
+
+private:
+
+	/****************************** INNER TYPES *******************************/
+
+	/******************************* ATTRIBUTES *******************************/
+
+	/******************************** METHODS *********************************/
+
+};
+
+/** 
+ * @union VolTreeBVHNode
+ *
+ * @brief The VolTreeBVHNode union provides ...
+ */
+union VolTreeBVHNode
+{
+	/**
+	 * ...
+	 */
+	VolTreeBVHNodeUser userNode;
+	
+	/**
+	 * ...
+	 */
+	VolTreeBVHNodeStorage storageNode;
+	
+	/**
+	 * ...
+	 */
+	VolTreeBVHNodeStorageUINT storageUINTNode;
+
+};
+
+#endif // !BVHTRIANGLES_HCU

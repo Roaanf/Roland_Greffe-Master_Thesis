@@ -1,0 +1,37 @@
+var class_gv_perf_mon_1_1_c_u_d_a_perf_mon =
+[
+    [ "ApplicationEvent", "class_gv_perf_mon_1_1_c_u_d_a_perf_mon.html#a4c8bff86ca170bb75970c69bca58d146", [
+      [ "NumApplicationEvents", "class_gv_perf_mon_1_1_c_u_d_a_perf_mon.html#a4c8bff86ca170bb75970c69bca58d146a863123476b7f32c017357ce809aef793", null ]
+    ] ],
+    [ "CUDAPerfMon", "class_gv_perf_mon_1_1_c_u_d_a_perf_mon.html#a0c4459554a4e961cd7b38018acd9163b", null ],
+    [ "displayCacheInfoGL", "class_gv_perf_mon_1_1_c_u_d_a_perf_mon.html#a182fa02a3530f4bc26cced302c84ad86", null ],
+    [ "displayFrame", "class_gv_perf_mon_1_1_c_u_d_a_perf_mon.html#ad7863dfe606809470b5434b835649bde", null ],
+    [ "displayFrameGL", "class_gv_perf_mon_1_1_c_u_d_a_perf_mon.html#a343db81d8147ccf86bfda37a0be9fb65", null ],
+    [ "displayOverlayGL", "class_gv_perf_mon_1_1_c_u_d_a_perf_mon.html#a921c983ba8f644bb1de58f34d9442f6f", null ],
+    [ "frameResized", "class_gv_perf_mon_1_1_c_u_d_a_perf_mon.html#a0469bfac9ab45ff17fc84d8d293d4c77", null ],
+    [ "getCacheStateArray", "class_gv_perf_mon_1_1_c_u_d_a_perf_mon.html#a123de258b86827fde4330baeebf6b342", null ],
+    [ "getKernelTimerArray", "class_gv_perf_mon_1_1_c_u_d_a_perf_mon.html#a30becb2ab1871de29e051b2c3eecd37a", null ],
+    [ "getKernelTimerMask", "class_gv_perf_mon_1_1_c_u_d_a_perf_mon.html#a08ee18df54a9d111d89001619b18dc13", null ],
+    [ "init", "class_gv_perf_mon_1_1_c_u_d_a_perf_mon.html#ac63e38543cff7e44b6faa411edaa2c08", null ],
+    [ "saveFrameStats", "class_gv_perf_mon_1_1_c_u_d_a_perf_mon.html#a3ce625267218f9e24d4a95116e746b0b", null ],
+    [ "setCacheStateArray", "class_gv_perf_mon_1_1_c_u_d_a_perf_mon.html#a234decb8e85d684da3f71a384bd906bc", null ],
+    [ "setEventNumElems", "class_gv_perf_mon_1_1_c_u_d_a_perf_mon.html#af6c1f61ec2bdc1da6b05d08c29647f9f", null ],
+    [ "startEvent", "class_gv_perf_mon_1_1_c_u_d_a_perf_mon.html#a43c226b23031d939227c216d20afe5e5", null ],
+    [ "startFrame", "class_gv_perf_mon_1_1_c_u_d_a_perf_mon.html#a897b6d84b3f18fc3cf120e28748908cf", null ],
+    [ "stopEvent", "class_gv_perf_mon_1_1_c_u_d_a_perf_mon.html#ac7a5f3eda971b6f0bb9b23b542ca285f", null ],
+    [ "stopFrame", "class_gv_perf_mon_1_1_c_u_d_a_perf_mon.html#a0565b639ec0dbd4694ec635563d7f88e", null ],
+    [ "_deviceClockRate", "class_gv_perf_mon_1_1_c_u_d_a_perf_mon.html#a5db70e73e415b224b9af2907c1f0b1e1", null ],
+    [ "_deviceEvents", "class_gv_perf_mon_1_1_c_u_d_a_perf_mon.html#a025a3287ddc6445467cd62016bd60f02", null ],
+    [ "_deviceTimer", "class_gv_perf_mon_1_1_c_u_d_a_perf_mon.html#abfa86102e348294a483c9f20daa87d50", null ],
+    [ "_frameStarted", "class_gv_perf_mon_1_1_c_u_d_a_perf_mon.html#aa572c489cb11f2c7b162999f4c7da092", null ],
+    [ "_hostEvents", "class_gv_perf_mon_1_1_c_u_d_a_perf_mon.html#a7add63b8bc42734ed29ed20471656be2", null ],
+    [ "_hostTimer", "class_gv_perf_mon_1_1_c_u_d_a_perf_mon.html#a4bffa9e254492b2a3aa105c89a00d15b", null ],
+    [ "_requestResize", "class_gv_perf_mon_1_1_c_u_d_a_perf_mon.html#a45e9ecc4fa9f5e109f40f3bcc1bda12a", null ],
+    [ "cacheStateTex", "class_gv_perf_mon_1_1_c_u_d_a_perf_mon.html#a2c87b191140d1a8e9b1d38b158953006", null ],
+    [ "d_cacheStateArray", "class_gv_perf_mon_1_1_c_u_d_a_perf_mon.html#a0e0adb8fdb5998ee8e229d694ef07eca", null ],
+    [ "d_timersArray", "class_gv_perf_mon_1_1_c_u_d_a_perf_mon.html#a8616c5f4f073b77db9537c7192981bae", null ],
+    [ "d_timersMask", "class_gv_perf_mon_1_1_c_u_d_a_perf_mon.html#a4575cda15f77d3c07fc085b93fb269e7", null ],
+    [ "eventsNumElements", "class_gv_perf_mon_1_1_c_u_d_a_perf_mon.html#a9c818ba8fa70a3e6f1588fd28d02cf7c", null ],
+    [ "frameCurrentInstance", "class_gv_perf_mon_1_1_c_u_d_a_perf_mon.html#a53f80a24659ca1b086c9db10ea7a0534", null ],
+    [ "overlayTex", "class_gv_perf_mon_1_1_c_u_d_a_perf_mon.html#aab74af1416d59520c3ce500b27ced9b6", null ]
+];

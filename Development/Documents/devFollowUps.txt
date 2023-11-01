@@ -1,0 +1,19 @@
+Initialisation
+Tout regroupe en 1 seul initialise
+F:\Projects\GigaVoxels\GVRelease\Development\Library\GigaSpace\GvCore\GvCoreConfig.cpp
+
+Object Pipeline : possiblité de switcher
+Multi-producer : addProducer()
+F:\Projects\GigaVoxels\GVRelease\Development\Library\GigaSpace\GvUtils\GvSimplePipeline.h
+Multi-renderer addRenderer()
+=> à tester
+ajouter addShader()
+
+
+Stream  (effet sur les perfs)
+lancer des kernels en parallèle pour de updatetImestamps() => Mise à jour du cache LRU
+
+GPU to CPU readBack bottleneck ex : nombres de brocks/nodes
+(BUT : équivalent de DarwIndirect dans un buffer)
+=> dynamic parallélisme
+=> lancer un kernel qui boucle sur le nb de requtes (MegaKernel) même s’il n’y en a pas

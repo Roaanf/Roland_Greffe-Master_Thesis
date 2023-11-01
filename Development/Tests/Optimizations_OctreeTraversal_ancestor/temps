@@ -1,0 +1,128 @@
+Protocole expérimental :
+On limite la démo à 50 frames (compteur dans la fonction SampleCore::draw())
+On fixe la caméra (fichier .qglviewer joint)
+On prend la moyenne fourni par nvvp pour le kernel GvRendering::RenderKernelSimple(), uniquement
+pour les kernels qui ont lieux quand phase de production est terminée.
+
+v0 :
+83ms
+
+v1 :
+ - fast math
+52.9ms
+ - retrait d'un truc de la mémoire shared
+52.6ms
+
+3 version différentes pour la descente en utilisant les entiers :
+ - code 0 : 51.7ms
+ - code 1 : 53.5ms
+ - code 2 : 61.3ms
+
+	
+Test des différentes options de fast-math :
+fast-math						51.697ms
+ftz 	div 	sqrt 	fmad
+1		1		1		1		60.616ms
+1		1		0		0		60.625ms
+0		1		0		0		63.545ms
+1		0		0		0 		79.584ms
+0		0		1		1		80.254ms
+0		0		1		0		80.252ms
+0		0		0		1		80.253ms
+0		0		0		0		80.235ms
+
+### On remplace les powf() par des __powf() dans le shader
+fast-math 	51.7ms
+1111		52.44ms
+1100		52.443ms
+0000		72.829ms
+
+=> déjà fait par fast-math, permet d'aller plus vite sans
+
+### factorisation des divisions dans le shader :
+OLD :
+color.x = rgb.x / color.w;
+color.y = rgb.y / color.w;
+color.z = rgb.z / color.w;
+
+NEW :
+float inv = __fdividef( 1.f / color.w );
+color.x = rgb.x * inv;
+color.y = rgb.y * inv;
+color.z = rgb.z * inv;
+
+fast-math	51.7ms	
+1111		52ms
+1100 		52ms
+1000		58.15ms
+0100		54.4ms
+0011		59.6ms	
+0000 		59.6ms
+
+=> déjà fait par fast-math, permet d'aller plus vite sans.
+
+### Test d'autres façons de descendre l'arbre :
+ - cache pas assez rempli ( < 10% )
+=> quand on essaye avec deux mots par lignes : trop lent (trop de branches)
+
+rien : 60.2ms - 52.7ms (fast-math)
+cache : 58.8ms - 50.8ms (fast-math)
+grand père : 57.5ms - 49.45ms (fast-math)
+
+avec fast-math, sphère : 
+rien : 52.7ms
+cache-full : 48.35ms (CACHE_DEPTH constante = 3), 48.85 (cst = 4), 49.85ms (cst = 2)
+cache-partiel : 50.85ms
+grand-pere : 49.85ms
+
+Sur la démo Amplified volume : (fast-math)
+rien : 195ms
+cache-full : 212ms (cst = 0), 202ms (cst = 1), 201.19ms (cst = 2), 206.4ms (cst = 3 ), 210ms (cst = 4) 
+grand-père : 195.5ms
+
+(profondeur limité à 5)
+(caméra F6 + fonction de transfert lapintransparence.xml => très proche du lapin avec beaucoup de transparence)
+
+
+### Test en descendant l'arbre avec la version "ancètre"
+
+770GTX :
+Caméra F1, (sphère, depth 6)
+(fast-math)
+rien : 22.5ms
+ancetre : 19.8ms
+
+Caméra F6 (sphère, depth 10)
+fast-math
+rien : 47.1ms
+ancètre : 39.2ms
+
+sans fast-math
+rien : 48.6ms
+ancètre : 41.6ms
+
+avec ftz=true
+rien : 47.7ms
+ancètre : 39.2ms
+
+465GTX:
+Caméra F1, (sphère, depth 6)
+(fast-math)
+rien : 51.5ms
+ancetre : 45ms
+
+Caméra F6 (sphère, depth 10)
+fast-math
+rien : 105.2ms
+ancètre : 84.6ms
+
+sans fast-math
+rien : 114.2ms
+ancètre : 94.4ms
+
+avec ftz=true
+rien : 109.5ms
+ancètre : 84.6ms
+
+=> entre 10 et 20% de gain en fonction de la latence et de la profondeur 
+(il y a plus de latence sur la carte plus puissante)

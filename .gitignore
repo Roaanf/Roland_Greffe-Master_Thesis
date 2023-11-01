@@ -396,3 +396,11 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+Data/
+Distributions/
+External/
+Install/
+Release/
+Release - Copie/
+Generated_VC12_x64/

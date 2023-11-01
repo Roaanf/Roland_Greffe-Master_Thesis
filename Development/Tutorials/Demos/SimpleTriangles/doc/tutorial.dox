@@ -1,0 +1,25 @@
+/*! \page Tutorial_Simple_Triangles Simple Triangles Tutorial
+ *
+ * \image html GigaVoxelsLogo_div2.png
+ *
+ * @section Overview_Section Overview
+ *
+ * This example shows...
+ *
+ * <br> 
+ * The main themes related to volume rendering are :
+ *
+ * <br>
+ * \image html image_01.png "A BVH data structure"
+ *
+ * <br>
+ * <hr>
+ *
+ * @section Tutorial_Simple_Triangles_Mandatory_Section Recommandation
+ *
+ * FIRST, assure you have read the basic programming scheme of GigaVoxels available in the \ref Library_HowToProgram_TheBasics_Page section. 
+ * <br>
+ * <hr>
+ *
+ */
+ 

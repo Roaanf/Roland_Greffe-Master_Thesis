@@ -1,0 +1,174 @@
+Windows:
+
+----------------------------------------------
+OMPORTANT : due to Visual Studio lack of managing long paths, you should store your GigaVoxels development directory not too far away from the root
+=> instead you could have errors with CMAKE.
+as an example: D:\Projects\GigaVoxels
+----------------------------------------------
+
+[ 0 ] Pre-requisites
+
+- This version of GigaVoxels/GigaSpace is based on CUDA 7.0
+
+- You need to install the cmake tools (binary distributions, minimum 2.8) available here: http://www.cmake.org/download/
+
+- You need to install the 7z.exe tools available here: http://www.7-zip.org/download.html
+=> check the installation path (you'll need it, see below)
+
+- Go to: External\Windows and unzip the file "Tools.7z". Go into the uncompressed Tools directory and install the tools ImageMagick
+IMPORTANT : be carefull to check the checkbox with the inclusion of the C++ header files (something close to : "install development headers and libraries for C and C++")
+=> if not, you could have CMAKE error searching for a ImageMagick_Magick++_INCLUDE_DIR variable
+
+---------- Project(s) settings ----------
+
+VERY IMPORTANT :
+=> in case of problems of paths to 3rd dependency libraries, the file Development\CMake\GvSettings_CMakeImport.cmake
+contains all these paths. You should edit it if any problem.
+=> for Visual 2012, it seems to have problems : with Cmake and Visual 2012, by default, program seems to link with cudart_static.lib instead of cudart.lib
+If so, using cmake-gui doing the same job as the scripts explained below, and forcing to indicate the path to native compiler should help:
+it should be here: C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\amd64\cl.exe
+
+[ 1 ]
+To be able to generate the projects, go into the Install\Windows directory
+
+[ 2 ]
+Open file (to edit): cmakeGeneratorSettings.bat
+a)
+=> choose the CMAKE generator used to compile the project : Visual Studio 2010, Visual Studio 2012, Visual Studio 2013, etc... (GV_COMPILER variable)
+=> "rem" is the way to comment a line, so choose the right one
+b) check or set the 7-zip tools installation path (GV_7ZIP_PATH variable)
+=> set it accordingly (based on your previous installation - no need of "" even with blank space in path)
+
+[ 3 ]
+- launch the script "unzipExternals.bat" to unzip all external dependencies in the "External" directory.
+=> based on the previously choosen CMAKE generator, the script will unzip the right 3rd dependency library (windows-VS2010-x64.7z, windows-VS2012-x64.7z or windows-VS2013-x64.7z...)
+=> you should obtain a x64 directory storing all dependencies here: in External\Windows\x64
+=> IMPORTANT : if the script does not work, unzip data manually in this way:
+go to External\Windows and "extract here"
+
+[ 4 ] - IMPORTANT : NVCC options
+Go to Development\CMake and open file GvSettings_CMakeImport.cmake
+This file contains all path to 3rd dependency libraries, plus NVidia NVCC compiler settings.
+Most important parameter is the "Set your compute capability version". Several options are integrated in the file, check it and choose your options.
+
+---------- Project(s) generation ----------
+
+[ 5 ] - Library
+- launch the script "makeLibrary.bat" (Install\Windows\makeLibrary.bat)
+- The "makeLibrary.bat" generate a root "Generated_VCxx" directory (xx : VC10, VC12... based on the previously choosen Visual Studio)
+  where you can find the generated Visual Solution (in fact the subfolder Library directory, ex: Generated_VC10_x64\Library)
+
+[ 6 ] - Demos
+- Now, as for the library, launch "makeDemoTutorials.bat" (Install\Windows\makeDemoTutorials.bat)
+
+[ 7 ] - Tools (viewer, etc...)
+- Now, as for the library and tutorials, launch "makeTools.bat" (Install\Windows\makeTools.bat)
+
+[ 8 ] - Viewer demos
+- Now, as for the library, launch "makeViewerPluginTutorials.bat" (Install\Windows\makeViewerPluginTutorials.bat)
+
+---------- Project(s) compilation ----------
+
+[ 9 ]
+To be able to compile the project, go into the root Generated_VC10_x64 directory (or Generated_VC12_x64, Generated_VC13_x64, etc...)
+
+[ 10 ] - Library
+- Go into Generated_VC10_x64\Library directory
+- Open "the Library.sln" and compile.
+- All GigaVoxels header files (*h., *.inl, *.hcu), library files (GigaVoxels.dll and/or GigaVoxels.lib) are copied in the root "Release" directory (Bin, Inc, Lib).
+- This "Release" directory is used as a SDK repository that all Tutorials and Tools use to compile.
+
+[ 11 ] - Demos
+- Like before, go in the Generated_VC10_x64\Tutorials\Demos directory and compile the Tutorials solution (DemoTutorials.sln)
+
+[ 12 ] - Tools
+- Like before, go in the Generated_VC10_x64\Tools directory and compile the Tools solution (Tools.sln)
+
+[ 13 ] - Viewer demos
+- Like before, go in the Generated_VC10_x64\Tutorials\ViewerPlugins directory and compile the Tutorials solution (ViewerPluginTutorials.sln)
+
+---------- Launching demos / tools ----------
+
+[ 14 ]
+- Go in Install\Windows directory and use the script "updateRelease.bat" to copy all libraries needed at run-time in the root Release\bin directory where all Tutorials and Tools have been copied.
+- Go in Install directory and use the script "updateData.bat" to copy all data needed at run-time in the Release directory where all Tutorials and Tools have been copied.
+- Go in Install directory and use the script "updateShaders.bat" to copy all GLSL shaders needed at run-time in the Release directory where all Tutorials and Tools have been copied.
+
+[ 15 ]
+- Go in "Release/Bin" to launch your demos and tools
+
+------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------
+
+LINUX:
+
+---------- Project(s) settings ----------
+
+VERY IMPORTANT
+=> in case of problems of paths to 3rd dependency libraries, the file Development\CMake\GvSettings_CMakeImport.cmake contains all these paths. You should edit it if any problem.
+For instance, you may encounter problems with glew and Qt.
+
+[ 1 ] - IMPORTANT : NVCC options
+Go to Development\CMake and open file GvSettings_CMakeImport.cmake
+This file contains all path to 3rd dependency libraries, plus NVidia NVCC compiler settings.
+Most important parameter is the "Set your compute capability version". Several options are integrated in the file, check it and choose your options.
+
+---------- Project(s) generation ----------
+
+PRE-REQUISITES : need to compile cudpp and glew in our local directory
+=> Install\Linux\install.sh (this will generate all Makefiles)
+=> Install\Linux\build.sh (this will launch compilation for all projects)
+---- in the build.sh are also the compilation of cudpp and glew, then copy in our local directory External\Linux\x64
+
+Once it is done, you can also use the following method to generate and compile :
+(in fact, the build.sh is mandatory to first compile and generate cudpp and glew)
+
+[ 2 ]
+To be able to generate the projects, go into the Install\Linux directory
+
+NOTE : Check that files have execution mode with "ls -l" and change them with the help of a "chmod" command
+
+[ 3 ] - Library
+- launch the script "makeLibrary.sh" (Install\Linux\makeLibrary.sh)
+- The "makeLibrary.sh" generate a root "Generated_Linux" directory where you can find the generated Makefile (in Generated_VC10_x64\Library)
+
+[ 4 ] - Demos
+- Now, as for the library, launch "makeDemo.sh" (Install\Linux\makeDemo.sh)
+
+[ 5 ] - Tools (viewer, etc...)
+- Now, as for the library and tutorials, launch "makeTools.sh" (Install\Linux\makeTools.sh)
+
+[ 6 ] - Viewer demos
+- Now, as for the library, launch "makeViewerPlugin.sh" (Install\Linux\makeViewerPlugin.sh)
+
+--------- Project(s) compilation ----------
+
+[ 7 ]
+To be able to compile the project, go into the root Generated_Linux directory
+
+[ 8 ] - Library
+- Go into Generated_Linux\Library directory
+- Compile with "make". You can type "make help" to see what you can compile. Just type "make", or "make SimpleSphereDemo", or "make -jN" if you want to use several processors (N is the number)
+- All GigaVoxels header files (*h., *.inl), library files (GigaVoxels.so or GigaSpace.so) are copied in the root "Release" directory (Bin, Inc, Lib).
+- This "Release" directory is used as a SDK repository that all Tutorials and Tools use to compile.
+NOTE: a command line like "make 2>&1 | grep -E "[eE]rror|$" can help you to see only errors. Or "make SimpleSphereDemo 2>&1 | grep -E "[eE]rror|$"
+
+[ 9 ] - Demos
+- Like before, go in the Generated_Linux\Tutorials\Demos directory and compile the Tutorials solution
+
+[ 10 ] - Tools
+- Like before, go in the Generated_Linux\Tools directory and compile the Tools solution
+NOTE : on Linux, the GvDicomVoxelizer tool have been de-activated due to compilation problem.
+Feel free to reactivate it if you want. Go in Development\Tools\CMakeLists.txt and uncomment project generation
+
+[ 11 ] - Viewer demos
+- Like before, go in the Generated_Linux\Tutorials\ViewerPlugins directory and compile the Tutorials solution
+
+---------- Launching demos / tools ----------
+
+[ 12 ]
+- Go in Install directory and use the script "updateData.sh" to copy all data needed at run-time in the Release directory where all Tutorials and Tools have been copied.
+- Go in Install directory and use the script "updateShaders.sh" to copy all GLSL shaders needed at run-time in the Release directory where all Tutorials and Tools have been copied.
+
+[ 13 ]
+- Go in "Release/Bin" to launch your demos and tools
