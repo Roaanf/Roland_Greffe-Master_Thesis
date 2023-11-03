@@ -132,7 +132,7 @@ It can be used to optimize the internal data structure by flagging nodes as empt
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QDoubleSpinBox" name="_producerThresholdDoubleSpinBox_low">
+       <widget class="QDoubleSpinBox" name="_producerThresholdDoubleSpinBoxLow">
         <property name="toolTip">
          <string>Scalar value used when streaming data from Host.
 It can be used to optimize the internal data structure by flagging nodes as empty.</string>
@@ -152,7 +152,7 @@ It can be used to optimize the internal data structure by flagging nodes as empt
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="QDoubleSpinBox" name="_producerThresholdDoubleSpinBox_high">
+       <widget class="QDoubleSpinBox" name="_producerThresholdDoubleSpinBoxHigh">
         <property name="toolTip">
          <string>Scalar value used when streaming data from Host.
 It can be used to optimize the internal data structure by flagging nodes as empty.</string>
@@ -207,14 +207,14 @@ It ranges from 0 to 1.</string>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
-        <property name="minimum">
+         <property name="minimum">
          <double>0.000000000000000</double>
         </property>
         <property name="maximum">
-         <double>1000000.000000000000000</double>
+         <double>1.000000000000000</double>
         </property>
         <property name="singleStep">
-         <double>0.050000000000000</double>
+         <double>0.010000000000000</double>
         </property>
        </widget>
       </item>
@@ -242,10 +242,10 @@ It ranges from 0 to 1.</string>
          <double>0.000000000000000</double>
         </property>
         <property name="maximum">
-         <double>1000000.000000000000000</double>
+         <double>1.000000000000000</double>
         </property>
         <property name="singleStep">
-         <double>0.050000000000000</double>
+         <double>0.010000000000000</double>
         </property>
        </widget>
       </item>

@@ -111,22 +111,22 @@ private slots:
 	/**
 	 * Slot called when producer's threshold value has changed
 	 */
-	void on__producerThresholdDoubleSpinBox_low_valueChanged( double value );
+	void on__producerThresholdDoubleSpinBoxLow_valueChanged( double value );
 
 	/**
 	 * Slot called when producer's threshold value has changed
 	 */
-	void on__producerThresholdDoubleSpinBox_high_valueChanged( double value );
+	void on__producerThresholdDoubleSpinBoxHigh_valueChanged( double value );
 
 	/**
 	 * Slot called when shader's threshold value has changed
 	 */
-	void on__shaderThresholdDoubleSpinBox_valueChangedLow( double value );
+	void on__shaderThresholdDoubleSpinBoxLow_valueChanged( double value );
 
 	/**
 	 * Slot called when shader's threshold value has changed
 	 */
-	void on__shaderThresholdDoubleSpinBox_valueChangedHigh( double value );
+	void on__shaderThresholdDoubleSpinBoxHigh_valueChanged( double value );
 
 	/**
 	 * Slot called when shader's full opacity distance value has changed

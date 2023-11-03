@@ -113,12 +113,12 @@ void CustomSectionEditor::populate( GvViewerCore::GvvBrowsable* pBrowsable )
 		_maxDataValueLineEdit->setText( QString::number( pipeline->getMaxDataValue() ) );
 
 		// Producer parameters
-		_producerThresholdDoubleSpinBox_low->setValue( pipeline->getProducerThresholdLow() );
-		_producerThresholdDoubleSpinBox_high->setValue( pipeline->getProducerThresholdHigh() );
+		_producerThresholdDoubleSpinBoxLow->setValue( pipeline->getProducerThresholdLow() );
+		_producerThresholdDoubleSpinBoxHigh->setValue( pipeline->getProducerThresholdHigh() );
 
 		// Shader parameters
 		_shaderThresholdDoubleSpinBoxLow->setValue( pipeline->getShaderThresholdLow() );
-		_shaderThresholdDoubleSpinBoxHigh->setValue(pipeline->getShaderThresholdHigh());
+		_shaderThresholdDoubleSpinBoxHigh->setValue( pipeline->getShaderThresholdHigh() );
 		_shaderFullOpacityDistanceDoubleSpinBox->setValue( pipeline->getFullOpacityDistance() );
 	}
 }
@@ -126,7 +126,7 @@ void CustomSectionEditor::populate( GvViewerCore::GvvBrowsable* pBrowsable )
 /******************************************************************************
  * Slot called when producer's threshold value has changed
  ******************************************************************************/
-void CustomSectionEditor::on__producerThresholdDoubleSpinBox_low_valueChanged( double pValue )
+void CustomSectionEditor::on__producerThresholdDoubleSpinBoxLow_valueChanged( double pValue )
 {
 	GvvApplication& application = GvvApplication::get();
 	GvvMainWindow* mainWindow = application.getMainWindow();
@@ -143,7 +143,7 @@ void CustomSectionEditor::on__producerThresholdDoubleSpinBox_low_valueChanged( d
 /******************************************************************************
  * Slot called when producer's threshold value has changed
  ******************************************************************************/
-void CustomSectionEditor::on__producerThresholdDoubleSpinBox_high_valueChanged( double pValue )
+void CustomSectionEditor::on__producerThresholdDoubleSpinBoxHigh_valueChanged( double pValue )
 {
 	GvvApplication& application = GvvApplication::get();
 	GvvMainWindow* mainWindow = application.getMainWindow();
@@ -160,7 +160,7 @@ void CustomSectionEditor::on__producerThresholdDoubleSpinBox_high_valueChanged( 
 /******************************************************************************
  * Slot called when shader's threshold value has changed
  ******************************************************************************/
-void CustomSectionEditor::on__shaderThresholdDoubleSpinBox_valueChangedLow( double pValue )
+void CustomSectionEditor::on__shaderThresholdDoubleSpinBoxLow_valueChanged( double pValue )
 {
 	GvvApplication& application = GvvApplication::get();
 	GvvMainWindow* mainWindow = application.getMainWindow();
@@ -177,7 +177,7 @@ void CustomSectionEditor::on__shaderThresholdDoubleSpinBox_valueChangedLow( doub
 /******************************************************************************
  * Slot called when shader's threshold value has changed
  ******************************************************************************/
-void CustomSectionEditor::on__shaderThresholdDoubleSpinBox_valueChangedHigh( double pValue )
+void CustomSectionEditor::on__shaderThresholdDoubleSpinBoxHigh_valueChanged( double pValue )
 {
 	GvvApplication& application = GvvApplication::get();
 	GvvMainWindow* mainWindow = application.getMainWindow();
