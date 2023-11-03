@@ -117,22 +117,22 @@ QLabel
    <item>
     <widget class="QGroupBox" name="groupBox_4">
      <property name="title">
-      <string>Producer</string>
+      <string>Provider</string>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QLabel" name="label_12">
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_9">
         <property name="toolTip">
          <string>Scalar value used when streaming data from Host.
 It can be used to optimize the internal data structure by flagging nodes as empty.</string>
         </property>
         <property name="text">
-         <string>Threshold</string>
+         <string>Threshold Low</string>
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QDoubleSpinBox" name="_producerThresholdDoubleSpinBox">
+      <item row="1" column="1">
+       <widget class="QDoubleSpinBox" name="_producerThresholdDoubleSpinBox_low">
         <property name="toolTip">
          <string>Scalar value used when streaming data from Host.
 It can be used to optimize the internal data structure by flagging nodes as empty.</string>
@@ -148,6 +148,33 @@ It can be used to optimize the internal data structure by flagging nodes as empt
         </property>
         <property name="singleStep">
          <double>1.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QDoubleSpinBox" name="_producerThresholdDoubleSpinBox_high">
+        <property name="toolTip">
+         <string>Scalar value used when streaming data from Host.
+It can be used to optimize the internal data structure by flagging nodes as empty.</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="minimum">
+         <double>-1000000.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>1000000.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>1.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string>Threshold High</string>
         </property>
        </widget>
       </item>
@@ -172,7 +199,38 @@ It ranges from 0 to 1.</string>
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QDoubleSpinBox" name="_shaderThresholdDoubleSpinBox">
+       <widget class="QDoubleSpinBox" name="_shaderThresholdDoubleSpinBoxLow">
+        <property name="toolTip">
+         <string>Scalar value used when rendering bricks of voxels.
+It ranges from 0 to 1.</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="minimum">
+         <double>0.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>1000000.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.050000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_9">
+        <property name="toolTip">
+         <string>Scalar value used when rendering bricks of voxels.
+It ranges from 0 to 1.</string>
+        </property>
+        <property name="text">
+         <string>Threshold</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QDoubleSpinBox" name="_shaderThresholdDoubleSpinBoxHigh">
         <property name="toolTip">
          <string>Scalar value used when rendering bricks of voxels.
 It ranges from 0 to 1.</string>

@@ -242,9 +242,9 @@ bool RawFileReader< TType >::optimizedReadData()
 		const unsigned int nbValues = _dataResolution * _dataResolution * _dataResolution;
 		// Hardcoded RN because try to see if it works
 		// TODO : find an elegant solution to the problem
-		unsigned int trueX = 804;
-		unsigned int trueY = 1103;
-		unsigned int trueZ = 804;
+		unsigned int trueX = 1681;
+		unsigned int trueY = 2206;
+		unsigned int trueZ = 1681;
 
 		const unsigned int trueNbValues = trueX * trueY * trueZ;
 		TType* _data = new TType[ trueNbValues ];
@@ -287,6 +287,10 @@ bool RawFileReader< TType >::optimizedReadData()
 					
 					if (y >= trueY){
 						continue;
+					}
+
+					if (y == _dataResolution - 1){
+						y += (trueY - _dataResolution);
 					}
 
 					if (z >= trueZ)

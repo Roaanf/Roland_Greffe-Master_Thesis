@@ -206,7 +206,7 @@ inline uint ProducerKernel< TDataStructureType >
 
 		// Threshold management
 		// => modify the return value to flag the node as empty if required
-		if ( voxelData >= cProducerThreshold )
+		if ( (voxelData >= cProducerThresholdLow) && (voxelData <= cProducerThresholdHigh) )
 		{
 			smIsEmptyNode = false;
 		}

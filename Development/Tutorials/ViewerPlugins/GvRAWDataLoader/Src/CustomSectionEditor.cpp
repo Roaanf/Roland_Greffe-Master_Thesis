@@ -113,10 +113,12 @@ void CustomSectionEditor::populate( GvViewerCore::GvvBrowsable* pBrowsable )
 		_maxDataValueLineEdit->setText( QString::number( pipeline->getMaxDataValue() ) );
 
 		// Producer parameters
-		_producerThresholdDoubleSpinBox->setValue( pipeline->getProducerThreshold() );
+		_producerThresholdDoubleSpinBox_low->setValue( pipeline->getProducerThresholdLow() );
+		_producerThresholdDoubleSpinBox_high->setValue( pipeline->getProducerThresholdHigh() );
 
 		// Shader parameters
-		_shaderThresholdDoubleSpinBox->setValue( pipeline->getShaderThreshold() );
+		_shaderThresholdDoubleSpinBoxLow->setValue( pipeline->getShaderThresholdLow() );
+		_shaderThresholdDoubleSpinBoxHigh->setValue(pipeline->getShaderThresholdHigh());
 		_shaderFullOpacityDistanceDoubleSpinBox->setValue( pipeline->getFullOpacityDistance() );
 	}
 }
@@ -124,7 +126,7 @@ void CustomSectionEditor::populate( GvViewerCore::GvvBrowsable* pBrowsable )
 /******************************************************************************
  * Slot called when producer's threshold value has changed
  ******************************************************************************/
-void CustomSectionEditor::on__producerThresholdDoubleSpinBox_valueChanged( double pValue )
+void CustomSectionEditor::on__producerThresholdDoubleSpinBox_low_valueChanged( double pValue )
 {
 	GvvApplication& application = GvvApplication::get();
 	GvvMainWindow* mainWindow = application.getMainWindow();
@@ -135,13 +137,30 @@ void CustomSectionEditor::on__producerThresholdDoubleSpinBox_valueChanged( doubl
 	SampleCore* sampleCore = dynamic_cast< SampleCore* >( pipeline );
 	assert( sampleCore != NULL );
 
-	sampleCore->setProducerThreshold( pValue );
+	sampleCore->setProducerThresholdLow( pValue );
+}
+
+/******************************************************************************
+ * Slot called when producer's threshold value has changed
+ ******************************************************************************/
+void CustomSectionEditor::on__producerThresholdDoubleSpinBox_high_valueChanged( double pValue )
+{
+	GvvApplication& application = GvvApplication::get();
+	GvvMainWindow* mainWindow = application.getMainWindow();
+	Gvv3DWindow* window3D = mainWindow->get3DWindow();
+	GvvPipelineInterfaceViewer* pipelineViewer = window3D->getPipelineViewer();
+	GvViewerCore::GvvPipelineInterface* pipeline = pipelineViewer->editPipeline();
+
+	SampleCore* sampleCore = dynamic_cast< SampleCore* >( pipeline );
+	assert( sampleCore != NULL );
+
+	sampleCore->setProducerThresholdHigh( pValue );
 }
 
 /******************************************************************************
  * Slot called when shader's threshold value has changed
  ******************************************************************************/
-void CustomSectionEditor::on__shaderThresholdDoubleSpinBox_valueChanged( double pValue )
+void CustomSectionEditor::on__shaderThresholdDoubleSpinBox_valueChangedLow( double pValue )
 {
 	GvvApplication& application = GvvApplication::get();
 	GvvMainWindow* mainWindow = application.getMainWindow();
@@ -152,7 +171,24 @@ void CustomSectionEditor::on__shaderThresholdDoubleSpinBox_valueChanged( double 
 	SampleCore* sampleCore = dynamic_cast< SampleCore* >( pipeline );
 	assert( sampleCore != NULL );
 
-	sampleCore->setShaderThreshold( pValue );
+	sampleCore->setShaderThresholdLow( pValue );
+}
+
+/******************************************************************************
+ * Slot called when shader's threshold value has changed
+ ******************************************************************************/
+void CustomSectionEditor::on__shaderThresholdDoubleSpinBox_valueChangedHigh( double pValue )
+{
+	GvvApplication& application = GvvApplication::get();
+	GvvMainWindow* mainWindow = application.getMainWindow();
+	Gvv3DWindow* window3D = mainWindow->get3DWindow();
+	GvvPipelineInterfaceViewer* pipelineViewer = window3D->getPipelineViewer();
+	GvViewerCore::GvvPipelineInterface* pipeline = pipelineViewer->editPipeline();
+
+	SampleCore* sampleCore = dynamic_cast< SampleCore* >( pipeline );
+	assert( sampleCore != NULL );
+
+	sampleCore->setShaderThresholdHigh( pValue );
 }
 
 /******************************************************************************

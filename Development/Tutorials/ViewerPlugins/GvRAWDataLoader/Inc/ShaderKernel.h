@@ -66,7 +66,12 @@ __constant__ float3 cLightPosition;
 /**
  * Shader threshold
  */
-__constant__ float cShaderThreshold;
+__constant__ float cShaderThresholdLow;
+
+/**
+ * Shader threshold
+ */
+__constant__ float cShaderThresholdHigh;
 
 /**
  * Full opacity distance

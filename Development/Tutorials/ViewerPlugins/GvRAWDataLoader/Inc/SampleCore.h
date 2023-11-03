@@ -428,28 +428,56 @@ public:
 	 *
 	 * @return the threshold
 	 */
-	float getProducerThreshold() const;
+	float getProducerThresholdLow() const;
+
+	/**
+	 * Get the producer's threshold
+	 *
+	 * @return the threshold
+	 */
+	float getProducerThresholdHigh() const;
 
 	/**
 	 * Set the producer's threshold
 	 *
 	 * @param pValue the threshold
 	 */
-	void setProducerThreshold( float pValue );
+	void setProducerThresholdLow( float pValue );
+
+	/**
+	 * Set the producer's threshold
+	 *
+	 * @param pValue the threshold
+	 */
+	void setProducerThresholdHigh( float pValue );
 
 	/**
 	 * Get the shader's threshold
 	 *
 	 * @return the threshold
 	 */
-	float getShaderThreshold() const;
+	float getShaderThresholdLow() const;
+
+	/**
+	 * Get the shader's threshold
+	 *
+	 * @return the threshold
+	 */
+	float getShaderThresholdHigh() const;
 
 	/**
 	 * Set the shader's threshold
 	 *
 	 * @param pValue the threshold
 	 */
-	void setShaderThreshold( float pValue );
+	void setShaderThresholdLow( float pValue );
+
+	/**
+	 * Set the shader's threshold
+	 *
+	 * @param pValue the threshold
+	 */
+	void setShaderThresholdHigh( float pValue );
 
 	/**
 	 * Get the full opacity distance
@@ -597,12 +625,22 @@ protected:
 	/**
 	 * Producer's threshold
 	 */
-	float _producerThreshold;
+	float _producerThresholdLow;
+
+	/**
+	 * Producer's threshold
+	 */
+	float _producerThresholdHigh;
 
 	/**
 	 * Shader's threshold
 	 */
-	float _shaderThreshold;
+	float _shaderThresholdLow;
+
+	/**
+	 * Shader's threshold
+	 */
+	float _shaderThresholdHigh;
 
 	/**
 	 * Full opacity distance

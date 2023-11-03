@@ -64,7 +64,12 @@
 /**
  * Producer threshold
  */
-__constant__ float cProducerThreshold;
+__constant__ float cProducerThresholdLow;
+
+/**
+ * Producer threshold
+ */
+__constant__ float cProducerThresholdHigh;
 
 /******************************************************************************
  ***************************** TYPE DEFINITION ********************************

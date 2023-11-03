@@ -119,8 +119,10 @@ SampleCore::SampleCore()
 ,	_maxVolTreeDepth( 0 )
 ,	_filename()
 ,	_resolution( 0 )
-,	_producerThreshold( 0.f )
-,	_shaderThreshold( 0.f )
+,	_producerThresholdLow( 0.f )
+,	_producerThresholdHigh( 255.f )
+,	_shaderThresholdLow( 0.f )
+,	_shaderThresholdHigh( 1.f )
 ,	_fullOpacityDistance( 0.f )
 ,	_gradientStep( 0.f )
 ,	_transferFunction( NULL )
@@ -353,8 +355,10 @@ void SampleCore::init()
 	float x,y,z;
 	getLightPosition( x, y, z );
 	setLightPosition( x, y, z );
-	setProducerThreshold( 0.f );	// no threshold by default
-	setShaderThreshold( 0.f );	// no threshold by default
+	setProducerThresholdLow( 0.f );	// no threshold by default
+	setProducerThresholdHigh( 255.f);	// no threshold by default
+	setShaderThresholdLow( 0.f );	// no threshold by default
+	setShaderThresholdHigh( 1.f );	// no threshold by default
 	setFullOpacityDistance( dataResolution ); // the distance ( 1 / FullOpacityDistance ) is the distance after which opacity is full.
 	setGradientStep( 0.25f );
 	_transferFunction->updateDeviceMemory();
@@ -944,9 +948,19 @@ void SampleCore::setScale( float pValue )
  *
  * @return the threshold
  ******************************************************************************/
-float SampleCore::getProducerThreshold() const
+float SampleCore::getProducerThresholdLow() const
 {
-	return _producerThreshold;
+	return _producerThresholdLow;
+}
+
+/******************************************************************************
+ * Get the producer's threshold
+ *
+ * @return the threshold
+ ******************************************************************************/
+float SampleCore::getProducerThresholdHigh() const
+{
+	return _producerThresholdHigh;
 }
 
 /******************************************************************************
@@ -954,12 +968,28 @@ float SampleCore::getProducerThreshold() const
  *
  * @param pValue the threshold
  ******************************************************************************/
-void SampleCore::setProducerThreshold( float pValue )
+void SampleCore::setProducerThresholdLow( float pValue )
 {
-	_producerThreshold = pValue;
+	_producerThresholdLow = pValue;
 
 	// Update device memory
-	GS_CUDA_SAFE_CALL( cudaMemcpyToSymbol( cProducerThreshold, &_producerThreshold, sizeof( _producerThreshold ), 0, cudaMemcpyHostToDevice ) );
+	GS_CUDA_SAFE_CALL( cudaMemcpyToSymbol( cProducerThresholdLow, &_producerThresholdLow, sizeof( _producerThresholdLow ), 0, cudaMemcpyHostToDevice ) );
+
+	// Clear cache
+	clearCache();
+}
+
+/******************************************************************************
+ * Set the producer's threshold
+ *
+ * @param pValue the threshold
+ ******************************************************************************/
+void SampleCore::setProducerThresholdHigh( float pValue )
+{
+	_producerThresholdHigh = pValue;
+
+	// Update device memory
+	GS_CUDA_SAFE_CALL( cudaMemcpyToSymbol( cProducerThresholdHigh, &_producerThresholdHigh, sizeof( _producerThresholdHigh ), 0, cudaMemcpyHostToDevice ) );
 
 	// Clear cache
 	clearCache();
@@ -970,9 +1000,19 @@ void SampleCore::setProducerThreshold( float pValue )
  *
  * @return the threshold
  ******************************************************************************/
-float SampleCore::getShaderThreshold() const
+float SampleCore::getShaderThresholdLow() const
 {
-	return _shaderThreshold;
+	return _shaderThresholdLow;
+}
+
+/******************************************************************************
+ * Get the shader's threshold
+ *
+ * @return the threshold
+ ******************************************************************************/
+float SampleCore::getShaderThresholdHigh() const
+{
+	return _shaderThresholdHigh;
 }
 
 /******************************************************************************
@@ -980,12 +1020,25 @@ float SampleCore::getShaderThreshold() const
  *
  * @param pValue the threshold
  ******************************************************************************/
-void SampleCore::setShaderThreshold( float pValue )
+void SampleCore::setShaderThresholdLow( float pValue )
 {
-	_shaderThreshold = pValue;
+	_shaderThresholdLow = pValue;
 
 	// Update device memory
-	GS_CUDA_SAFE_CALL( cudaMemcpyToSymbol( cShaderThreshold, &_shaderThreshold, sizeof( _shaderThreshold ), 0, cudaMemcpyHostToDevice ) );
+	GS_CUDA_SAFE_CALL( cudaMemcpyToSymbol( cShaderThresholdLow, &_shaderThresholdLow, sizeof( _shaderThresholdLow ), 0, cudaMemcpyHostToDevice ) );
+}
+
+/******************************************************************************
+ * Set the shader's threshold
+ *
+ * @param pValue the threshold
+ ******************************************************************************/
+void SampleCore::setShaderThresholdHigh( float pValue )
+{
+	_shaderThresholdHigh = pValue;
+
+	// Update device memory
+	GS_CUDA_SAFE_CALL( cudaMemcpyToSymbol( cShaderThresholdHigh, &_shaderThresholdHigh, sizeof( _shaderThresholdHigh ), 0, cudaMemcpyHostToDevice ) );
 }
 
 /******************************************************************************
