@@ -276,25 +276,21 @@ bool RawFileReader< TType >::optimizedReadData()
 		// The issue is probably because of the thing machin truc pfffffff
 		for ( unsigned int z = 0; z < _dataResolution; z++ ) // Is trueZ an issue here ?
 		{
+			if (z >= trueZ)
+				break;
+
 			for ( unsigned int y = 0; y < _dataResolution; y++ )
 			{
+				if (y >= trueY) {
+					break;
+				}
+
 				for ( unsigned int x = 0; x < _dataResolution; x++ )
 				{
 					// Retrieve data at current position
 					// Bandaid fix :(
 					if (x >= trueX)
-						continue;
-					
-					if (y >= trueY){
-						continue;
-					}
-
-					if (y == _dataResolution - 1){
-						y += (trueY - _dataResolution);
-					}
-
-					if (z >= trueZ)
-						continue;
+						break;
 
 					voxelData = _data[ index ];
 					
