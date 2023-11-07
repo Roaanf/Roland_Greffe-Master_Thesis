@@ -67,7 +67,7 @@ class ShaderKernel;
 
 // Defines the type list representing the content of one voxel
 // - handled types:
-typedef Loki::TL::MakeTypelist< uchar >::Result DataType;
+typedef Loki::TL::MakeTypelist< ushort >::Result DataType;
 //typedef Loki::TL::MakeTypelist< ushort >::Result DataType;
 //typedef Loki::TL::MakeTypelist< float >::Result DataType;
 // - not yet handled types:

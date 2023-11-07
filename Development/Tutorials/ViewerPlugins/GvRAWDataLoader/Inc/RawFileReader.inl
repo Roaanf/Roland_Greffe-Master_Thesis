@@ -247,12 +247,12 @@ bool RawFileReader< TType >::optimizedReadData()
 		unsigned int trueZ = 1681;
 
 		const unsigned int trueNbValues = trueX * trueY * trueZ;
-		TType* _data = new TType[ trueNbValues ];
 
 		// Read data file
 		// - open file
 		std::ifstream file;
 		file.open( dataFilename.c_str(), std::ios::in | std::ios::binary );
+
 		if ( ! file.is_open() )
 		{
 			// LOG
@@ -260,8 +260,13 @@ bool RawFileReader< TType >::optimizedReadData()
 
 			return false;
 		}
+		// Potential fix for large files not beeing fully read ?
+		file.seekg(0, std::ios_base::end);
+		size_t size = file.tellg();
+		TType* _data = new TType[ size ];
+		file.seekg(0);
 		// - read all data
-		file.read( reinterpret_cast< char* >( _data ), trueNbValues * sizeof( TType ) ); // Read more oof
+		file.read( reinterpret_cast< char* >( _data ), size );
 		// - close the file
 		file.close();
 
@@ -319,6 +324,10 @@ bool RawFileReader< TType >::optimizedReadData()
 
 					// Update counter
 					index++;
+				}
+
+				if ((y == _dataResolution - 1) && (_dataResolution != trueY)){
+					index += (trueY - _dataResolution) * _dataResolution;
 				}
 			}
 		}

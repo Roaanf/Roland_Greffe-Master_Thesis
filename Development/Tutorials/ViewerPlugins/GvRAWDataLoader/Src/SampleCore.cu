@@ -238,10 +238,12 @@ void SampleCore::init()
 		if ( strcmp( dataTypeName, "uchar" ) == 0 )
 		{
 			voxelDataType = GvVoxelizer::GsDataTypeHandler::gvUCHAR;
+			std::cout << "Uchar UwU" << std::endl;
 		}
 		else if ( strcmp( dataTypeName, "ushort" ) == 0 )
 		{
 			voxelDataType = GvVoxelizer::GsDataTypeHandler::gvUSHORT;
+			std::cout << "UShort UwU" << std::endl;
 		}
 		else if ( strcmp( dataTypeName, "float" ) == 0 )
 		{
@@ -356,7 +358,7 @@ void SampleCore::init()
 	getLightPosition( x, y, z );
 	setLightPosition( x, y, z );
 	setProducerThresholdLow( 0.f );	// no threshold by default
-	setProducerThresholdHigh( 255.f);	// no threshold by default
+	setProducerThresholdHigh( 65025.f);	// no threshold by default
 	setShaderThresholdLow( 0.f );	// no threshold by default
 	setShaderThresholdHigh( 1.f );	// no threshold by default
 	setFullOpacityDistance( dataResolution ); // the distance ( 1 / FullOpacityDistance ) is the distance after which opacity is full.
