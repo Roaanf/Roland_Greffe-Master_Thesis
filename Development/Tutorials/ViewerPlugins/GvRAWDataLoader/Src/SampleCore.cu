@@ -69,8 +69,8 @@ using namespace std;
  ******************************************************************************/
 
 // Defines the size allowed for each type of pool
-#define NODEPOOL_MEMSIZE	(512*1024*1024)		// 8 Mo
-#define BRICKPOOL_MEMSIZE	(1024*1024*1024)		// 256 Mo
+#define NODEPOOL_MEMSIZE	(128*1024*1024)		// 8 Mo
+#define BRICKPOOL_MEMSIZE	(2048*1024*1024)		// 256 Mo
 
 ///**
 // * Tag name identifying a space profile element
