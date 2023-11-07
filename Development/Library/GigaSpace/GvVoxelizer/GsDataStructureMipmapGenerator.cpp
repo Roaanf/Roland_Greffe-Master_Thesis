@@ -175,7 +175,7 @@ bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& p
 					voxelPosUP[ 2 ] = voxelPos[ 2 ] + z;
 
 					// Get associated data (in the UP resolution version)
-					unsigned char voxelDataUP[ 4 ];
+					unsigned short voxelDataUP[ 4 ];
 					//unsigned char voxelDataUP[ 1 ];
 					//unsigned short voxelDataUP[ 1 ];
 					dataStructureIOHandlerUP->getVoxel( voxelPosUP, voxelDataUP, 0 );
@@ -202,14 +202,14 @@ bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& p
 				voxelPosDOWN[ 2 ] = voxelPos[ 2 ] / 2;
 
 				// Set data in coarser voxel
-				unsigned char vd[4];		// "vd" stands for "voxel data"
+				unsigned short vd[4];		// "vd" stands for "voxel data"
 				//unsigned char vd[ 1 ];		// "vd" stands for "voxel data"
 				//unsigned short vd[ 1 ];		// "vd" stands for "voxel data"
-				vd[ 0 ] = static_cast< unsigned char >( voxelDataDOWNf[ 0 ] / 8.f );
+				vd[ 0 ] = static_cast< unsigned short >( voxelDataDOWNf[ 0 ] / 8.f );
 				// Comment the following lines to handle only one element in tuple
-				vd[ 1 ] = static_cast< unsigned char >( voxelDataDOWNf[ 1 ] / 8.f );
-				vd[ 2 ] = static_cast< unsigned char >( voxelDataDOWNf[ 2 ] / 8.f );
-				vd[ 3 ] = static_cast< unsigned char >( voxelDataDOWNf[ 3 ] / 8.f );
+				vd[ 1 ] = static_cast< unsigned short >( voxelDataDOWNf[ 1 ] / 8.f );
+				vd[ 2 ] = static_cast< unsigned short >( voxelDataDOWNf[ 2 ] / 8.f );
+				vd[ 3 ] = static_cast< unsigned short >( voxelDataDOWNf[ 3 ] / 8.f );
 				// To handle Unsigned Short datatype
 				//vd[ 0 ] = static_cast< unsigned short >( voxelDataDOWNf[ 0 ] / 8.f );
 				dataStructureIOHandlerDOWN->setVoxel( voxelPosDOWN, vd, 0 );

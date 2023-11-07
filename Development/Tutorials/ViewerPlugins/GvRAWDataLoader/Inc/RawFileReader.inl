@@ -242,9 +242,9 @@ bool RawFileReader< TType >::optimizedReadData()
 		const unsigned int nbValues = _dataResolution * _dataResolution * _dataResolution;
 		// Hardcoded RN because try to see if it works
 		// TODO : find an elegant solution to the problem
-		unsigned int trueX = 1681;
-		unsigned int trueY = 2206;
-		unsigned int trueZ = 1681;
+		unsigned int trueX = 840;
+		unsigned int trueY = 1103;
+		unsigned int trueZ = 840;
 
 		const unsigned int trueNbValues = trueX * trueY * trueZ;
 
@@ -272,8 +272,9 @@ bool RawFileReader< TType >::optimizedReadData()
 
 		// Write equivalent GigaSpace voxels file
 		// - create a file/streamer handler to read/write GigaVoxels data
-		const unsigned int levelOfResolution = static_cast< unsigned int >( log( static_cast< float >( getDataResolution() / 8/*<== if 8 voxels by bricks*/ ) ) / log( static_cast< float >( 2 ) ) );
 		const unsigned int brickWidth = 8;
+		const unsigned int levelOfResolution = static_cast< unsigned int >( log( static_cast< float >( getDataResolution() / brickWidth ) ) / log( static_cast< float >( 2 ) ) );
+		
 		_dataStructureIOHandler = new GvVoxelizer::GsDataStructureIOHandler( getFilename(), levelOfResolution, brickWidth, getDataType(), true );
 		TType voxelData;
 		unsigned int voxelPosition[ 3 ];
@@ -309,6 +310,11 @@ bool RawFileReader< TType >::optimizedReadData()
 						_maxDataValue = voxelData;
 					}
 
+					if (voxelData == 0) {
+						index++;
+						continue;
+					}
+
 					// Threshold management:
 					// - it could be better to import data as is,
 					//   and rely on the thresholds provided at real-time (shader)
@@ -324,10 +330,6 @@ bool RawFileReader< TType >::optimizedReadData()
 
 					// Update counter
 					index++;
-				}
-
-				if ((y == _dataResolution - 1) && (_dataResolution != trueY)){
-					index += (trueY - _dataResolution) * _dataResolution;
 				}
 			}
 		}
