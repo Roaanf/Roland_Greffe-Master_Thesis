@@ -138,10 +138,6 @@ protected:
 	 */
 	virtual bool readData();
 
-	/**
-	 * ...
-	 */
-	bool bruteForceReadData();
 	bool optimizedReadData();
 
 	/**************************************************************************

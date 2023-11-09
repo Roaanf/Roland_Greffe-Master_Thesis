@@ -131,7 +131,7 @@ bool GsIRAWFileReader::generateMipmapPyramid()
 {
 	std::vector< GsDataTypeHandler::VoxelDataType > dataTypes;
 	dataTypes.push_back( getDataType() );
-	return GsDataStructureMipmapGenerator::generateMipmapPyramid( getFilename(), getDataResolution(), dataTypes );
+	return GsDataStructureMipmapGenerator::generateMipmapPyramid( getFilename(), getDataResolution(), dataTypes);
 }
 
 /******************************************************************************

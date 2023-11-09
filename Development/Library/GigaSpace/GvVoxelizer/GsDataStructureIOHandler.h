@@ -119,6 +119,11 @@ public:
 	 * Currently, there is only a border of one voxel on each side of bricks.
 	 */
 	const unsigned int _brickSize;	
+
+	/**
+	 * True number of voxels of opened file
+	*/
+	const unsigned int _trueNbOfValues;
 	
 	/******************************** METHODS *********************************/
 
@@ -135,7 +140,8 @@ public:
 								unsigned int pLevel,
 								unsigned int pBrickWidth,
 								GsDataTypeHandler::VoxelDataType pDataType,
-								bool pNewFiles );
+								bool pNewFiles,
+								unsigned int pTrueNbOfValues);
 
 	/**
      * Constructor
@@ -150,7 +156,8 @@ public:
 								unsigned int pLevel,
 								unsigned int pBrickWidth,
 								const std::vector< GsDataTypeHandler::VoxelDataType >& pDataTypes,
-								bool pNewFiles );
+								bool pNewFiles,
+								unsigned int pTrueNbOfValues);
 
 	/**
      * Destructor
@@ -167,6 +174,15 @@ public:
 	unsigned int getNode( unsigned int nodePos[ 3 ] );
 
 	/**
+	 * Get the node info associated to an indexed node position
+	 *
+	 * @param pNodePos an indexed node position
+	 *
+	 * @return node info (address + brick index)
+	 */
+	unsigned int getNode_buffered( unsigned int nodePos[ 3 ] );
+
+	/**
 	 * Set data in a voxel at given data channel
 	 *
 	 * @param pVoxelPos voxel position
@@ -176,6 +192,17 @@ public:
 	 * than the type of the channel. If 0, use sizeof( channel ) instead.
 	 */
 	void setVoxel( unsigned int pVoxelPos[ 3 ], const void* pVoxelData, unsigned int pDataChannel, unsigned int pInputDataSize = 0 );
+
+	/**
+	 * Set data in a voxel at given data channel (Used only by RawFileReader)
+	 *
+	 * @param pVoxelPos voxel position
+	 * @param pVoxelData voxel data
+	 * @param pDataChannel data channel index
+	 * @param pInputDataSize size of the input data (in bytes), it may be smaller 
+	 * than the type of the channel. If 0, use sizeof( channel ) instead.
+	 */
+	void setVoxel_buffered( unsigned int pVoxelPos[ 3 ], const void* pVoxelData, unsigned int pDataChannel, unsigned int pInputDataSize = 0 );
 
 	/**
 	 * Set data in a voxel at given data channel
@@ -196,6 +223,15 @@ public:
 	 * @param pDataChannel data channel index
 	 */
 	void getVoxel( unsigned int pVoxelPos[ 3 ], void* voxelData, unsigned int pDataChannel );
+
+	/**
+	 * Get data in a voxel at given data channel
+	 *
+	 * @param pVoxelPos voxel position
+	 * @param pVoxelData voxel data
+	 * @param pDataChannel data channel index
+	 */
+	void getVoxel_buffered( unsigned int pVoxelPos[ 3 ], void* voxelData, unsigned int pDataChannel );
 
 	/**
 	 * Get data in a voxel at given data channel
@@ -223,6 +259,15 @@ public:
 	void getBrick( unsigned int pNodePos[ 3 ], void* pBrickData, unsigned int pDataChannel );
 
 	/**
+	 * Get brick data in a node at given data channel
+	 *
+	 * @param pNodePos node position
+	 * @param pBrickData brick data
+	 * @param pDataChannel data channel index
+	 */
+	void getBrick_buffered( unsigned int pNodePos[ 3 ], void* pBrickData, unsigned int pDataChannel );
+
+	/**
 	 * Set brick data in a node at given data channel
 	 *
 	 * @param pNodePos node position
@@ -230,6 +275,15 @@ public:
 	 * @param pDataChannel data channel index
 	 */
 	void setBrick( unsigned int pNodePos[ 3 ], void* pBrickData, unsigned int pDataChannel );
+
+	/**
+	 * Set brick data in a node at given data channel
+	 *
+	 * @param pNodePos node position
+	 * @param pBrickData brick data
+	 * @param pDataChannel data channel index
+	 */
+	void setBrick_buffered( unsigned int pNodePos[ 3 ], void* pBrickData, unsigned int pDataChannel );
 
 	/**
 	 * Get the voxel size at current level of resolution
@@ -379,6 +433,18 @@ protected:
 	unsigned int _nodeBuffer;
 
 	/**
+	 * Array that holds the content of the node file (HARDCODED TO USHORT)
+	*/
+
+	unsigned int * _nodeData;
+	
+	/**
+	 * Array that holds the content of the brick file (HARDCODED TO USHORT)
+	*/
+
+	unsigned short * _brickData;
+
+	/**
 	 * Brick data buffer associated to current nodeBuffer.
 	 * This is where all data reside for each channel (color, normal, etc...)
 	 */
@@ -412,9 +478,27 @@ protected:
 	void loadNodeandBrick( unsigned int pNodePos[ 3 ] );
 
 	/**
+	 * Retrieve node info and brick data associated to a node position in the buffers.
+	 * Data is retrieved from disk if not already in cache, otherwise exit.
+	 *
+	 * Data is stored in buffers if not yet in cache.
+	 *
+	 * Note : Data is written on disk a previous node have been processed
+	 * and a new one is requested.
+	 *
+	 * @param pNodePos node position
+	 */
+	void loadNodeandBrick_buffered( unsigned int pNodePos[ 3 ] );
+
+	/**
 	 * Save node info and brick data associated to current node position on disk.
 	 */
 	void saveNodeandBrick();
+
+	/**
+	 * Save node info and brick data associated to current node position on disk.
+	 */
+	void saveNodeandBrick_buffered();
 
 	/**
 	 * Initialize all the files that will be generated.
@@ -425,6 +509,8 @@ protected:
 	 * @param pNewFiles a flag telling whether or not new files are used
 	 */
 	void openFiles( const std::string& name, bool newFiles );
+
+	void writeFiles();
 
 	/**
 	 * Retrieve the node file name.

@@ -52,6 +52,8 @@
 #include <cstdio>
 #include <cstring>
 
+#include <cmath>
+
 /******************************************************************************
  ****************************** NAMESPACE SECTION *****************************
  ******************************************************************************/
@@ -92,9 +94,10 @@ GsDataStructureIOHandler::GsDataStructureIOHandler( const std::string& pName,
 							unsigned int pLevel,
 							unsigned int pBrickWidth,
 							GsDataTypeHandler::VoxelDataType pDataType,
-							bool pNewFiles )
+							bool pNewFiles,
+							unsigned int pTrueNbOfValues )
 // TO DO
-// attention à l'ordre des initializations...
+// attention ï¿½ l'ordre des initializations...
 :	_nodeFile( NULL )
 ,	_level( pLevel )
 ,	_brickWidth( pBrickWidth )
@@ -103,6 +106,7 @@ GsDataStructureIOHandler::GsDataStructureIOHandler( const std::string& pName,
 ,	_brickNumber( 0 )
 ,	_nodeGridSize( 1 << pLevel )
 ,	_voxelGridSize( _nodeGridSize * pBrickWidth )
+,   _trueNbOfValues( pTrueNbOfValues )
 {
 	// Store the voxel data type
 	_dataTypes.push_back( pDataType );
@@ -125,9 +129,10 @@ GsDataStructureIOHandler::GsDataStructureIOHandler( const std::string& pName,
 							unsigned int pLevel,
 							unsigned int pBrickWidth,
 							const vector< GsDataTypeHandler::VoxelDataType >& pDataTypes,
-							bool pNewFiles )
+							bool pNewFiles,
+							unsigned int pTrueNbOfValues )
 // TO DO
-// attention à l'ordre des initializations...
+// attention ï¿½ l'ordre des initializations...
 :	_nodeFile( NULL )
 ,	_level( pLevel )
 ,	_brickWidth( pBrickWidth )
@@ -137,10 +142,17 @@ GsDataStructureIOHandler::GsDataStructureIOHandler( const std::string& pName,
 ,	_brickNumber( 0 )
 ,	_nodeGridSize( 1 << pLevel )
 ,	_voxelGridSize( _nodeGridSize * pBrickWidth )
+,   _trueNbOfValues( pTrueNbOfValues )
 {
 	// Initialize all the files that will be generated.
 	// Note : Associated brick buffer(s) will be created/initialized.
 	openFiles( pName, pNewFiles );
+
+	// Initialize buffers
+	unsigned int sizeOfBrickData = std::ceil((double) _trueNbOfValues / (double) _brickSize);
+	_brickData = (unsigned short *) malloc( sizeOfBrickData * _brickSize * sizeof( unsigned short ) );
+
+	_nodeData = (unsigned int *) malloc( _nodeGridSize * _nodeGridSize * _nodeGridSize * sizeof( unsigned int ) );
 }
 
 /******************************************************************************
@@ -154,6 +166,9 @@ GsDataStructureIOHandler::~GsDataStructureIOHandler()
 	}
 
 	fclose( _nodeFile );
+
+	free(_nodeData);
+	free(_brickData);
 
 	for ( unsigned int c = 0; c < _dataTypes.size(); ++c )
 	{
@@ -241,6 +256,63 @@ void GsDataStructureIOHandler::setVoxel( unsigned int pVoxelPos[ 3 ], const void
 			size );
 }
 
+
+/******************************************************************************
+ * Set data in a voxel at given data channel
+ *
+ * @param pVoxelPos voxel position
+ * @param pVoxelData voxel data
+ * @param pDataChannel data channel index
+ * @param pInputDataSize size of the input data (in bytes), it may be smaller 
+ * than the type of the channel. If 0, use sizeof( channel ) instead.
+ ******************************************************************************/
+void GsDataStructureIOHandler::setVoxel_buffered( unsigned int pVoxelPos[ 3 ], const void* pVoxelData, unsigned int pDataChannel, unsigned int pInputDataSize )
+{
+	// Retrieve the associated node position in which the voxel resides
+	unsigned int nodePos[ 3 ];
+	nodePos[ 0 ] = pVoxelPos[ 0 ] / _brickWidth;
+	nodePos[ 1 ] = pVoxelPos[ 1 ] / _brickWidth;
+	nodePos[ 2 ] = pVoxelPos[ 2 ] / _brickWidth;
+	
+	// Retrieve node info and associated brick data
+	loadNodeandBrick_buffered( nodePos );
+
+	// If node is empty, as we set a voxel data, the node information needs to be updated
+	if( isEmpty( _nodeBuffer ) )
+	{
+		// Update node info
+		// Mark the node as a region containing data (i.e. 0x40000000u flag) and add the associated brick index
+		_nodeBuffer = 0x40000000 | _brickNumber;
+
+		// Append 0 to brick files
+		for ( unsigned int i = 0; i < _brickSize; ++i ) {
+			_brickData[_brickNumber * _brickSize + i] = 0;
+		}
+
+		// Update the bricks counter
+		_brickNumber++;
+	}
+ 
+	// Retrieve the voxel position in the current brick
+	// (take into account the border)
+	unsigned int voxelPosInBrick[ 3 ];
+	voxelPosInBrick[ 0 ] = pVoxelPos[ 0 ] % _brickWidth + 1;
+	voxelPosInBrick[ 1 ] = pVoxelPos[ 1 ] % _brickWidth + 1;
+	voxelPosInBrick[ 2 ] = pVoxelPos[ 2 ] % _brickWidth + 1;
+
+	// Write voxel data
+	unsigned int size;
+	if( pInputDataSize != 0 ) {
+		size = pInputDataSize;
+	} else {
+		size = GsDataTypeHandler::canalByteSize( _dataTypes[ pDataChannel ] );
+	}
+	// Ã§a le met dans _brickbuffer apparemment ?
+	memcpy( GsDataTypeHandler::getAddress( _dataTypes[ pDataChannel ], _brickBuffers[ pDataChannel ], voxelPosInBrick[ 0 ] + ( _brickWidth + 2 ) * ( voxelPosInBrick[ 1 ] + ( _brickWidth + 2 ) * voxelPosInBrick[ 2 ] ) ),
+			pVoxelData,
+			size );
+}
+
 /******************************************************************************
  * Set data in a voxel at given data channel
  *
@@ -293,6 +365,36 @@ void GsDataStructureIOHandler::getVoxel( unsigned int pVoxelPos[ 3 ], void* voxe
 /******************************************************************************
  * Get data in a voxel at given data channel
  *
+ * @param pVoxelPos voxel position
+ * @param pVoxelData voxel data
+ * @param pDataChannel data channel index
+ ******************************************************************************/
+void GsDataStructureIOHandler::getVoxel_buffered( unsigned int pVoxelPos[ 3 ], void* voxelData, unsigned int pDataChannel )
+{
+	// Retrieve the associated node position in which the voxel resides
+	unsigned int nodePos[ 3 ];
+	nodePos[ 0 ] = pVoxelPos[ 0 ] / _brickWidth;
+	nodePos[ 1 ] = pVoxelPos[ 1 ] / _brickWidth;
+	nodePos[ 2 ] = pVoxelPos[ 2 ] / _brickWidth;
+	
+	// Retrieve the voxel position in the current brick
+	unsigned int voxelPosInBrick[ 3 ];
+	voxelPosInBrick[ 0 ] = pVoxelPos[ 0 ] % _brickWidth;
+	voxelPosInBrick[ 1 ] = pVoxelPos[ 1 ] % _brickWidth;
+	voxelPosInBrick[ 2 ] = pVoxelPos[ 2 ] % _brickWidth;
+
+	// Load data (eventually from cache)
+	loadNodeandBrick_buffered( nodePos );
+
+	// Copy data from memory
+	memcpy( voxelData,
+			GsDataTypeHandler::getAddress( _dataTypes[ pDataChannel ], _brickBuffers[ pDataChannel ], voxelPosInBrick[ 0 ] + ( _brickWidth + 2 ) * ( voxelPosInBrick[ 1 ] + ( _brickWidth + 2 ) * voxelPosInBrick[ 2 ] ) ),		
+			GsDataTypeHandler::canalByteSize( _dataTypes[ pDataChannel ] ) );
+}
+
+/******************************************************************************
+ * Get data in a voxel at given data channel
+ *
  * @param pNormalizedVoxelPos float normalized voxel position
  * @param pVoxelData voxel data
  * @param pDataChannel data channel index
@@ -324,6 +426,22 @@ void GsDataStructureIOHandler::getBrick( unsigned int pNodePos[ 3 ], void* pBric
 }
 
 /******************************************************************************
+ * Get brick data in a node at given data channel
+ *
+ * @param pNodePos node position
+ * @param pBrickData brick data
+ * @param pDataChannel data channel index
+ ******************************************************************************/
+void GsDataStructureIOHandler::getBrick_buffered( unsigned int pNodePos[ 3 ], void* pBrickData, unsigned int pDataChannel )
+{
+	// Retrieve node info and associated brick data
+	loadNodeandBrick_buffered( pNodePos );
+
+	// Read data from memory
+	memcpy( pBrickData, _brickBuffers[ pDataChannel ], _brickSize * GsDataTypeHandler::canalByteSize( _dataTypes[ pDataChannel ] ) );
+}
+
+/******************************************************************************
  * Set brick data in a node at given data channel
  *
  * @param pNodePos node position
@@ -334,6 +452,22 @@ void GsDataStructureIOHandler::setBrick( unsigned int pNodePos[ 3 ], void* pBric
 {
 	// Retrieve node info and associated brick data
 	loadNodeandBrick( pNodePos );
+
+	// Write data in memory
+	memcpy( _brickBuffers[ pDataChannel ], pBrickData, _brickSize * GsDataTypeHandler::canalByteSize( _dataTypes[ pDataChannel ] ) );
+}
+
+/******************************************************************************
+ * Set brick data in a node at given data channel
+ *
+ * @param pNodePos node position
+ * @param pBrickData brick data
+ * @param pDataChannel data channel index
+ ******************************************************************************/
+void GsDataStructureIOHandler::setBrick_buffered( unsigned int pNodePos[ 3 ], void* pBrickData, unsigned int pDataChannel )
+{
+	// Retrieve node info and associated brick data
+	loadNodeandBrick_buffered( pNodePos );
 
 	// Write data in memory
 	memcpy( _brickBuffers[ pDataChannel ], pBrickData, _brickSize * GsDataTypeHandler::canalByteSize( _dataTypes[ pDataChannel ] ) );
@@ -389,6 +523,22 @@ unsigned int GsDataStructureIOHandler::getNode( unsigned int pNodePos[ 3 ] )
 {
 	// Retrieve node info and associated brick data
 	loadNodeandBrick( pNodePos );
+
+	// Return the associated node info
+	return _nodeBuffer;
+}
+
+/******************************************************************************
+ * Get the node info associated to an indexed node position
+ *
+ * @param pNodePos an indexed node position
+ *
+ * @return node info (address + brick index)
+ ******************************************************************************/
+unsigned int GsDataStructureIOHandler::getNode_buffered( unsigned int pNodePos[ 3 ] )
+{
+	// Retrieve node info and associated brick data
+	loadNodeandBrick_buffered( pNodePos );
 
 	// Return the associated node info
 	return _nodeBuffer;
@@ -467,6 +617,70 @@ void GsDataStructureIOHandler::loadNodeandBrick( unsigned int pNodePos[ 3 ] )
 }
 
 /******************************************************************************
+ * Retrieve node info and brick data associated to a node position.
+ * Data is retrieved from disk if not already in cache, otherwise exit.
+ *
+ * Data is stored in buffers if not yet in cache.
+ *
+ * Note : Data is written on disk a previous node have been processed
+ * and a new one is requested.
+ *
+ * @param pNodePos node position
+ ******************************************************************************/
+void GsDataStructureIOHandler::loadNodeandBrick_buffered( unsigned int pNodePos[ 3 ] )
+{
+	// Try to find node in cache.
+	// If yes, exit.
+	if ( ( _isBufferLoaded && 
+		pNodePos[ 0 ] == _nodeBufferPos[ 0 ] && 
+		pNodePos[ 1 ] == _nodeBufferPos[ 1 ] && 
+		pNodePos[ 2 ] == _nodeBufferPos[ 2 ] ) )
+	{
+		return;
+	}
+
+	// If a previous node has been processed and a new one is requested,
+	// This means that the previous data need to be written on disk.
+	if ( _isBufferLoaded )
+	{
+		saveNodeandBrick_buffered();
+	}
+
+	// Update current node position in buffer
+	_nodeBufferPos[ 0 ] = pNodePos[ 0 ];
+	_nodeBufferPos[ 1 ] = pNodePos[ 1 ];
+	_nodeBufferPos[ 2 ] = pNodePos[ 2 ];
+
+	// Read node info (address+brick index) in node buffer
+
+	_nodeBuffer =_nodeData[ _nodeBufferPos[0] + _nodeGridSize*(_nodeBufferPos[1] + _nodeGridSize*_nodeBufferPos[2]) ];
+
+	// Iterate through data channels
+	for ( unsigned int c = 0; c < _dataTypes.size(); ++c )
+	{
+		// If node is empty, set 0 in buffer of brick data
+		if ( isEmpty( _nodeBuffer ) )
+		{
+			memset( _brickBuffers[ c ], 0, _brickSize * GsDataTypeHandler::canalByteSize( _dataTypes[ c ] ) );
+		}
+		else
+		{
+			// Retrieve the brick offset in brick file
+			unsigned int brickOffset = getBrickOffset( _nodeBuffer );
+
+			// Read brick data and store it in buffer
+			unsigned short * casted_brickBuffer = (unsigned short *) _brickBuffers[ c ];
+			for (unsigned int i = 0; i < _brickSize; ++i) {
+				casted_brickBuffer[i] = _brickData[ brickOffset * _brickSize + i ];
+			}
+		}
+	}
+
+	// Update the flag telling whether or not the current node and brick have been loaded in memory (and stored in buffers)
+	_isBufferLoaded = true;
+}
+
+/******************************************************************************
  * Save node info and brick data associated to current node position on disk.
  ******************************************************************************/
 void GsDataStructureIOHandler::saveNodeandBrick()
@@ -506,6 +720,30 @@ void GsDataStructureIOHandler::saveNodeandBrick()
 }
 
 /******************************************************************************
+ * Save node info and brick data associated to current node position on disk.
+ ******************************************************************************/
+void GsDataStructureIOHandler::saveNodeandBrick_buffered()
+{
+	// Check the flag telling whether or not the current node and brick have been loaded in memory (and stored in buffers)
+	if ( _isBufferLoaded ) {
+		// Write current node info (address+brick index)
+		_nodeData[ _nodeBufferPos[0] + _nodeGridSize*(_nodeBufferPos[1] + _nodeGridSize*_nodeBufferPos[2]) ] = _nodeBuffer;
+
+		// Retrieve the brick offset in brick file
+		unsigned int brickOffset = getBrickOffset( _nodeBuffer );
+		// Iterate through data channels (we only have 1 channel in our case)
+		unsigned short * casted_brickBuffer = (unsigned short *) _brickBuffers[ 0 ];
+		for ( unsigned int c = 0; c < _brickSize; ++c ) {
+			// Write current brick data
+			_brickData[ brickOffset * _brickSize + c ] = casted_brickBuffer[c];
+		}
+	}
+
+	// Update the flag telling whether or not the current node and brick have been loaded in memory (and stored in buffers)
+	_isBufferLoaded = false;
+}
+
+/******************************************************************************
  * Fill all brick borders of the data structure with data.
  ******************************************************************************/
 void GsDataStructureIOHandler::computeBorders()
@@ -536,18 +774,18 @@ void GsDataStructureIOHandler::computeBorders()
 			nodePos[ 2 ] = k;
 
 			// Retrieve the associated node info
-			unsigned int node = getNode( nodePos );
+			unsigned int node = getNode_buffered( nodePos );
 
 			// If node is empty, there is nothing to do, so go to next node
 			if ( isEmpty( node ) )
 			{
-				// TODO c'est faux, il faut vérifier que le bord du noeud voisin est aussi vide 
+				// TODO c'est faux, il faut vï¿½rifier que le bord du noeud voisin est aussi vide 
 				// (sinon il faut remplir la bordure des noeuds vides et leur associer une brique)
 				continue; 
 			}
 
 			// Retrieve the associated brick data
-			getBrick( nodePos, brick, c );
+			getBrick_buffered( nodePos, brick, c );
 
 			// Iterate through each neighbor nodes (in 3D, there are 26 neighbors)
 			for ( int k2 =- 1; k2 <= 1; ++k2 )
@@ -571,7 +809,7 @@ void GsDataStructureIOHandler::computeBorders()
 				nodePos2[ 2 ] = k + k2;
 
 				// Retrieve the associated neighbor node info
-				unsigned int node2 = getNode( nodePos2 );
+				unsigned int node2 = getNode_buffered( nodePos2 );
 
 				// If node is empty :
 				// there is nothing to do, so go to next neighbor node
@@ -581,7 +819,7 @@ void GsDataStructureIOHandler::computeBorders()
 				}
 
 				// Retrieve the associated neighbor brick data
-				getBrick( nodePos2, brick2, c );
+				getBrick_buffered( nodePos2, brick2, c );
 
 				// In this part, the goal is to copy voxel data from original brick to voxel data
 				// of the current neighbor brick if it is on a border.
@@ -630,7 +868,7 @@ void GsDataStructureIOHandler::computeBorders()
 				// If the brick data has been modified, copy the data to the neighbor brick buffer
 				if ( modified )
 				{
-					setBrick( nodePos2, brick2, c );
+					setBrick_buffered( nodePos2, brick2, c );
 				}
 			}
 		}
@@ -642,6 +880,7 @@ void GsDataStructureIOHandler::computeBorders()
 //		delete [] brick;
 //		delete [] brick2;
 	}
+	writeFiles();
 }
 
 /******************************************************************************
@@ -677,6 +916,13 @@ void GsDataStructureIOHandler::openFiles( const string& pName, bool pNewFiles )
 					// Update brick counter
 					_brickNumber++;
 				}
+				_nodeData[ node ] = nodeData;
+			}
+			_brickData = new unsigned short[ _brickNumber * _brickSize ];
+			FILE* brickFile = fopen( getFileNameBrick( pName, _level, _brickWidth, 0, GsDataTypeHandler::getTypeName( _dataTypes[ 0 ] ) ).data(), "rb+" );
+			if ( brickFile ) {
+				fread( _brickData, 1, _brickNumber * _brickSize * GsDataTypeHandler::canalByteSize( _dataTypes[ 0 ] ), brickFile );
+				fclose( brickFile );
 			}
 		}
 	}
@@ -803,11 +1049,25 @@ unsigned int createBrickNode( unsigned int pBrickNumber )
 /******************************************************************************
  * Retrieve the brick offset of a brick given a node info.
  *
- * @param pNode a node info
+ * @param pNode a node info_trueNbOfValues
  *
  * @return the brick offset
  ******************************************************************************/
 unsigned int GsDataStructureIOHandler::getBrickOffset( unsigned int pNode )
 {
 	return ( pNode & 0x3fffffff );
+}
+
+void GsDataStructureIOHandler::writeFiles(){
+	
+	//Write node file
+	fwrite( _nodeData, sizeof( unsigned int ), _nodeGridSize * _nodeGridSize * _nodeGridSize, _nodeFile );
+	fflush( _nodeFile );
+
+	//Write brick file
+	unsigned int sizeOfBrickData = std::ceil((double) _trueNbOfValues / (double) _brickSize);
+	for ( unsigned int i = 0; i < _dataTypes.size(); ++i ){
+		fwrite( _brickData, GsDataTypeHandler::canalByteSize( _dataTypes[ i ] ), sizeOfBrickData * _brickSize, _brickFiles[ i ] );
+		fflush( _brickFiles[ i ] );
+	}
 }

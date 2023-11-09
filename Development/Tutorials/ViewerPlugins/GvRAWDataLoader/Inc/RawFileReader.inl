@@ -120,112 +120,6 @@ bool RawFileReader< TType >::readData()
  * ...
  ******************************************************************************/
 template< typename TType >
-bool RawFileReader< TType >::bruteForceReadData()
-{
-	bool result = false;
-
-	std::string dataFilename = getFilename() + ".raw";
-
-	// LOG
-	std::cout << "- read file : " << dataFilename << std::endl;
-
-	// Create a file/streamer handler to read/write GigaVoxels data
-	const unsigned int levelOfResolution = static_cast< unsigned int >( log( static_cast< float >( getDataResolution() / 8/*<== if 8 voxels by bricks*/ ) ) / log( static_cast< float >( 2 ) ) );
-	const unsigned int brickWidth = 8;
-	_dataStructureIOHandler = new GvVoxelizer::GsDataStructureIOHandler( getFilename(), levelOfResolution, brickWidth, getDataType(), true );
-		
-	// Read file
-	if ( getMode() == eBinary )
-	{
-		// Open file
-		FILE* file = fopen( dataFilename.c_str(), "rb" );
-		if ( file != NULL )
-		{
-			// TODO
-			// - optimizations => reduce IO read/write overheads
-			// ---- read file with 1 unique fread()
-			// ---- reorganize data in memory to be able to work with bricks and not voxels
-			// ---- then try to rely on setBrick() instead of setVoxel()
-
-			// Set voxel data
-			TType voxelData;
-			unsigned int voxelPosition[ 3 ];
-			for ( unsigned int z = 0; z < _dataResolution; z++ )
-			{
-				for ( unsigned int y = 0; y < _dataResolution; y++ )
-				{
-					for ( unsigned int x = 0; x < _dataResolution; x++ )
-					{
-						// Read voxel data
-						fread( &voxelData, sizeof( TType ), 1, file );
-
-						// Update min/max values
-						if ( voxelData < _minDataValue )
-						{
-							_minDataValue = voxelData;
-						}
-						if ( voxelData > _maxDataValue )
-						{
-							_maxDataValue = voxelData;
-						}
-
-						// Threshold management:
-						// - it could be better to import data as is,
-						//   and rely on the thresholds provided at real-time (shader)
-						//   or when reading data (producer).
-						//	if ( voxelData >= userThreshold )
-						//{
-							// Write voxel data (in channel 0)
-							voxelPosition[ 0 ] = x;
-							voxelPosition[ 1 ] = y;
-							voxelPosition[ 2 ] = z;
-							_dataStructureIOHandler->setVoxel( voxelPosition, &voxelData, 0 );
-						//}
-					}
-				}
-			}
-		}
-		else
-		{
-			// LOG
-			std::cout << "- Error : unable to open file : " << dataFilename << std::endl;
-
-			assert( false );
-		}
-	}
-	else if ( _mode == eASCII )
-	{
-		// LOG
-		std::cout << "ASCII files are not yet handled... : " << dataFilename << std::endl;
-
-		// TO DO
-		// Add ASCII mode
-		// ...
-
-		/*FILE* file = fopen( filename.c_str(), "r" );
-		if ( file != NULL )
-		{
-		}
-		else
-		{*/
-			assert( false );
-		//}
-	}
-	else
-	{
-		// LOG
-		std::cout << "Reading RAW files not working... : " << dataFilename << std::endl;
-		
-		assert( false );
-	}
-
-	return result;
-}
-
-/******************************************************************************
- * ...
- ******************************************************************************/
-template< typename TType >
 bool RawFileReader< TType >::optimizedReadData()
 {
 	std::string dataFilename = getFilename() + ".raw";
@@ -275,11 +169,12 @@ bool RawFileReader< TType >::optimizedReadData()
 		const unsigned int brickWidth = 8;
 		const unsigned int levelOfResolution = static_cast< unsigned int >( log( static_cast< float >( getDataResolution() / brickWidth ) ) / log( static_cast< float >( 2 ) ) );
 		
-		_dataStructureIOHandler = new GvVoxelizer::GsDataStructureIOHandler( getFilename(), levelOfResolution, brickWidth, getDataType(), true );
+		_dataStructureIOHandler = new GvVoxelizer::GsDataStructureIOHandler( getFilename(), levelOfResolution, brickWidth, getDataType(), true, trueNbValues);
 		TType voxelData;
 		unsigned int voxelPosition[ 3 ];
 		unsigned int index = 0;
 		// The issue is probably because of the thing machin truc pfffffff
+		std::cout << "Entering the loop" << std::endl;
 		for ( unsigned int z = 0; z < _dataResolution; z++ ) // Is trueZ an issue here ?
 		{
 			if (z >= trueZ)
@@ -325,7 +220,9 @@ bool RawFileReader< TType >::optimizedReadData()
 					voxelPosition[ 0 ] = x;
 					voxelPosition[ 1 ] = y;
 					voxelPosition[ 2 ] = z;
-					_dataStructureIOHandler->setVoxel( voxelPosition, &voxelData, 0 );
+					std::cout << "x:" << x <<", y: " << y << ", z:" << z << std::endl;
+					
+					_dataStructureIOHandler->setVoxel_buffered( voxelPosition, &voxelData, 0 );
 					//}
 
 					// Update counter

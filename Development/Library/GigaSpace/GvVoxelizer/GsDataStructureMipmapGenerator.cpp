@@ -100,7 +100,7 @@ GsDataStructureMipmapGenerator::~GsDataStructureMipmapGenerator()
  * @param pFilename 3D model file name
  * @param pDataResolution Data resolution
  ******************************************************************************/
-bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& pFileName, unsigned int pDataResolution, const std::vector< GsDataTypeHandler::VoxelDataType >& pDataTypes )
+bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& pFileName, unsigned int pDataResolution, const std::vector< GsDataTypeHandler::VoxelDataType >& pDataTypes)
 {
 	bool result = false;
 
@@ -122,7 +122,7 @@ bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& p
 	// Two files/streamers are used :
 	// UP is an already pre-filtered scene at resolution [ N ]
 	// DOWN is the coarser version to generate at resolution [ N - 1 ]
-	GsDataStructureIOHandler* dataStructureIOHandlerUP = new GsDataStructureIOHandler( pFileName, levelOfResolution, brickWidth, dataTypes, false );
+	GsDataStructureIOHandler* dataStructureIOHandlerUP = new GsDataStructureIOHandler( pFileName, levelOfResolution, brickWidth, dataTypes, false, 15 );
 	GsDataStructureIOHandler* dataStructureIOHandlerDOWN = NULL;
 
 	// Iterate through levels of resolution
@@ -132,7 +132,7 @@ bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& p
 		std::cout << "GvVoxelizerEngine::mipmap : level : " << level << std::endl;
 
 		// The coarser data handler is allocated dynamically due to memory consumption considerations.
-		dataStructureIOHandlerDOWN = new GsDataStructureIOHandler( pFileName, level, brickWidth, dataTypes, true );
+		dataStructureIOHandlerDOWN = new GsDataStructureIOHandler( pFileName, level, brickWidth, dataTypes, true, (2^level)*brickWidth);
 
 		// Iterate through nodes of the structure
 		unsigned int nodePos[ 3 ];
@@ -145,7 +145,7 @@ bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& p
 		for ( nodePos[ 0 ] = 0; nodePos[ 0 ] < dataStructureIOHandlerUP->_nodeGridSize; nodePos[ 0 ]++ )
 		{
 			// Retrieve the current node info
-			unsigned int node = dataStructureIOHandlerUP->getNode( nodePos );
+			unsigned int node = dataStructureIOHandlerUP->getNode_buffered( nodePos );
 			
 			// If node is empty, go to next node
 			if ( GsDataStructureIOHandler::isEmpty( node ) )
@@ -178,7 +178,7 @@ bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& p
 					unsigned short voxelDataUP[ 4 ];
 					//unsigned char voxelDataUP[ 1 ];
 					//unsigned short voxelDataUP[ 1 ];
-					dataStructureIOHandlerUP->getVoxel( voxelPosUP, voxelDataUP, 0 );
+					dataStructureIOHandlerUP->getVoxel_buffered( voxelPosUP, voxelDataUP, 0 );
 					voxelDataDOWNf[ 0 ] += voxelDataUP[ 0 ];
 					// Comment the following lines to handle only one element in tuple
 					voxelDataDOWNf[ 1 ] += voxelDataUP[ 1 ];
@@ -212,7 +212,7 @@ bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& p
 				vd[ 3 ] = static_cast< unsigned short >( voxelDataDOWNf[ 3 ] / 8.f );
 				// To handle Unsigned Short datatype
 				//vd[ 0 ] = static_cast< unsigned short >( voxelDataDOWNf[ 0 ] / 8.f );
-				dataStructureIOHandlerDOWN->setVoxel( voxelPosDOWN, vd, 0 );
+				dataStructureIOHandlerDOWN->setVoxel_buffered( voxelPosDOWN, vd, 0 );
 
 #ifdef NORMALS
 				// Set normal in coarser voxel
