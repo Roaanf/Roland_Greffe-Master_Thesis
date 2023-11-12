@@ -169,7 +169,7 @@ bool RawFileReader< TType >::optimizedReadData()
 		const unsigned int brickWidth = 8;
 		const unsigned int levelOfResolution = static_cast< unsigned int >( log( static_cast< float >( getDataResolution() / brickWidth ) ) / log( static_cast< float >( 2 ) ) );
 		
-		_dataStructureIOHandler = new GvVoxelizer::GsDataStructureIOHandler( getFilename(), levelOfResolution, brickWidth, getDataType(), true, trueNbValues);
+		_dataStructureIOHandler = new GvVoxelizer::GsDataStructureIOHandler( getFilename(), levelOfResolution, brickWidth, getDataType(), true);
 		TType voxelData;
 		unsigned int voxelPosition[ 3 ];
 		unsigned int index = 0;
@@ -220,7 +220,6 @@ bool RawFileReader< TType >::optimizedReadData()
 					voxelPosition[ 0 ] = x;
 					voxelPosition[ 1 ] = y;
 					voxelPosition[ 2 ] = z;
-					std::cout << "x:" << x <<", y: " << y << ", z:" << z << std::endl;
 					
 					_dataStructureIOHandler->setVoxel_buffered( voxelPosition, &voxelData, 0 );
 					//}
@@ -230,9 +229,62 @@ bool RawFileReader< TType >::optimizedReadData()
 				}
 			}
 		}
+		/* Try to do it brick by brick
+		unsigned int nodeSize = (1 << levelOfResolution) * brickWidth;
+		for ( unsigned int node_z = 0; node_z < nodeSize ; node_z++ ){
+			for (unsigned int node_y = 0; node_y < nodeSize; node_y++) {
+				for (unsigned int node_x = 0; node_x < nodeSize; node_x++) {
+					for (unsigned int z_brick = 0; z_brick < brickWidth; z_brick++) {
+						for (unsigned int y_brick = 0; y_brick < brickWidth; y_brick++) {
+							for (unsigned int x_brick = 0; x_brick < brickWidth; x_brick++) {
+								unsigned int true_x = node_x * brickWidth + x_brick;
+								if (true_x >= trueX) {
+									continue;
+								}
+								unsigned int true_y = node_y * brickWidth + y_brick;
+								if (true_y >= trueY) {
+									continue;
+								}
+								unsigned int true_z = node_z * brickWidth + z_brick;
+								if (true_z >= trueZ) {
+									continue;
+								}
+
+								voxelData = _data[ true_x + true_y * trueX + true_z * trueX * trueY];
+					
+								// Update min/max values
+								if ( voxelData < _minDataValue )
+								{
+									_minDataValue = voxelData;
+								}
+								if ( voxelData > _maxDataValue )
+								{
+									_maxDataValue = voxelData;
+								}
+
+								if (voxelData == 0) {
+									continue;
+								}
+
+								voxelPosition[ 0 ] = true_x;
+								voxelPosition[ 1 ] = true_y;
+								voxelPosition[ 2 ] = true_z;
+					
+								_dataStructureIOHandler->setVoxel_buffered( voxelPosition, &voxelData, 0 );
+							
+							}
+						}
+					}
+				}
+			}
+		}
+		*/
 
 		// Free resources
 		delete[] _data;
+
+		// Write the GigaSpace data
+		//_dataStructureIOHandler->writeFiles();
 	}
 	else if ( _mode == eASCII )
 	{

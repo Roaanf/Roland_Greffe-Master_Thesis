@@ -94,8 +94,7 @@ GsDataStructureIOHandler::GsDataStructureIOHandler( const std::string& pName,
 							unsigned int pLevel,
 							unsigned int pBrickWidth,
 							GsDataTypeHandler::VoxelDataType pDataType,
-							bool pNewFiles,
-							unsigned int pTrueNbOfValues )
+							bool pNewFiles)
 // TO DO
 // attention � l'ordre des initializations...
 :	_nodeFile( NULL )
@@ -106,7 +105,6 @@ GsDataStructureIOHandler::GsDataStructureIOHandler( const std::string& pName,
 ,	_brickNumber( 0 )
 ,	_nodeGridSize( 1 << pLevel )
 ,	_voxelGridSize( _nodeGridSize * pBrickWidth )
-,   _trueNbOfValues( pTrueNbOfValues )
 {
 	// Store the voxel data type
 	_dataTypes.push_back( pDataType );
@@ -114,6 +112,12 @@ GsDataStructureIOHandler::GsDataStructureIOHandler( const std::string& pName,
 	// Initialize all the files that will be generated.
 	// Note : Associated brick buffer(s) will be created/initialized.
 	openFiles( pName, pNewFiles );
+
+	std::cout << "GsDataStructureIOHandler::GsDataStructureIOHandler" << std::endl;
+	// Initialize buffers
+	_brickData = (unsigned short *) calloc( _nodeGridSize * _nodeGridSize * _nodeGridSize * _brickSize, sizeof( unsigned short ) );
+
+	_nodeData = (unsigned int *) calloc( _nodeGridSize * _nodeGridSize * _nodeGridSize, sizeof( unsigned int ) );
 }
 
 /******************************************************************************
@@ -129,8 +133,7 @@ GsDataStructureIOHandler::GsDataStructureIOHandler( const std::string& pName,
 							unsigned int pLevel,
 							unsigned int pBrickWidth,
 							const vector< GsDataTypeHandler::VoxelDataType >& pDataTypes,
-							bool pNewFiles,
-							unsigned int pTrueNbOfValues )
+							bool pNewFiles)
 // TO DO
 // attention � l'ordre des initializations...
 :	_nodeFile( NULL )
@@ -142,17 +145,19 @@ GsDataStructureIOHandler::GsDataStructureIOHandler( const std::string& pName,
 ,	_brickNumber( 0 )
 ,	_nodeGridSize( 1 << pLevel )
 ,	_voxelGridSize( _nodeGridSize * pBrickWidth )
-,   _trueNbOfValues( pTrueNbOfValues )
 {
+	// Store the voxel data type
+	_dataTypes = pDataTypes;
+
 	// Initialize all the files that will be generated.
+	// Initialize buffers
+	_brickData = (unsigned short *) calloc( _nodeGridSize * _nodeGridSize * _nodeGridSize * _brickSize, sizeof( unsigned short ) );
+
+	_nodeData = (unsigned int *) calloc( _nodeGridSize * _nodeGridSize * _nodeGridSize, sizeof( unsigned int ) );
 	// Note : Associated brick buffer(s) will be created/initialized.
 	openFiles( pName, pNewFiles );
 
-	// Initialize buffers
-	unsigned int sizeOfBrickData = std::ceil((double) _trueNbOfValues / (double) _brickSize);
-	_brickData = (unsigned short *) malloc( sizeOfBrickData * _brickSize * sizeof( unsigned short ) );
-
-	_nodeData = (unsigned int *) malloc( _nodeGridSize * _nodeGridSize * _nodeGridSize * sizeof( unsigned int ) );
+	std::cout << "GsDataStructureIOHandler::GsDataStructureIOHandler" << std::endl;
 }
 
 /******************************************************************************
@@ -284,10 +289,10 @@ void GsDataStructureIOHandler::setVoxel_buffered( unsigned int pVoxelPos[ 3 ], c
 		// Mark the node as a region containing data (i.e. 0x40000000u flag) and add the associated brick index
 		_nodeBuffer = 0x40000000 | _brickNumber;
 
-		// Append 0 to brick files
-		for ( unsigned int i = 0; i < _brickSize; ++i ) {
-			_brickData[_brickNumber * _brickSize + i] = 0;
-		}
+		// Append 0 to brick files -> no need I calloced the brickData
+		//for ( unsigned int i = 0; i < _brickSize; ++i ) {
+		//	_brickData[_brickNumber * _brickSize + i] = 0;
+		//}
 
 		// Update the bricks counter
 		_brickNumber++;
@@ -762,9 +767,6 @@ void GsDataStructureIOHandler::computeBorders()
 		for ( unsigned int k = 0; k < _nodeGridSize; ++k )
 		for ( unsigned int j = 0; j < _nodeGridSize; ++j )
 		{
-			// LOG message
-			std::cout << "computeBorders - Node : [ " << "x" << " / " << j << " / " << k << " ] - " << _nodeGridSize << " - channel [ " << c << " / " << _dataTypes.size() << " ]" << std::endl;
-		
 		for ( unsigned int i = 0; i < _nodeGridSize; ++i )
 		{
 			// Store current node position
@@ -901,8 +903,9 @@ void GsDataStructureIOHandler::openFiles( const string& pName, bool pNewFiles )
 	// Handle case where no "new files" are requested
 	if ( ! pNewFiles )
 	{
-		// Open a file for update both reading and writing. The file must exist.
+		// Open a file for update both reading and writing. The file must exist
 		_nodeFile = fopen( _fileNameNode.data(), "rb+" );
+
 		if ( _nodeFile )
 		{
 			// Iterate through nodes of the data structure
@@ -910,19 +913,13 @@ void GsDataStructureIOHandler::openFiles( const string& pName, bool pNewFiles )
 			for ( unsigned int node = 0; node < _nodeGridSize * _nodeGridSize * _nodeGridSize ; ++node )
 			{
 				// Read current node info and update brick number if not empty
-				fread( &nodeData, 1, sizeof( unsigned int ), _nodeFile );
+				fread( &nodeData, sizeof( unsigned int ), 1, _nodeFile );
 				if ( ! isEmpty( nodeData ) )
 				{
 					// Update brick counter
 					_brickNumber++;
 				}
 				_nodeData[ node ] = nodeData;
-			}
-			_brickData = new unsigned short[ _brickNumber * _brickSize ];
-			FILE* brickFile = fopen( getFileNameBrick( pName, _level, _brickWidth, 0, GsDataTypeHandler::getTypeName( _dataTypes[ 0 ] ) ).data(), "rb+" );
-			if ( brickFile ) {
-				fread( _brickData, 1, _brickNumber * _brickSize * GsDataTypeHandler::canalByteSize( _dataTypes[ 0 ] ), brickFile );
-				fclose( brickFile );
 			}
 		}
 	}
@@ -935,30 +932,35 @@ void GsDataStructureIOHandler::openFiles( const string& pName, bool pNewFiles )
 		_nodeFile = fopen( _fileNameNode.data(), "wb+" );
 		
 		// Iterate through nodes of the data structure
-		for ( unsigned int node = 0; node < _nodeGridSize * _nodeGridSize * _nodeGridSize; ++node )
-		{
+		//for ( unsigned int node = 0; node < _nodeGridSize * _nodeGridSize * _nodeGridSize; ++node )
+		//{
 			// Fill node file with the "empty node flag"
-			fwrite( &_cEmptyNodeFlag, 1, sizeof( unsigned int ), _nodeFile );
-		}
-		fflush( _nodeFile );
+		//	fwrite( &_cEmptyNodeFlag, 1, sizeof( unsigned int ), _nodeFile );
+		//}
+		//fflush( _nodeFile );
 	}
 
 	// [ 2 ] - Handle brick file(s) - [ 2 ]
 
 	// Iterate through data channels (i.e. data types)
+	FILE *brickFile = NULL;
+	if ( ! pNewFiles )
+	{
+		// Open a file for update both reading and writing. The file must exist.
+		free(_brickData);
+		_brickData = (unsigned short *) malloc( _brickNumber * _brickSize * sizeof( unsigned short ) );
+		brickFile = fopen( getFileNameBrick( pName, _level, _brickWidth, 0, GsDataTypeHandler::getTypeName( _dataTypes[ 0 ] ) ).data(), "rb+" );
+		if ( brickFile ) {
+			fread( _brickData,  sizeof(unsigned short), _brickNumber * _brickSize, brickFile );
+			fclose( brickFile );
+		}
+	}
 	for ( int c = 0; c < _dataTypes.size(); ++c )
 	{
 		// Retrieve the brick file name associated to current data channel and store it
 		_fileNamesBrick.push_back( getFileNameBrick( pName, _level, _brickWidth, c, GsDataTypeHandler::getTypeName( _dataTypes[ c ] ) ) );
 
-		FILE* brickFile = NULL;
-
 		// Handle case where no "new files" are requested
-		if ( ! pNewFiles )
-		{
-			// Open a file for update both reading and writing. The file must exist.
-			brickFile = fopen( _fileNamesBrick[ c ].data(), "rb+" );
-		}
 
 		// Handle case where "new files" are requested or if "brickFile" has not been initialized
 		if ( ! brickFile || pNewFiles )
@@ -1049,7 +1051,7 @@ unsigned int createBrickNode( unsigned int pBrickNumber )
 /******************************************************************************
  * Retrieve the brick offset of a brick given a node info.
  *
- * @param pNode a node info_trueNbOfValues
+ * @param pNode a node info
  *
  * @return the brick offset
  ******************************************************************************/
@@ -1065,9 +1067,8 @@ void GsDataStructureIOHandler::writeFiles(){
 	fflush( _nodeFile );
 
 	//Write brick file
-	unsigned int sizeOfBrickData = std::ceil((double) _trueNbOfValues / (double) _brickSize);
 	for ( unsigned int i = 0; i < _dataTypes.size(); ++i ){
-		fwrite( _brickData, GsDataTypeHandler::canalByteSize( _dataTypes[ i ] ), sizeOfBrickData * _brickSize, _brickFiles[ i ] );
+		fwrite( _brickData, GsDataTypeHandler::canalByteSize( _dataTypes[ i ] ), _brickNumber * _brickSize, _brickFiles[ i ] );
 		fflush( _brickFiles[ i ] );
 	}
 }

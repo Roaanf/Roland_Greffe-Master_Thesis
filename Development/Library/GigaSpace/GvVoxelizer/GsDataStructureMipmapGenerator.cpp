@@ -122,7 +122,7 @@ bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& p
 	// Two files/streamers are used :
 	// UP is an already pre-filtered scene at resolution [ N ]
 	// DOWN is the coarser version to generate at resolution [ N - 1 ]
-	GsDataStructureIOHandler* dataStructureIOHandlerUP = new GsDataStructureIOHandler( pFileName, levelOfResolution, brickWidth, dataTypes, false, 15 );
+	GsDataStructureIOHandler* dataStructureIOHandlerUP = new GsDataStructureIOHandler( pFileName, levelOfResolution, brickWidth, dataTypes, false);
 	GsDataStructureIOHandler* dataStructureIOHandlerDOWN = NULL;
 
 	// Iterate through levels of resolution
@@ -132,16 +132,13 @@ bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& p
 		std::cout << "GvVoxelizerEngine::mipmap : level : " << level << std::endl;
 
 		// The coarser data handler is allocated dynamically due to memory consumption considerations.
-		dataStructureIOHandlerDOWN = new GsDataStructureIOHandler( pFileName, level, brickWidth, dataTypes, true, (2^level)*brickWidth);
+		dataStructureIOHandlerDOWN = new GsDataStructureIOHandler( pFileName, level, brickWidth, dataTypes, true);
 
 		// Iterate through nodes of the structure
 		unsigned int nodePos[ 3 ];
 		for ( nodePos[2] = 0; nodePos[2] < dataStructureIOHandlerUP->_nodeGridSize; nodePos[2]++ )
 		for ( nodePos[1] = 0; nodePos[1] < dataStructureIOHandlerUP->_nodeGridSize; nodePos[1]++ )
 		{
-			// LOG info
-			std::cout << "mipmap - LEVEL [ " << level << " ] - Node [ " << "x" << " / " << nodePos[1] << " / " << nodePos[2] << " ] - " << dataStructureIOHandlerUP->_nodeGridSize << std::endl;
-			
 		for ( nodePos[ 0 ] = 0; nodePos[ 0 ] < dataStructureIOHandlerUP->_nodeGridSize; nodePos[ 0 ]++ )
 		{
 			// Retrieve the current node info
@@ -229,6 +226,9 @@ bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& p
 
 		// Generate the border data of the coarser scene
 		dataStructureIOHandlerDOWN->computeBorders();
+
+		// Write the coarser scene
+		dataStructureIOHandlerDOWN->writeFiles();
 		
 		// Destroy the coarser data handler (due to memory consumption considerations)
 		delete dataStructureIOHandlerUP;

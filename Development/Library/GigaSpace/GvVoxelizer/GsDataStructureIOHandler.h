@@ -119,11 +119,6 @@ public:
 	 * Currently, there is only a border of one voxel on each side of bricks.
 	 */
 	const unsigned int _brickSize;	
-
-	/**
-	 * True number of voxels of opened file
-	*/
-	const unsigned int _trueNbOfValues;
 	
 	/******************************** METHODS *********************************/
 
@@ -140,8 +135,7 @@ public:
 								unsigned int pLevel,
 								unsigned int pBrickWidth,
 								GsDataTypeHandler::VoxelDataType pDataType,
-								bool pNewFiles,
-								unsigned int pTrueNbOfValues);
+								bool pNewFiles);
 
 	/**
      * Constructor
@@ -156,8 +150,7 @@ public:
 								unsigned int pLevel,
 								unsigned int pBrickWidth,
 								const std::vector< GsDataTypeHandler::VoxelDataType >& pDataTypes,
-								bool pNewFiles,
-								unsigned int pTrueNbOfValues);
+								bool pNewFiles);
 
 	/**
      * Destructor
@@ -336,7 +329,9 @@ public:
 	 * @return a flag telling whether or not a node is empty
 	 */
 	static bool isEmpty( unsigned int pNode );
-	
+
+	void writeFiles();
+
 	/**************************************************************************
 	 **************************** PROTECTED SECTION ***************************
 	 **************************************************************************/
@@ -509,8 +504,6 @@ protected:
 	 * @param pNewFiles a flag telling whether or not new files are used
 	 */
 	void openFiles( const std::string& name, bool newFiles );
-
-	void writeFiles();
 
 	/**
 	 * Retrieve the node file name.
