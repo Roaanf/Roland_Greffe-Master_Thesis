@@ -132,7 +132,7 @@ bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& p
 		std::cout << "GvVoxelizerEngine::mipmap : level : " << level << std::endl;
 
 		// The coarser data handler is allocated dynamically due to memory consumption considerations.
-		dataStructureIOHandlerDOWN = new GsDataStructureIOHandler( pFileName, level, brickWidth, dataTypes, true);
+		dataStructureIOHandlerDOWN = new GsDataStructureIOHandler( pFileName, level, brickWidth, dataTypes[0], true);
 
 		// Iterate through nodes of the structure
 		unsigned int nodePos[ 3 ];

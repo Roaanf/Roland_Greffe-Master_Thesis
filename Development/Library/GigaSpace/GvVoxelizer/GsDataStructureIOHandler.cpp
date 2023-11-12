@@ -148,7 +148,6 @@ GsDataStructureIOHandler::GsDataStructureIOHandler( const std::string& pName,
 {
 	// Store the voxel data type
 	_dataTypes = pDataTypes;
-	std::cout << _nodeGridSize << std::endl;
 
 	// Initialize all the files that will be generated.
 	// Initialize buffers
@@ -168,7 +167,7 @@ GsDataStructureIOHandler::~GsDataStructureIOHandler()
 {
 	if ( _isBufferLoaded )
 	{
-		saveNodeandBrick();
+		saveNodeandBrick_buffered();
 	}
 
 	fclose( _nodeFile );
