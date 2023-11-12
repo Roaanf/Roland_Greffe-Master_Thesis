@@ -101,13 +101,12 @@ bool GsIRAWFileReader::read()
 {
 	bool result = false;
 
-	/*std::cout << "- [step 1 / 3] - Read data and write voxels..." << std::endl;
+	std::cout << "- [step 1 / 3] - Read data and write voxels..." << std::endl;
 	// For the RAWReader plugin this calls the readData function of RawFileReader.inl and not the one just below
 	result = readData();	// TO DO : add a boolean return value
 
 	std::cout << "- [step 2 / 3] - Update borders..." << std::endl;
 	_dataStructureIOHandler->computeBorders();	// TO DO : add a boolean return value
-	*/
 	std::cout << "- [step 3 / 3] - Mipmap pyramid generation..." << std::endl;
 	result = generateMipmapPyramid();
 
