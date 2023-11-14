@@ -254,7 +254,9 @@ bool RawFileReader< TType >::optimizedReadData()
 									continue;
 								}
 
-								voxelData = _data[ true_x + true_y * trueX + true_z * trueX * trueY];
+								size_t index = true_x + true_y * trueX + true_z * trueX * trueY;
+								
+								voxelData = _data[index];
 					
 								// Update min/max values
 								if ( voxelData < _minDataValue )
