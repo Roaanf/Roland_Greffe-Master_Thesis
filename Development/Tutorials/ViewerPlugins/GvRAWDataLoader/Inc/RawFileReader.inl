@@ -133,14 +133,14 @@ bool RawFileReader< TType >::optimizedReadData()
 		// Allocate a buffer to store all data
 		// - BEWARE : only works if _dataResolution is maximum 1024 (2048 will fail due to max "unsigned int" limit)
 		// Thats an issue in 32bit but since we are in 64 we should be good to do way more
-		const unsigned int nbValues = _dataResolution * _dataResolution * _dataResolution;
+		const size_t nbValues = _dataResolution * _dataResolution * _dataResolution;
 		// Hardcoded RN because try to see if it works
 		// TODO : find an elegant solution to the problem
-		unsigned int trueX = 840;
-		unsigned int trueY = 1103;
-		unsigned int trueZ = 840;
+		size_t trueX = 1681;
+		size_t trueY = 2206;
+		size_t trueZ = 1681;
 
-		const unsigned int trueNbValues = trueX * trueY * trueZ;
+		const size_t trueNbValues = trueX * trueY * trueZ;
 
 		// Read data file
 		// - open file
@@ -166,14 +166,16 @@ bool RawFileReader< TType >::optimizedReadData()
 
 		// Write equivalent GigaSpace voxels file
 		// - create a file/streamer handler to read/write GigaVoxels data
-		const unsigned int brickWidth = 8;
-		const unsigned int levelOfResolution = static_cast< unsigned int >( log( static_cast< float >( getDataResolution() / brickWidth ) ) / log( static_cast< float >( 2 ) ) );
+		const size_t brickWidth = 8;
+		const size_t levelOfResolution = static_cast<size_t>( log( static_cast< float >( getDataResolution() / brickWidth ) ) / log( static_cast< float >( 2 ) ) );
+		std::cout << "Level of resolution : " << levelOfResolution << std::endl;
 		
 		_dataStructureIOHandler = new GvVoxelizer::GsDataStructureIOHandler( getFilename(), levelOfResolution, brickWidth, getDataType(), true);
 		TType voxelData;
-		unsigned int voxelPosition[ 3 ];
-		unsigned int index = 0;
-		// The issue is probably because of the thing machin truc pfffffff
+		size_t voxelPosition[ 3 ];
+		
+		/*Old method
+		size_t index = 0;
 		std::cout << "Entering the loop" << std::endl;
 		for ( unsigned int z = 0; z < _dataResolution; z++ ) // Is trueZ an issue here ?
 		{
@@ -229,23 +231,25 @@ bool RawFileReader< TType >::optimizedReadData()
 				}
 			}
 		}
-		/* Try to do it brick by brick
-		unsigned int nodeSize = (1 << levelOfResolution) * brickWidth;
-		for ( unsigned int node_z = 0; node_z < nodeSize ; node_z++ ){
-			for (unsigned int node_y = 0; node_y < nodeSize; node_y++) {
-				for (unsigned int node_x = 0; node_x < nodeSize; node_x++) {
-					for (unsigned int z_brick = 0; z_brick < brickWidth; z_brick++) {
-						for (unsigned int y_brick = 0; y_brick < brickWidth; y_brick++) {
-							for (unsigned int x_brick = 0; x_brick < brickWidth; x_brick++) {
-								unsigned int true_x = node_x * brickWidth + x_brick;
+		*/
+		std::cout << "Entering the loop" << std::endl;
+		// Try to do it brick by brick -> speedup de fou -> unsigned int devrait �tre size_t non ????
+		size_t nodeSize = (1 << levelOfResolution);
+		for ( size_t node_z = 0; node_z < nodeSize ; node_z++ ){
+			for (size_t node_y = 0; node_y < nodeSize; node_y++) {
+				for (size_t node_x = 0; node_x < nodeSize; node_x++) {
+					for (size_t z_brick = 0; z_brick < brickWidth; z_brick++) {
+						for (size_t y_brick = 0; y_brick < brickWidth; y_brick++) {
+							for (size_t x_brick = 0; x_brick < brickWidth; x_brick++) {
+								size_t true_x = node_x * brickWidth + x_brick;
 								if (true_x >= trueX) {
 									continue;
 								}
-								unsigned int true_y = node_y * brickWidth + y_brick;
+								size_t true_y = node_y * brickWidth + y_brick;
 								if (true_y >= trueY) {
 									continue;
 								}
-								unsigned int true_z = node_z * brickWidth + z_brick;
+								size_t true_z = node_z * brickWidth + z_brick;
 								if (true_z >= trueZ) {
 									continue;
 								}
@@ -278,7 +282,7 @@ bool RawFileReader< TType >::optimizedReadData()
 				}
 			}
 		}
-		*/
+		
 
 		// Free resources
 		delete[] _data;

@@ -135,7 +135,7 @@ bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& p
 		dataStructureIOHandlerDOWN = new GsDataStructureIOHandler( pFileName, level, brickWidth, dataTypes[0], true);
 
 		// Iterate through nodes of the structure
-		unsigned int nodePos[ 3 ];
+		size_t nodePos[ 3 ];
 		for ( nodePos[2] = 0; nodePos[2] < dataStructureIOHandlerUP->_nodeGridSize; nodePos[2]++ )
 		for ( nodePos[1] = 0; nodePos[1] < dataStructureIOHandlerUP->_nodeGridSize; nodePos[1]++ )
 		{
@@ -151,7 +151,7 @@ bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& p
 			}
 
 			// Iterate through voxels of the current node
-			unsigned int voxelPos[ 3 ];
+			size_t voxelPos[ 3 ];
 			for ( voxelPos[ 2 ] = brickWidth * nodePos[ 2 ]; voxelPos[ 2 ] < dataStructureIOHandlerUP->_brickWidth * ( nodePos[ 2 ] + 1 ); voxelPos[ 2 ] +=2 )
 			for ( voxelPos[ 1 ] = brickWidth * nodePos[ 1 ]; voxelPos[ 1 ] < dataStructureIOHandlerUP->_brickWidth * ( nodePos[ 1 ] + 1 ); voxelPos[ 1 ] +=2 )
 			for ( voxelPos[ 0 ] = brickWidth * nodePos[ 0 ]; voxelPos[ 0 ] < dataStructureIOHandlerUP->_brickWidth * ( nodePos[ 0 ] + 1 ); voxelPos[ 0 ] +=2 )
@@ -161,12 +161,12 @@ bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& p
 
 				// As the underlying structure is an octree, to compute data at coarser level,
 				// we need to iterate through 8 voxels and take the mean value.
-				for ( unsigned int z = 0; z < 2; z++ )
-				for ( unsigned int y = 0; y < 2; y++ )
-				for ( unsigned int x = 0; x < 2; x++ )
+				for ( size_t z = 0; z < 2; z++ )
+				for (size_t y = 0; y < 2; y++ )
+				for (size_t x = 0; x < 2; x++ )
 				{
 					// Retrieve position of voxel in the UP resolution version
-					unsigned int voxelPosUP[ 3 ];
+					size_t voxelPosUP[ 3 ];
 					voxelPosUP[ 0 ] = voxelPos[ 0 ] + x;
 					voxelPosUP[ 1 ] = voxelPos[ 1 ] + y;
 					voxelPosUP[ 2 ] = voxelPos[ 2 ] + z;
@@ -193,7 +193,7 @@ bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& p
 				}
 
 				// Coarser voxel is scaled from current UP voxel (2 times smaller for octree)
-				unsigned int voxelPosDOWN[3];
+				size_t voxelPosDOWN[3];
 				voxelPosDOWN[ 0 ] = voxelPos[ 0 ] / 2;
 				voxelPosDOWN[ 1 ] = voxelPos[ 1 ] / 2;
 				voxelPosDOWN[ 2 ] = voxelPos[ 2 ] / 2;
@@ -226,9 +226,6 @@ bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& p
 
 		// Generate the border data of the coarser scene
 		dataStructureIOHandlerDOWN->computeBorders();
-
-		// Write the coarser scene
-		dataStructureIOHandlerDOWN->writeFiles();
 		
 		// Destroy the coarser data handler (due to memory consumption considerations)
 		delete dataStructureIOHandlerUP;
