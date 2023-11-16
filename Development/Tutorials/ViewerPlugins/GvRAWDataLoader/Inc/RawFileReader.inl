@@ -136,9 +136,9 @@ bool RawFileReader< TType >::optimizedReadData()
 		const size_t nbValues = _dataResolution * _dataResolution * _dataResolution;
 		// Hardcoded RN because try to see if it works
 		// TODO : find an elegant solution to the problem
-		size_t trueX = 1681;
-		size_t trueY = 2206;
-		size_t trueZ = 1681;
+		size_t trueX = 840;
+		size_t trueY = 1103;
+		size_t trueZ = 840;
 
 		const size_t trueNbValues = trueX * trueY * trueZ;
 
@@ -166,7 +166,7 @@ bool RawFileReader< TType >::optimizedReadData()
 
 		// Write equivalent GigaSpace voxels file
 		// - create a file/streamer handler to read/write GigaVoxels data
-		const size_t brickWidth = 8;
+		const size_t brickWidth = 32;
 		const size_t levelOfResolution = static_cast<size_t>( log( static_cast< float >( getDataResolution() / brickWidth ) ) / log( static_cast< float >( 2 ) ) );
 		std::cout << "Level of resolution : " << levelOfResolution << std::endl;
 		
@@ -233,8 +233,12 @@ bool RawFileReader< TType >::optimizedReadData()
 		}
 		*/
 		std::cout << "Entering the loop" << std::endl;
-		// Try to do it brick by brick -> speedup de fou -> unsigned int devrait �tre size_t non ????
+		// Try to do it brick by brick -> speedup de fou !
 		size_t nodeSize = (1 << levelOfResolution);
+		/*
+			We iterate over the nodes, and for each node we iterate over each voxel of that node
+			It goes faster than just iterating over the voxels, because we don't have to change the current noce/brick buffer as often in the GsDataStructureIOHandler
+		*/
 		for ( size_t node_z = 0; node_z < nodeSize ; node_z++ ){
 			for (size_t node_y = 0; node_y < nodeSize; node_y++) {
 				for (size_t node_x = 0; node_x < nodeSize; node_x++) {
