@@ -279,7 +279,7 @@ void SampleCore::init()
 	gigaSpaceWriter->setModelDirectory( dataFileInfo.absolutePath().toLatin1().constData() );
 	gigaSpaceWriter->setModelName( dataFileInfo.completeBaseName().toLatin1().constData() );
 	std::cout << "get3DModelResolution : " << get3DModelResolution() << std::endl;
-	const unsigned int modelMaxResolution = static_cast< unsigned int >( log( static_cast< float >( get3DModelResolution() / 8/*<== if 8 voxels by bricks*/ ) ) / log( static_cast< float >( 2 ) ) );
+	const unsigned int modelMaxResolution = static_cast< unsigned int >( log( static_cast< float >( get3DModelResolution() / 32/*<== if 32 voxels by bricks*/ ) ) / log( static_cast< float >( 2 ) ) );
 	std::cout << "\nModel max resolution : "<< modelMaxResolution << std::endl;
 	gigaSpaceWriter->setModelMaxResolution( modelMaxResolution );
 	const unsigned int brickWidth = PipelineType::BrickTileResolution::get().x;	/*BEWARE : bricks are uniforms*/

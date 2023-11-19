@@ -106,7 +106,12 @@ bool GsIRAWFileReader::read()
 	result = readData();	// TO DO : add a boolean return value
 
 	std::cout << "- [step 2 / 3] - Update borders..." << std::endl;
+
 	_dataStructureIOHandler->computeBorders();	// TO DO : add a boolean return value
+
+	std::cout << "- [step 2.5 / 3] - Writing Files..." << std::endl;
+	_dataStructureIOHandler->writeFiles();
+
 	std::cout << "- [step 3 / 3] - Mipmap pyramid generation..." << std::endl;
 	result = generateMipmapPyramid();
 

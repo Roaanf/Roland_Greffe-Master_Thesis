@@ -166,7 +166,7 @@ bool RawFileReader< TType >::optimizedReadData()
 
 		// Write equivalent GigaSpace voxels file
 		// - create a file/streamer handler to read/write GigaVoxels data
-		const size_t brickWidth = 8;
+		const size_t brickWidth = 32;
 		const size_t levelOfResolution = static_cast<size_t>( log( static_cast< float >( getDataResolution() / brickWidth ) ) / log( static_cast< float >( 2 ) ) );
 		std::cout << "Level of resolution : " << levelOfResolution << std::endl;
 		
@@ -288,13 +288,10 @@ bool RawFileReader< TType >::optimizedReadData()
 				}
 			}
 		}
-		
 
 		// Free resources
 		delete[] _data;
 
-		// Write the GigaSpace data
-		//_dataStructureIOHandler->writeFiles();
 	}
 	else if ( _mode == eASCII )
 	{

@@ -80,9 +80,10 @@ typedef Loki::TL::MakeTypelist< ushort >::Result DataType;
 typedef GvCore::GsVec1D< 2 > NodeRes; // The GsVec1D represent a 3D resolution where each dimension has the same value 
 
 // Defines the size of a brick
-typedef GvCore::GsVec1D< 8 > BrickRes;
+typedef GvCore::GsVec1D< 32 > BrickRes;
 
 // Defines the type of structure we want to use
+//typedef GvStructure::GsVolumeTree< DataType, NodeRes, BrickRes, 0 > DataStructureType;
 typedef GvStructure::GsVolumeTree< DataType, NodeRes, BrickRes > DataStructureType;
 
 // Defines the type of the producer

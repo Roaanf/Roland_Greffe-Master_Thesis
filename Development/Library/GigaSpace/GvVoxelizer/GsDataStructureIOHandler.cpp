@@ -100,6 +100,7 @@ GsDataStructureIOHandler::GsDataStructureIOHandler( const std::string& pName,
 :	_nodeFile( NULL )
 ,	_level( pLevel )
 ,	_brickWidth( pBrickWidth )
+//,	_brickSize( ( pBrickWidth) * ( pBrickWidth) * ( pBrickWidth) )
 ,	_brickSize( ( pBrickWidth + 2 ) * ( pBrickWidth + 2 ) * ( pBrickWidth + 2 ) )
 ,	_isBufferLoaded( false )
 ,	_brickNumber( 0 )
@@ -144,6 +145,7 @@ GsDataStructureIOHandler::GsDataStructureIOHandler( const std::string& pName,
 :	_nodeFile( NULL )
 ,	_level( pLevel )
 ,	_brickWidth( pBrickWidth )
+//,	_brickSize( (pBrickWidth) * ( pBrickWidth) * (pBrickWidth) )
 ,	_brickSize( ( pBrickWidth + 2 ) * ( pBrickWidth + 2 ) * ( pBrickWidth + 2 ) )
 ,	_dataTypes( pDataTypes )
 ,	_isBufferLoaded( false )
@@ -248,6 +250,12 @@ void GsDataStructureIOHandler::setVoxel_buffered( size_t pVoxelPos[ 3 ], const v
 	// Retrieve the voxel position in the current brick
 	// (take into account the border)
 	unsigned int voxelPosInBrick[ 3 ];
+	/*
+	voxelPosInBrick[ 0 ] = pVoxelPos[ 0 ] % _brickWidth;
+	voxelPosInBrick[ 1 ] = pVoxelPos[ 1 ] % _brickWidth;
+	voxelPosInBrick[ 2 ] = pVoxelPos[ 2 ] % _brickWidth;
+	*/
+
 	voxelPosInBrick[ 0 ] = pVoxelPos[ 0 ] % _brickWidth + 1;
 	voxelPosInBrick[ 1 ] = pVoxelPos[ 1 ] % _brickWidth + 1;
 	voxelPosInBrick[ 2 ] = pVoxelPos[ 2 ] % _brickWidth + 1;
@@ -260,6 +268,11 @@ void GsDataStructureIOHandler::setVoxel_buffered( size_t pVoxelPos[ 3 ], const v
 		size = GsDataTypeHandler::canalByteSize( _dataTypes[ pDataChannel ] );
 	}
 	// ça le met dans _brickbuffer apparemment ?
+	/*
+	memcpy( GsDataTypeHandler::getAddress( _dataTypes[ pDataChannel ], _brickBuffers[ pDataChannel ], voxelPosInBrick[ 0 ] + ( _brickWidth ) * ( voxelPosInBrick[ 1 ] + ( _brickWidth ) * voxelPosInBrick[ 2 ] ) ),
+			pVoxelData,
+			size );
+	*/
 	memcpy( GsDataTypeHandler::getAddress( _dataTypes[ pDataChannel ], _brickBuffers[ pDataChannel ], voxelPosInBrick[ 0 ] + ( _brickWidth + 2 ) * ( voxelPosInBrick[ 1 ] + ( _brickWidth + 2 ) * voxelPosInBrick[ 2 ] ) ),
 			pVoxelData,
 			size );
@@ -605,7 +618,6 @@ void GsDataStructureIOHandler::computeBorders()
 //		delete [] brick;
 //		delete [] brick2;
 	}
-	writeFiles();
 }
 
 /******************************************************************************
@@ -718,6 +730,7 @@ string GsDataStructureIOHandler::getFileNameNode( const std::string& pName, unsi
 {
 	std::ostringstream oss;
 	
+	//oss << pName << "_BR" << pBrickWidth << "_B0_L" << pLevel << ".nodes";
 	oss << pName << "_BR" << pBrickWidth << "_B1_L" << pLevel << ".nodes";
 
 	return oss.str();
@@ -742,6 +755,7 @@ string GsDataStructureIOHandler::getFileNameBrick( const string& pName, unsigned
 {
 	std::ostringstream oss;
 
+	//oss << pName << "_BR" << pBrickWidth << "_B0_L" << pLevel << "_C" << pDataChannelIndex << "_" << pDataTypeName << ".bricks";
 	oss << pName << "_BR" << pBrickWidth << "_B1_L" << pLevel << "_C" << pDataChannelIndex << "_" << pDataTypeName << ".bricks";
 
 	return oss.str();

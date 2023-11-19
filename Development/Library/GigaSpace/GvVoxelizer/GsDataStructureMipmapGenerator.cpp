@@ -105,8 +105,8 @@ bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& p
 	bool result = false;
 
 	unsigned int dataResolution = pDataResolution;
-	unsigned int levelOfResolution = static_cast< unsigned int >( log( static_cast< float >( dataResolution / 8 ) ) / log( static_cast< float >( 2 ) ) );
-	unsigned int brickWidth = 8; // TO DO : template different size
+	unsigned int levelOfResolution = static_cast< unsigned int >( log( static_cast< float >( dataResolution / 32 ) ) / log( static_cast< float >( 2 ) ) );
+	unsigned int brickWidth = 32; // TO DO : template different size
 	//GsDataTypeHandler::VoxelDataType dataType = GsDataTypeHandler::gvUCHAR4;	// TO DO : template differents type
 	//GsDataTypeHandler::VoxelDataType dataType = GsDataTypeHandler::gvUCHAR;
 	//GsDataTypeHandler::VoxelDataType dataType = GsDataTypeHandler::gvUSHORT;
@@ -161,7 +161,7 @@ bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& p
 
 				// As the underlying structure is an octree, to compute data at coarser level,
 				// we need to iterate through 8 voxels and take the mean value.
-				for ( size_t z = 0; z < 2; z++ )
+				for (size_t z = 0; z < 2; z++ )
 				for (size_t y = 0; y < 2; y++ )
 				for (size_t x = 0; x < 2; x++ )
 				{
@@ -225,7 +225,10 @@ bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& p
 		}
 
 		// Generate the border data of the coarser scene
+		
 		dataStructureIOHandlerDOWN->computeBorders();
+
+		dataStructureIOHandlerDOWN->writeFiles();
 		
 		// Destroy the coarser data handler (due to memory consumption considerations)
 		delete dataStructureIOHandlerUP;
