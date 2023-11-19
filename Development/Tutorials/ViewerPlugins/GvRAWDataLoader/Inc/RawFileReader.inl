@@ -133,7 +133,8 @@ bool RawFileReader< TType >::optimizedReadData()
 		// Allocate a buffer to store all data
 		// - BEWARE : only works if _dataResolution is maximum 1024 (2048 will fail due to max "unsigned int" limit)
 		// Thats an issue in 32bit but since we are in 64 we should be good to do way more
-		const size_t nbValues = _dataResolution * _dataResolution * _dataResolution;
+		const size_t nbValues = (size_t)_dataResolution * (size_t)_dataResolution * (size_t)_dataResolution;
+		std::cout << "Nb values : " << nbValues << std::endl;
 		// Hardcoded RN because try to see if it works
 		// TODO : find an elegant solution to the problem
 		size_t trueX = 1681;

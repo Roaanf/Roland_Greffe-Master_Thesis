@@ -148,13 +148,16 @@ namespace GvCore
 	 *
 	 * @note All is done at compile-time.
 	 */
-	template< size_t Ta, size_t Tb >
-	struct IDivUp
+	template< int Ta, int Tb >
+	struct Max
 	{
 		/**
 		 * ...
 		 */
-		static const size_t value = (Ta % Tb != 0) ? (Ta / Tb + 1) : (Ta / Tb);
+		enum
+		{
+			value = Ta > Tb ? Ta : Tb
+		};
 	};
 
 } //namespace GvCore
@@ -209,13 +212,16 @@ namespace GvCore
 	 *
 	 * @note All is done at compile-time.
 	 */
-	template< size_t Ta, size_t Tb >
+	template< int Ta, int Tb >
 	struct IDivUp
 	{
 		/**
 		 * ...
 		 */
-		static size_t value = (Ta % Tb != 0) ? (Ta / Tb + 1) : (Ta / Tb);
+		enum
+		{
+			value = ( Ta % Tb != 0 ) ? ( Ta / Tb + 1 ) : ( Ta / Tb )
+		};
 	};
 
 } //namespace GvCore

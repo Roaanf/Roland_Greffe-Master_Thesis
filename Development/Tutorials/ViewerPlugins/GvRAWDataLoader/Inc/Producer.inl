@@ -72,6 +72,7 @@ Producer< TDataStructureType, TDataProductionManager >
 
 	// size_t brickSize = voxelSize * nbVoxelsPerBrick;
 	size_t brickSize = voxelSize * (size_t)KernelProducerType::BrickVoxelAlignment;
+	std::cout << "Brick size: " << brickSize << "\n";
 	this->_nbMaxRequests = gpuCacheSize / brickSize; // gpuCacheSize defines the maximum number of request (per ask ?) 
 	this->_bufferNbVoxels = gpuCacheSize / voxelSize;
 

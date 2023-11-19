@@ -247,7 +247,7 @@ public:
 	 * @param pNormalizedNodePos normalized node position
 	 * @param pNodePos indexed node position
 	 */
-	void getNodePosition(  float pNormalizedNodePos[ 3 ], unsigned int pNodePos[ 3 ] );
+	void getNodePosition(  float pNormalizedNodePos[ 3 ], size_t pNodePos[ 3 ] );
 
 	/**
 	 * Convert a normalized voxel position to its indexed voxel position
@@ -255,7 +255,7 @@ public:
 	 * @param pNormalizedVoxelPos normalized voxel position
 	 * @param pVoxelPos indexed voxel position
 	 */
-	void getVoxelPosition( float pNormalizedVoxelPos[ 3 ], unsigned int pVoxelPos[ 3 ] );
+	void getVoxelPosition( float pNormalizedVoxelPos[ 3 ], size_t pVoxelPos[ 3 ] );
 
 	/**
 	 * Convert a normalized voxel position to its indexed voxel position in its associated brick
@@ -263,7 +263,7 @@ public:
 	 * @param pNormalizedVoxelPos normalized voxel position
 	 * @param pVoxelPosInBrick indexed voxel position in its associated brick
 	 */
-	void getVoxelPositionInBrick( float pNormalizedVoxelPos[ 3 ], unsigned int pVoxelPosInBrick[ 3 ] );
+	void getVoxelPositionInBrick( float pNormalizedVoxelPos[ 3 ], size_t pVoxelPosInBrick[ 3 ] );
 	
 	/**@}*/
 

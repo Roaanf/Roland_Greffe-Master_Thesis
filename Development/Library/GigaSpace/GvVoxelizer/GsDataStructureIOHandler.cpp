@@ -249,7 +249,7 @@ void GsDataStructureIOHandler::setVoxel_buffered( size_t pVoxelPos[ 3 ], const v
  
 	// Retrieve the voxel position in the current brick
 	// (take into account the border)
-	unsigned int voxelPosInBrick[ 3 ];
+	size_t voxelPosInBrick[ 3 ];
 	/*
 	voxelPosInBrick[ 0 ] = pVoxelPos[ 0 ] % _brickWidth;
 	voxelPosInBrick[ 1 ] = pVoxelPos[ 1 ] % _brickWidth;
@@ -347,11 +347,11 @@ void GsDataStructureIOHandler::setBrick_buffered( size_t pNodePos[ 3 ], void* pB
  * @param pNormalizedNodePos normalized node position
  * @param pNodePos indexed node position
   ******************************************************************************/
-void GsDataStructureIOHandler::getNodePosition( float pNormalizedNodePos[ 3 ], unsigned int pNodePos[ 3 ] )
+void GsDataStructureIOHandler::getNodePosition( float pNormalizedNodePos[ 3 ], size_t pNodePos[ 3 ] )
 {
-	pNodePos[ 0 ] = static_cast< unsigned int >( pNormalizedNodePos[ 0 ] * static_cast< float >( _nodeGridSize ) );
-	pNodePos[ 1 ] = static_cast< unsigned int >( pNormalizedNodePos[ 1 ] * static_cast< float >( _nodeGridSize ) );
-	pNodePos[ 2 ] = static_cast< unsigned int >( pNormalizedNodePos[ 2 ] * static_cast< float >( _nodeGridSize ) );
+	pNodePos[ 0 ] = static_cast< size_t >( pNormalizedNodePos[ 0 ] * static_cast< float >( _nodeGridSize ) );
+	pNodePos[ 1 ] = static_cast< size_t >( pNormalizedNodePos[ 1 ] * static_cast< float >( _nodeGridSize ) );
+	pNodePos[ 2 ] = static_cast< size_t >( pNormalizedNodePos[ 2 ] * static_cast< float >( _nodeGridSize ) );
 }
 
 /******************************************************************************
@@ -360,11 +360,11 @@ void GsDataStructureIOHandler::getNodePosition( float pNormalizedNodePos[ 3 ], u
  * @param pNormalizedVoxelPos normalized voxel position
  * @param pVoxelPos indexed voxel position
  ******************************************************************************/
-void GsDataStructureIOHandler::getVoxelPosition( float pNormalizedVoxelPos[ 3 ], unsigned int pVoxelPos[ 3 ] )
+void GsDataStructureIOHandler::getVoxelPosition( float pNormalizedVoxelPos[ 3 ], size_t pVoxelPos[ 3 ] )
 {
-	pVoxelPos[ 0 ] = static_cast< unsigned int >( pNormalizedVoxelPos[ 0 ] * static_cast< float >( _voxelGridSize ) );
-	pVoxelPos[ 1 ] = static_cast< unsigned int >( pNormalizedVoxelPos[ 1 ] * static_cast< float >( _voxelGridSize ) );
-	pVoxelPos[ 2 ] = static_cast< unsigned int >( pNormalizedVoxelPos[ 2 ] * static_cast< float >( _voxelGridSize ) );
+	pVoxelPos[ 0 ] = static_cast< size_t >( pNormalizedVoxelPos[ 0 ] * static_cast< float >( _voxelGridSize ) );
+	pVoxelPos[ 1 ] = static_cast< size_t >( pNormalizedVoxelPos[ 1 ] * static_cast< float >( _voxelGridSize ) );
+	pVoxelPos[ 2 ] = static_cast< size_t >( pNormalizedVoxelPos[ 2 ] * static_cast< float >( _voxelGridSize ) );
 }
 
 /******************************************************************************
@@ -373,11 +373,11 @@ void GsDataStructureIOHandler::getVoxelPosition( float pNormalizedVoxelPos[ 3 ],
  * @param pNormalizedVoxelPos normalized voxel position
  * @param pVoxelPosInBrick indexed voxel position in its associated brick
  ******************************************************************************/
-void GsDataStructureIOHandler::getVoxelPositionInBrick( float pNormalizedVoxelPos[ 3 ], unsigned int pVoxelPosInBrick[ 3 ] )
+void GsDataStructureIOHandler::getVoxelPositionInBrick( float pNormalizedVoxelPos[ 3 ], size_t pVoxelPosInBrick[ 3 ] )
 {
-	pVoxelPosInBrick[ 0 ] = ( ( static_cast< unsigned int >( pNormalizedVoxelPos[ 0 ] * static_cast< float >( _voxelGridSize ) ) ) % _brickWidth ) + 1;
-	pVoxelPosInBrick[ 1 ] = ( ( static_cast< unsigned int >( pNormalizedVoxelPos[ 1 ] * static_cast< float >( _voxelGridSize ) ) ) % _brickWidth ) + 1;
-	pVoxelPosInBrick[ 2 ] = ( ( static_cast< unsigned int >( pNormalizedVoxelPos[ 2 ] * static_cast< float >( _voxelGridSize ) ) ) % _brickWidth ) + 1;
+	pVoxelPosInBrick[ 0 ] = ( ( static_cast< size_t >( pNormalizedVoxelPos[ 0 ] * static_cast< float >( _voxelGridSize ) ) ) % _brickWidth ) + 1;
+	pVoxelPosInBrick[ 1 ] = ( ( static_cast< size_t >( pNormalizedVoxelPos[ 1 ] * static_cast< float >( _voxelGridSize ) ) ) % _brickWidth ) + 1;
+	pVoxelPosInBrick[ 2 ] = ( ( static_cast< size_t >( pNormalizedVoxelPos[ 2 ] * static_cast< float >( _voxelGridSize ) ) ) % _brickWidth ) + 1;
 }
 
 /******************************************************************************
@@ -446,7 +446,7 @@ void GsDataStructureIOHandler::loadNodeandBrick_buffered( size_t pNodePos[ 3 ] )
 		else
 		{
 			// Retrieve the brick offset in brick file
-			unsigned int brickOffset = getBrickOffset( _nodeBuffer );
+			size_t brickOffset = getBrickOffset( _nodeBuffer );
 
 			// Read brick data and store it in buffer
 			unsigned short * casted_brickBuffer = (unsigned short *) _brickBuffers[ c ];
@@ -471,12 +471,12 @@ void GsDataStructureIOHandler::saveNodeandBrick_buffered()
 		_nodeData[ _nodeBufferPos[0] + _nodeGridSize*(_nodeBufferPos[1] + _nodeGridSize*_nodeBufferPos[2]) ] = _nodeBuffer;
 
 		// Retrieve the brick offset in brick file
-		size_t brickOffset = getBrickOffset( _nodeBuffer );
+		unsigned int brickOffset = getBrickOffset( _nodeBuffer );
 		// Iterate through data channels (we only have 1 channel in our case)
 		unsigned short * casted_brickBuffer = (unsigned short *) _brickBuffers[ 0 ];
 		for ( size_t c = 0; c < _brickSize; ++c ) {
 			// Write current brick data
-			_brickData[ brickOffset * _brickSize + c ] = casted_brickBuffer[c];
+			_brickData[ (size_t)brickOffset * (size_t)_brickSize + c ] = casted_brickBuffer[c];
 		}
 	}
 
