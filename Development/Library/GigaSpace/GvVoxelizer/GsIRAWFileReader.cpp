@@ -107,7 +107,7 @@ bool GsIRAWFileReader::read()
 
 	std::cout << "- [step 2 / 3] - Update borders..." << std::endl;
 
-	_dataStructureIOHandler->computeBorders();	// TO DO : add a boolean return value
+	//_dataStructureIOHandler->computeBorders();	// TO DO : add a boolean return value
 
 	std::cout << "- [step 2.5 / 3] - Writing Files..." << std::endl;
 	_dataStructureIOHandler->writeFiles();

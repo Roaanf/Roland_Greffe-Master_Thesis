@@ -71,7 +71,7 @@ Producer< TDataStructureType, TDataProductionManager >
 	size_t voxelSize = GvCore::DataTotalChannelSize< DataTList >::value;
 
 	// size_t brickSize = voxelSize * nbVoxelsPerBrick;
-	size_t brickSize = voxelSize * KernelProducerType::BrickVoxelAlignment;
+	size_t brickSize = voxelSize * (size_t)KernelProducerType::BrickVoxelAlignment;
 	this->_nbMaxRequests = gpuCacheSize / brickSize; // gpuCacheSize defines the maximum number of request (per ask ?) 
 	this->_bufferNbVoxels = gpuCacheSize / voxelSize;
 
@@ -428,7 +428,7 @@ inline void Producer< TDataStructureType, TDataProductionManager >
 			getRegionFromLocalization( locDepth, locCode * BrickRes::get(), regionPos, regionSize );
 			
 			// Uses statically computed alignment
-			uint brickOffset = KernelProducerType::BrickVoxelAlignment;
+			size_t brickOffset = (size_t)KernelProducerType::BrickVoxelAlignment;
 			
 			// Retrieve the node and associated brick located in this region of space,
 			// and depending of its type, if it contains data, load it.

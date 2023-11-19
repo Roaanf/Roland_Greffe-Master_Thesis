@@ -226,7 +226,7 @@ bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& p
 
 		// Generate the border data of the coarser scene
 		
-		dataStructureIOHandlerDOWN->computeBorders();
+		//dataStructureIOHandlerDOWN->computeBorders();
 
 		dataStructureIOHandlerDOWN->writeFiles();
 		

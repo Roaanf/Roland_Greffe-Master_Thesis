@@ -136,9 +136,9 @@ bool RawFileReader< TType >::optimizedReadData()
 		const size_t nbValues = _dataResolution * _dataResolution * _dataResolution;
 		// Hardcoded RN because try to see if it works
 		// TODO : find an elegant solution to the problem
-		size_t trueX = 840;
-		size_t trueY = 1103;
-		size_t trueZ = 840;
+		size_t trueX = 1681;
+		size_t trueY = 2206;
+		size_t trueZ = 1681;
 
 		const size_t trueNbValues = trueX * trueY * trueZ;
 

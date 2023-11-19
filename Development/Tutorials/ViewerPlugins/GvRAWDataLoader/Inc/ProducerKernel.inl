@@ -197,9 +197,9 @@ inline uint ProducerKernel< TDataStructureType >
 	__syncthreads();
 
 	// Iterate through voxels of the current brick
-	const uint blockStartAddress = pRequestID/*brickIndex*/ * ProducerKernel< TDataStructureType >::BrickVoxelAlignment;
-	const uint nbThreads = blockDim.x * blockDim.y * blockDim.z;
-	for ( int index = pProcessID; index < BrickFullRes::numElements/*nbVoxels*/; index += nbThreads )
+	const size_t blockStartAddress = (size_t)pRequestID/*brickIndex*/ * ProducerKernel< TDataStructureType >::BrickVoxelAlignment;
+	const size_t nbThreads = (size_t)blockDim.x * (size_t)blockDim.y * (size_t)blockDim.z;
+	for ( size_t index = pProcessID; index < BrickFullRes::numElements/*nbVoxels*/; index += nbThreads )
 	{
 		// Retrieve Host data
 		voxelData = _hostDataCache.getChannel( Loki::Int2Type< 0/*data channel index*/ >() ).get( blockStartAddress + index );

@@ -171,10 +171,7 @@ public:
 	/**
 	 * Brick voxel alignment
 	 */
-	enum
-	{
-		BrickVoxelAlignment = GvCore::IDivUp< BrickFullRes::x * BrickFullRes::y * BrickFullRes::z, 32 >::value * 32
-	};
+	static const size_t BrickVoxelAlignment = GvCore::IDivUp< (size_t)BrickFullRes::x * (size_t)BrickFullRes::y * (size_t)BrickFullRes::z, 32 >::value * 32;
 
 	/******************************* ATTRIBUTES *******************************/
 
