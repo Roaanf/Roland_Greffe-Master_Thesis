@@ -379,7 +379,7 @@ unsigned int GsDataLoader< TDataTypeList >
 		// Compute the index of the node in the buffer of nodes, given its position
 		//
 		// Nodes are stored in increasing order from X axis first, then Y axis, then Z axis.
-		uint indexPos = pBlockPos.x + pBlockPos.y * blocksInLevel.x + pBlockPos.z * blocksInLevel.x * blocksInLevel.y;
+		size_t indexPos = pBlockPos.x + pBlockPos.y * blocksInLevel.x + pBlockPos.z * blocksInLevel.x * blocksInLevel.y;
 
 		// Get the node address
 		indexValue = _blockIndexCache[ pLevel ][ indexPos ];
@@ -392,7 +392,7 @@ unsigned int GsDataLoader< TDataTypeList >
 #ifdef WIN32
 		__int64 indexPos = ( (__int64)pBlockPos.x + (__int64)( pBlockPos.y * blocksInLevel.x ) + (__int64)( pBlockPos.z * blocksInLevel.x * blocksInLevel.y ) ) * sizeof( unsigned int );
 #else
-		off_t indexPos = ( (off_t)pBlockPos.x + (off_t)( pBlockPos.y * blocksInLevel.x ) + (off_t)( pBlockPos.z * blocksInLevel.x * blocksInLevel.y ) ) * sizeof( unsigned int );
+		size_t indexPos = ( (size_t)pBlockPos.x + (size_t)( (size_t)pBlockPos.y * (size_t)blocksInLevel.x ) + (size_t)( (size_t)pBlockPos.z * (size_t)blocksInLevel.x *(size_t) blocksInLevel.y ) ) * sizeof( unsigned int );
 #endif
 		// Retrieve node filename at given level
 		std::string fileNameIndex = this->_filesNames[ ( _numChannels + 1 ) * pLevel ];
@@ -666,7 +666,7 @@ inline void GsDataLoader< TDataTypeList >
 	// These 30 bits corresponds to the address of the node on x,y,z axes.
 	//
 	// Compute the offset
-	unsigned int filePos = ( pIndexVal & 0x3FFFFFFFU ) * pBlockMemSize * sizeof( TChannelType );
+	size_t filePos = (size_t)( pIndexVal & 0x3FFFFFFFU ) * (size_t)pBlockMemSize * (size_t)sizeof( TChannelType );
 
 	// Check whether or not, cache mechanism is used
 	if ( _useCache )

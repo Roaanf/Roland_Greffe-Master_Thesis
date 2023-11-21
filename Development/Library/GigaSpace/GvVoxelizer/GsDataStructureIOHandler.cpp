@@ -476,7 +476,7 @@ void GsDataStructureIOHandler::loadNodeandBrick_buffered( size_t pNodePos[ 3 ] )
  ******************************************************************************/
 void GsDataStructureIOHandler::saveNodeandBrick_buffered()
 {
-	
+	// f
 	// Check the flag telling whether or not the current node and brick have been loaded in memory (and stored in buffers)
 	if ( _isBufferLoaded ) {
 		// Write current node info (address+brick index)
