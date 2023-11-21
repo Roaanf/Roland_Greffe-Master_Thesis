@@ -171,7 +171,7 @@ bool RawFileReader< TType >::optimizedReadData()
 		const size_t levelOfResolution = static_cast<size_t>( log( static_cast< float >( getDataResolution() / brickWidth ) ) / log( static_cast< float >( 2 ) ) );
 		std::cout << "Level of resolution : " << levelOfResolution << std::endl;
 		
-		_dataStructureIOHandler = new GvVoxelizer::GsDataStructureIOHandler( getFilename(), levelOfResolution, brickWidth, getDataType(), true);
+		_dataStructureIOHandler = new GvVoxelizer::GsDataStructureIOHandler( getFilename(), levelOfResolution, brickWidth, getDataType(), true, trueNbValues );
 		TType voxelData;
 		size_t voxelPosition[ 3 ];
 		

@@ -94,7 +94,8 @@ GsDataStructureIOHandler::GsDataStructureIOHandler( const std::string& pName,
 							size_t pLevel,
 							size_t pBrickWidth,
 							GsDataTypeHandler::VoxelDataType pDataType,
-							bool pNewFiles)
+							bool pNewFiles,
+							size_t pTrueNbOfValues)
 // TO DO
 // attention � l'ordre des initializations...
 :	_nodeFile( NULL )
@@ -106,6 +107,7 @@ GsDataStructureIOHandler::GsDataStructureIOHandler( const std::string& pName,
 ,	_brickNumber( 0 )
 ,	_nodeGridSize( 1 << pLevel )
 ,	_voxelGridSize( _nodeGridSize * pBrickWidth )
+,   _trueNbOfValues(pTrueNbOfValues)
 {
 	// Store the voxel data type
 	_dataTypes.push_back( pDataType );
@@ -119,9 +121,17 @@ GsDataStructureIOHandler::GsDataStructureIOHandler( const std::string& pName,
 
 	std::cout << (size_t)_nodeGridSize * (size_t)_nodeGridSize * (size_t)_nodeGridSize * (size_t)_brickSize << std::endl;
 	std::cout << (size_t)_nodeGridSize * (size_t)_nodeGridSize * (size_t)_nodeGridSize << std::endl;
+
+	size_t sizeBufferCalloc = (_trueNbOfValues * 1.3); // TEMP FIX !!!
+	std::cout << sizeBufferCalloc << std::endl;
+	std::cout << sizeBufferCalloc * sizeof(unsigned short) << std::endl;
 	
 	// Initialize buffers
-	_brickData = (unsigned short *) calloc( (size_t)_nodeGridSize * (size_t)_nodeGridSize * (size_t)_nodeGridSize * (size_t)_brickSize, sizeof( unsigned short ) );
+	_brickData = (unsigned short *) calloc( sizeBufferCalloc, sizeof( unsigned short ) );
+	
+	if (_brickData == NULL) {
+		std::cout << 'OOF' << std::endl;
+	}
 
 	_nodeData = (unsigned int *) calloc( (size_t)_nodeGridSize * (size_t)_nodeGridSize * (size_t)_nodeGridSize, sizeof( unsigned int ) );
 }
@@ -152,6 +162,7 @@ GsDataStructureIOHandler::GsDataStructureIOHandler( const std::string& pName,
 ,	_brickNumber( 0 )
 ,	_nodeGridSize( 1 << pLevel )
 ,	_voxelGridSize( _nodeGridSize * pBrickWidth )
+,   _trueNbOfValues(0)
 {
 	// Store the voxel data type
 	_dataTypes = pDataTypes;
@@ -465,13 +476,14 @@ void GsDataStructureIOHandler::loadNodeandBrick_buffered( size_t pNodePos[ 3 ] )
  ******************************************************************************/
 void GsDataStructureIOHandler::saveNodeandBrick_buffered()
 {
+	
 	// Check the flag telling whether or not the current node and brick have been loaded in memory (and stored in buffers)
 	if ( _isBufferLoaded ) {
 		// Write current node info (address+brick index)
 		_nodeData[ _nodeBufferPos[0] + _nodeGridSize*(_nodeBufferPos[1] + _nodeGridSize*_nodeBufferPos[2]) ] = _nodeBuffer;
 
 		// Retrieve the brick offset in brick file
-		unsigned int brickOffset = getBrickOffset( _nodeBuffer );
+		size_t brickOffset = getBrickOffset( _nodeBuffer );
 		// Iterate through data channels (we only have 1 channel in our case)
 		unsigned short * casted_brickBuffer = (unsigned short *) _brickBuffers[ 0 ];
 		for ( size_t c = 0; c < _brickSize; ++c ) {

@@ -119,6 +119,8 @@ public:
 	 * Currently, there is only a border of one voxel on each side of bricks.
 	 */
 	const size_t _brickSize;	
+
+	const size_t _trueNbOfValues;
 	
 	/******************************** METHODS *********************************/
 
@@ -135,7 +137,8 @@ public:
 								size_t pLevel,
 								size_t pBrickWidth,
 								GsDataTypeHandler::VoxelDataType pDataType,
-								bool pNewFiles);
+								bool pNewFiles,
+								size_t pTrueNbOfValues);
 
 	/**
      * Constructor
