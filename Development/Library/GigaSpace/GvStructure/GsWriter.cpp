@@ -154,8 +154,8 @@ bool GsWriter::write()
 		// - brick width
 		nodeFilename << GsIWriter::_cFileSymbolSeperator << GsIWriter::_cBrickWidthSymbol << _brickWidth;
 		// - brick border size
-		nodeFilename << GsIWriter::_cFileSymbolSeperator << GsIWriter::_cBrickBorderSizeSymbol << "0";
-		//nodeFilename << GsIWriter::_cFileSymbolSeperator << GsIWriter::_cBrickBorderSizeSymbol << "1";
+		//nodeFilename << GsIWriter::_cFileSymbolSeperator << GsIWriter::_cBrickBorderSizeSymbol << "0";
+		nodeFilename << GsIWriter::_cFileSymbolSeperator << GsIWriter::_cBrickBorderSizeSymbol << "1";
 		// - node LOD index
 		nodeFilename << GsIWriter::_cFileSymbolSeperator << GsIWriter::_cLODIndexSymbol << k;
 		// - node file extension
@@ -176,8 +176,8 @@ bool GsWriter::write()
 	stringstream brickRes;
 	brickRes << _brickWidth;
 	brickDataElement->SetAttribute( GsIWriter::_cBrickResolutionAttributeName, brickRes.str().c_str() );
-	brickDataElement->SetAttribute( GsIWriter::_cBrickBorderSizeAttributeName, "0" );
-	//brickDataElement->SetAttribute( GsIWriter::_cBrickBorderSizeAttributeName, "1" );
+	//brickDataElement->SetAttribute( GsIWriter::_cBrickBorderSizeAttributeName, "0" );
+	brickDataElement->SetAttribute( GsIWriter::_cBrickBorderSizeAttributeName, "1" );
 
 	// Iterate through data channels
 	TiXmlElement* dataChannelElement;
@@ -231,8 +231,8 @@ bool GsWriter::write()
 			// - brick width
 			brickFilename << GsIWriter::_cFileSymbolSeperator << GsIWriter::_cBrickWidthSymbol << _brickWidth;
 			// - brick border size
-			brickFilename << GsIWriter::_cFileSymbolSeperator << GsIWriter::_cBrickBorderSizeSymbol << "0";
-			//brickFilename << GsIWriter::_cFileSymbolSeperator << GsIWriter::_cBrickBorderSizeSymbol << "1";
+			//brickFilename << GsIWriter::_cFileSymbolSeperator << GsIWriter::_cBrickBorderSizeSymbol << "0";
+			brickFilename << GsIWriter::_cFileSymbolSeperator << GsIWriter::_cBrickBorderSizeSymbol << "1";
 			// - brick LOD index
 			brickFilename << GsIWriter::_cFileSymbolSeperator << GsIWriter::_cLODIndexSymbol << k;
 			// - brick data channel index
