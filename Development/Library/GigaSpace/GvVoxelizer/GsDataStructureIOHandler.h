@@ -121,6 +121,18 @@ public:
 	const size_t _brickSize;	
 
 	const size_t _trueNbOfValues;
+
+	/**
+	* Array that holds the content of the node file (HARDCODED TO USHORT)
+	*/
+
+	unsigned int * _nodeData;
+	
+	/**
+	 * Array that holds the content of the brick file (HARDCODED TO USHORT)
+	*/
+
+	unsigned short * _brickData;
 	
 	/******************************** METHODS *********************************/
 
@@ -222,6 +234,24 @@ public:
 	 * @param pDataChannel data channel index
 	 */
 	void getBrick_buffered( size_t pNodePos[ 3 ], void* pBrickData, unsigned int pDataChannel );
+
+	/******************************************************************************
+	 * Get data in a voxel at given data channel
+	 *
+	 * @param pVoxelPos voxel position
+	 * @param pVoxelData voxel data
+	 * @param pDataChannel data channel index
+	******************************************************************************/
+	unsigned short* GsDataStructureIOHandler::getBrickData();
+
+	/******************************************************************************
+	 * Get data in a voxel at given data channel
+	 *
+	 * @param pVoxelPos voxel position
+	 * @param pVoxelData voxel data
+	 * @param pDataChannel data channel index
+	******************************************************************************/
+	unsigned int* GsDataStructureIOHandler::getNodeData();
 
 	/**
 	 * Set brick data in a node at given data channel
@@ -381,17 +411,7 @@ protected:
 	 */
 	unsigned int _nodeBuffer;
 
-	/**
-	 * Array that holds the content of the node file (HARDCODED TO USHORT)
-	*/
 
-	unsigned int * _nodeData;
-	
-	/**
-	 * Array that holds the content of the brick file (HARDCODED TO USHORT)
-	*/
-
-	unsigned short * _brickData;
 
 	/**
 	 * Brick data buffer associated to current nodeBuffer.

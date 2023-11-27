@@ -330,10 +330,11 @@ void GsDataStructureIOHandler::getVoxel_buffered( size_t pVoxelPos[ 3 ], void* v
 void GsDataStructureIOHandler::getBrick_buffered( size_t pNodePos[ 3 ], void* pBrickData, unsigned int pDataChannel )
 {
 	// Retrieve node info and associated brick data
-	loadNodeandBrick_buffered( pNodePos );
+	unsigned int node = _nodeData[ pNodePos[0] + _nodeGridSize*(pNodePos[1] + _nodeGridSize*pNodePos[2]) ];
+	unsigned int offset = getBrickOffset(node);
 
 	// Read data from memory
-	memcpy( pBrickData, _brickBuffers[ pDataChannel ], _brickSize * GsDataTypeHandler::canalByteSize( _dataTypes[ pDataChannel ] ) );
+	memcpy( pBrickData, _brickData + offset*_brickSize , _brickSize * GsDataTypeHandler::canalByteSize( _dataTypes[ pDataChannel ] ) );
 }
 
 /******************************************************************************
@@ -346,10 +347,10 @@ void GsDataStructureIOHandler::getBrick_buffered( size_t pNodePos[ 3 ], void* pB
 void GsDataStructureIOHandler::setBrick_buffered( size_t pNodePos[ 3 ], void* pBrickData, unsigned int pDataChannel )
 {
 	// Retrieve node info and associated brick data
-	loadNodeandBrick_buffered( pNodePos );
-
+	unsigned int node = _nodeData[ pNodePos[0] + _nodeGridSize*(pNodePos[1] + _nodeGridSize*pNodePos[2]) ];
+	unsigned int offset = getBrickOffset(node);
 	// Write data in memory
-	memcpy( _brickBuffers[ pDataChannel ], pBrickData, _brickSize * GsDataTypeHandler::canalByteSize( _dataTypes[ pDataChannel ] ) );
+	memcpy( _brickData + offset*_brickSize , pBrickData, _brickSize * GsDataTypeHandler::canalByteSize( _dataTypes[ pDataChannel ] ) );
 }
 
 /******************************************************************************
@@ -508,8 +509,9 @@ void GsDataStructureIOHandler::computeBorders()
 	for ( size_t c = 0; c < _dataTypes.size(); ++c )
 	{
 		// Create two brick buffers
-		void* brick = GsDataTypeHandler::allocateVoxels( _dataTypes[ c ], _brickSize );
-		void* brick2 = GsDataTypeHandler::allocateVoxels( _dataTypes[ c ], _brickSize );
+		//Instead of using buffers we'll deal with pointers to the brick data to avoid copying memory
+		size_t brick = 0;
+		size_t brick2 = 0;
 
 		// Iterate trough nodes of the data structure
 		for ( size_t k = 0; k < _nodeGridSize; ++k ){
@@ -523,7 +525,7 @@ void GsDataStructureIOHandler::computeBorders()
 					nodePos[ 2 ] = k;
 
 					// Retrieve the associated node info
-					unsigned int node = getNode_buffered( nodePos );
+					unsigned int node = _nodeData[ nodePos[0] + _nodeGridSize*(nodePos[1] + _nodeGridSize*nodePos[2]) ];
 
 					// If node is empty, there is nothing to do, so go to next node
 					if ( isEmpty( node ) )
@@ -534,7 +536,7 @@ void GsDataStructureIOHandler::computeBorders()
 					}
 
 					// Retrieve the associated brick data
-					getBrick_buffered( nodePos, brick, c );
+					brick = (size_t)getBrickOffset( node ) * (size_t)_brickSize;
 
 					// Iterate through each neighbor nodes (in 3D, there are 26 neighbors)
 					for ( int k2 =- 1; k2 <= 1; ++k2 )
@@ -558,7 +560,7 @@ void GsDataStructureIOHandler::computeBorders()
 						nodePos2[ 2 ] = k + k2;
 
 						// Retrieve the associated neighbor node info
-						unsigned int node2 = getNode_buffered( nodePos2 );
+						unsigned int node2 = _nodeData[ nodePos2[0] + _nodeGridSize*(nodePos2[1] + _nodeGridSize*nodePos2[2]) ];
 
 						// If node is empty :
 						// there is nothing to do, so go to next neighbor node
@@ -568,7 +570,7 @@ void GsDataStructureIOHandler::computeBorders()
 						}
 
 						// Retrieve the associated neighbor brick data
-						getBrick_buffered( nodePos2, brick2, c );
+						brick2 = (size_t)getBrickOffset( node2 ) * (size_t)_brickSize;
 
 						// In this part, the goal is to copy voxel data from original brick to voxel data
 						// of the current neighbor brick if it is on a border.
@@ -581,9 +583,9 @@ void GsDataStructureIOHandler::computeBorders()
 						for ( size_t x = 1; x < _brickWidth + 1; ++x )
 						{
 							// Store the voxel position of the neighbor brick
-							int x2 = (-i2) * (_brickWidth) + x;
-							int y2 = (-j2) * (_brickWidth) + y;
-							int z2 = (-k2) * (_brickWidth) + z;
+							size_t x2 = (-i2) * (_brickWidth) + x;
+							size_t y2 = (-j2) * (_brickWidth) + y;
+							size_t z2 = (-k2) * (_brickWidth) + z;
 
 								// Check if ( HYPOTHESIS_1 && HYPOTHESIS_2 ) is true.
 								// If yes, it means that this voxel is in the border of the neighbor brick
@@ -592,9 +594,9 @@ void GsDataStructureIOHandler::computeBorders()
 								if ( /*HYPOTHESIS_1*/( x2==0 || x2==_brickWidth+1 || 
 									y2==0 || y2==_brickWidth+1 || 
 									z2==0 || z2==_brickWidth+1 )
-									&& /*HYPOTHESIS_2*/ ( x2 >= 0 && x2 <= static_cast< int >( _brickWidth ) + 1 
-									&& y2 >= 0 && y2 <= static_cast< int >( _brickWidth ) + 1 
-									&& z2 >= 0 && z2 <= static_cast< int >( _brickWidth ) + 1 ) )
+									&& /*HYPOTHESIS_2*/ ( x2 >= 0 && x2 <= ( _brickWidth ) + 1 
+									&& y2 >= 0 && y2 <= ( _brickWidth ) + 1 
+									&& z2 >= 0 && z2 <= ( _brickWidth ) + 1 ) )
 								{
 									// Copy voxel data from original brick to "border" voxel of current neighbor brick
 
@@ -603,32 +605,17 @@ void GsDataStructureIOHandler::computeBorders()
 										brick2[(x2 + (brickWidth+2)*(y2 + (brickWidth+2)*z2))*components[c] + d] =
 											brick[(x + (brickWidth+2)*(y + (brickWidth+2)*z))*components[c] + d];
 									}*/
-									memcpy(
-											/*destination*/GsDataTypeHandler::getAddress( _dataTypes[ c ], brick2, x2 + ( _brickWidth + 2 ) * ( y2 + ( _brickWidth + 2 ) * z2 ) ),
-											/*source*/GsDataTypeHandler::getAddress( _dataTypes[ c ], brick , x  + ( _brickWidth + 2 ) * ( y  + ( _brickWidth + 2 ) * z ) ),
-											/*size*/GsDataTypeHandler::canalByteSize( _dataTypes[ c ] )
-									);
+									_brickData[ brick2 + x2 + ( _brickWidth + 2 ) * ( y2 + ( _brickWidth + 2 ) * z2 ) ] =
+										_brickData[ brick + x  + ( _brickWidth + 2 ) * ( y  + ( _brickWidth + 2 ) * z ) ];
 
 									// Update the flag telling that data has been modified in the neighbor brick.
 									modified = true;
 								}
 						}
-
-						// If the brick data has been modified, copy the data to the neighbor brick buffer
-						if ( modified )
-						{
-							setBrick_buffered( nodePos2, brick2, c );
-						}
 					}
 				}
 			}
 		}
-
-		// Free memory of the two brick data buffers
-                operator delete( brick );
-                operator delete( brick2 );
-//		delete [] brick;
-//		delete [] brick2;
 	}
 }
 

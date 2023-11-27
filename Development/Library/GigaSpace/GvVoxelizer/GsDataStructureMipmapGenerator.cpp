@@ -131,6 +131,10 @@ bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& p
 		// LOG info
 		std::cout << "GvVoxelizerEngine::mipmap : level : " << level << std::endl;
 
+		unsigned int * nodeData = dataStructureIOHandlerUP->_nodeData;
+		unsigned short * brickData = dataStructureIOHandlerUP->_brickData;
+		size_t _nodeGridSize = dataStructureIOHandlerUP->_nodeGridSize;
+
 		// The coarser data handler is allocated dynamically due to memory consumption considerations.
 		size_t nbOfvalues = (1 << level);
 		dataStructureIOHandlerDOWN = new GsDataStructureIOHandler( pFileName, level, brickWidth, dataTypes[0], true, (nbOfvalues* nbOfvalues* nbOfvalues * 34*34*34)/1.2);
@@ -143,7 +147,7 @@ bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& p
 		for ( nodePos[ 0 ] = 0; nodePos[ 0 ] < dataStructureIOHandlerUP->_nodeGridSize; nodePos[ 0 ]++ )
 		{
 			// Retrieve the current node info
-			unsigned int node = dataStructureIOHandlerUP->getNode_buffered( nodePos );
+			unsigned int node = nodeData[ nodePos[0] + _nodeGridSize*(nodePos[1] + _nodeGridSize*nodePos[2]) ];
 			
 			// If node is empty, go to next node
 			if ( GsDataStructureIOHandler::isEmpty( node ) )
@@ -151,13 +155,17 @@ bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& p
 				continue;
 			}
 
+			// Let's skip memcpy actually i'll just give a pointer to the buffer ? would that work ?
+
+			unsigned int brickoffset = ( node & 0x3fffffff );
+
 			// Iterate through voxels of the current node
 			size_t voxelPos[ 3 ];
 			for ( voxelPos[ 2 ] = brickWidth * nodePos[ 2 ]; voxelPos[ 2 ] < dataStructureIOHandlerUP->_brickWidth * ( nodePos[ 2 ] + 1 ); voxelPos[ 2 ] +=2 )
 			for ( voxelPos[ 1 ] = brickWidth * nodePos[ 1 ]; voxelPos[ 1 ] < dataStructureIOHandlerUP->_brickWidth * ( nodePos[ 1 ] + 1 ); voxelPos[ 1 ] +=2 )
 			for ( voxelPos[ 0 ] = brickWidth * nodePos[ 0 ]; voxelPos[ 0 ] < dataStructureIOHandlerUP->_brickWidth * ( nodePos[ 0 ] + 1 ); voxelPos[ 0 ] +=2 )
 			{
-				float voxelDataDOWNf[ 4 ] = { 0.f, 0.f, 0.f, 0.f };
+				double voxelDataDOWNf = 0;
 				float voxelDataDOWNf2[ 4 ] = { 0.f, 0.f, 0.f, 0.f };
 
 				// As the underlying structure is an octree, to compute data at coarser level,
@@ -173,15 +181,17 @@ bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& p
 					voxelPosUP[ 2 ] = voxelPos[ 2 ] + z;
 
 					// Get associated data (in the UP resolution version)
-					unsigned short voxelDataUP[ 4 ];
+					unsigned short voxelDataUP;
 					//unsigned char voxelDataUP[ 1 ];
 					//unsigned short voxelDataUP[ 1 ];
-					dataStructureIOHandlerUP->getVoxel_buffered( voxelPosUP, voxelDataUP, 0 );
-					voxelDataDOWNf[ 0 ] += voxelDataUP[ 0 ];
-					// Comment the following lines to handle only one element in tuple
-					voxelDataDOWNf[ 1 ] += voxelDataUP[ 1 ];
-					voxelDataDOWNf[ 2 ] += voxelDataUP[ 2 ];
-					voxelDataDOWNf[ 3 ] += voxelDataUP[ 3 ];
+					size_t brickWidth = dataStructureIOHandlerUP->_brickWidth;
+					size_t voxelPosInBrick[ 3 ];
+					voxelPosInBrick[ 0 ] = voxelPosUP[ 0 ] % brickWidth;
+					voxelPosInBrick[ 1 ] = voxelPosUP[ 1 ] % brickWidth;
+					voxelPosInBrick[ 2 ] = voxelPosUP[ 2 ] % brickWidth;
+					size_t index = voxelPosInBrick[ 0 ] + ( brickWidth + 2 ) * ( voxelPosInBrick[ 1 ] + ( brickWidth + 2 ) * voxelPosInBrick[ 2 ] );
+					voxelDataUP = brickData[ brickoffset * dataStructureIOHandlerUP->_brickSize + index ];
+					voxelDataDOWNf += (double) voxelDataUP;
 										
 #ifdef NORMALS
 					// Get associated normal (in the UP resolution version)
@@ -200,17 +210,11 @@ bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& p
 				voxelPosDOWN[ 2 ] = voxelPos[ 2 ] / 2;
 
 				// Set data in coarser voxel
-				unsigned short vd[4];		// "vd" stands for "voxel data"
+				unsigned short vd;		// "vd" stands for "voxel data"
 				//unsigned char vd[ 1 ];		// "vd" stands for "voxel data"
 				//unsigned short vd[ 1 ];		// "vd" stands for "voxel data"
-				vd[ 0 ] = static_cast< unsigned short >( voxelDataDOWNf[ 0 ] / 8.f );
-				// Comment the following lines to handle only one element in tuple
-				vd[ 1 ] = static_cast< unsigned short >( voxelDataDOWNf[ 1 ] / 8.f );
-				vd[ 2 ] = static_cast< unsigned short >( voxelDataDOWNf[ 2 ] / 8.f );
-				vd[ 3 ] = static_cast< unsigned short >( voxelDataDOWNf[ 3 ] / 8.f );
-				// To handle Unsigned Short datatype
-				//vd[ 0 ] = static_cast< unsigned short >( voxelDataDOWNf[ 0 ] / 8.f );
-				dataStructureIOHandlerDOWN->setVoxel_buffered( voxelPosDOWN, vd, 0 );
+				vd = static_cast< unsigned short >( voxelDataDOWNf / 8.0 );
+				dataStructureIOHandlerDOWN->setVoxel_buffered( voxelPosDOWN, &vd, 0 );
 
 #ifdef NORMALS
 				// Set normal in coarser voxel
@@ -227,7 +231,7 @@ bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& p
 
 		// Generate the border data of the coarser scene
 		
-		//dataStructureIOHandlerDOWN->computeBorders();
+		dataStructureIOHandlerDOWN->computeBorders();
 
 		dataStructureIOHandlerDOWN->writeFiles();
 		
