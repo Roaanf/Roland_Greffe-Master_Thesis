@@ -100,7 +100,7 @@ GsDataStructureMipmapGenerator::~GsDataStructureMipmapGenerator()
  * @param pFilename 3D model file name
  * @param pDataResolution Data resolution
  ******************************************************************************/
-bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& pFileName, unsigned int pDataResolution, const std::vector< GsDataTypeHandler::VoxelDataType >& pDataTypes)
+bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& pFileName, unsigned int pDataResolution, const std::vector< GsDataTypeHandler::VoxelDataType >& pDataTypes, GsDataStructureIOHandler* up)
 {
 	bool result = false;
 
@@ -122,7 +122,7 @@ bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& p
 	// Two files/streamers are used :
 	// UP is an already pre-filtered scene at resolution [ N ]
 	// DOWN is the coarser version to generate at resolution [ N - 1 ]
-	GsDataStructureIOHandler* dataStructureIOHandlerUP = new GsDataStructureIOHandler( pFileName, levelOfResolution, brickWidth, dataTypes, false);
+	GsDataStructureIOHandler* dataStructureIOHandlerUP = up;
 	GsDataStructureIOHandler* dataStructureIOHandlerDOWN = NULL;
 
 	// Iterate through levels of resolution

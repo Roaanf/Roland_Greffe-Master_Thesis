@@ -113,7 +113,7 @@ bool GsIRAWFileReader::read()
 	_dataStructureIOHandler->writeFiles();
 
 	std::cout << "- [step 3 / 3] - Mipmap pyramid generation..." << std::endl;
-	result = generateMipmapPyramid();
+	result = generateMipmapPyramid(_dataStructureIOHandler);
 
 	return result;
 }
@@ -131,11 +131,11 @@ bool GsIRAWFileReader::readData() // NOT USED
  * Given a pre-filtered voxel scene at a given level of resolution,
  * it generates a mip-map pyramid hierarchy of coarser levels (until 0).
  ******************************************************************************/
-bool GsIRAWFileReader::generateMipmapPyramid()
+bool GsIRAWFileReader::generateMipmapPyramid(GsDataStructureIOHandler* up)
 {
 	std::vector< GsDataTypeHandler::VoxelDataType > dataTypes;
 	dataTypes.push_back( getDataType() );
-	return GsDataStructureMipmapGenerator::generateMipmapPyramid( getFilename(), getDataResolution(), dataTypes);
+	return GsDataStructureMipmapGenerator::generateMipmapPyramid( getFilename(), getDataResolution(), dataTypes, up);
 }
 
 /******************************************************************************

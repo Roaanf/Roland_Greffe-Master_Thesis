@@ -49,6 +49,7 @@
 // GigaVoxels
 #include "GvCore/GsCoreConfig.h"
 #include "GvVoxelizer/GsDataTypeHandler.h"
+#include "GvVoxelizer/GsDataStructureIOHandler.h"
 
 // STL
 #include <string>
@@ -116,7 +117,7 @@ public:
 	 * @param pFilename 3D model file name
 	 * @param pDataResolution Data resolution
 	 */
-	static bool generateMipmapPyramid( const std::string& pFileName, unsigned int pDataResolution, const std::vector< GsDataTypeHandler::VoxelDataType >& pDataTypes );
+	static bool generateMipmapPyramid( const std::string& pFileName, unsigned int pDataResolution, const std::vector< GsDataTypeHandler::VoxelDataType >& pDataTypes, GsDataStructureIOHandler* up );
 
 	/**************************************************************************
 	 **************************** PROTECTED SECTION ***************************

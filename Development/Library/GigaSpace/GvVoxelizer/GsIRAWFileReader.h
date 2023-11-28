@@ -220,7 +220,7 @@ protected:
 	 * Given a pre-filtered voxel scene at a given level of resolution,
 	 * it generates a mip-map pyramid hierarchy of coarser levels (until 0).
 	 */
-	virtual bool generateMipmapPyramid();
+	virtual bool generateMipmapPyramid(GsDataStructureIOHandler* up);
 
 	/**************************************************************************
 	 ***************************** PRIVATE SECTION ****************************
