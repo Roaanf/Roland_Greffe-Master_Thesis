@@ -155,12 +155,11 @@ bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& p
 				continue;
 			}
 
-			// Let's skip memcpy actually i'll just give a pointer to the buffer ? would that work ?
-
 			unsigned int brickoffset = ( node & 0x3fffffff );
 
 			// Iterate through voxels of the current node
 			size_t voxelPos[ 3 ];
+			// Le += 2 c'est pcq on fait un mipmap au niveau sup donc on a 8 fois moins de voxels (/2 par chaque dimension)
 			for ( voxelPos[ 2 ] = brickWidth * nodePos[ 2 ]; voxelPos[ 2 ] < dataStructureIOHandlerUP->_brickWidth * ( nodePos[ 2 ] + 1 ); voxelPos[ 2 ] +=2 )
 			for ( voxelPos[ 1 ] = brickWidth * nodePos[ 1 ]; voxelPos[ 1 ] < dataStructureIOHandlerUP->_brickWidth * ( nodePos[ 1 ] + 1 ); voxelPos[ 1 ] +=2 )
 			for ( voxelPos[ 0 ] = brickWidth * nodePos[ 0 ]; voxelPos[ 0 ] < dataStructureIOHandlerUP->_brickWidth * ( nodePos[ 0 ] + 1 ); voxelPos[ 0 ] +=2 )

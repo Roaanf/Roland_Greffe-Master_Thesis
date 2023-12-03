@@ -239,6 +239,7 @@ bool RawFileReader< TType >::optimizedReadData()
 		/*
 			We iterate over the nodes, and for each node we iterate over each voxel of that node
 			It goes faster than just iterating over the voxels, because we don't have to change the current noce/brick buffer as often in the GsDataStructureIOHandler
+			But we might have read order issues since the raw file in encoded in the order slice, row, column
 		*/
 		for ( size_t node_z = 0; node_z < nodeSize ; node_z++ ){
 			for (size_t node_y = 0; node_y < nodeSize; node_y++) {

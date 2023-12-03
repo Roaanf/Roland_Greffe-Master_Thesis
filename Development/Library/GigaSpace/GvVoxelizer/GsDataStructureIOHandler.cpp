@@ -238,16 +238,15 @@ void GsDataStructureIOHandler::setVoxel_buffered( size_t pVoxelPos[ 3 ], const v
 	nodePos[ 0 ] = pVoxelPos[ 0 ] / _brickWidth;
 	nodePos[ 1 ] = pVoxelPos[ 1 ] / _brickWidth;
 	nodePos[ 2 ] = pVoxelPos[ 2 ] / _brickWidth;
-	
-	// Retrieve node info and associated brick data
-	loadNodeandBrick_buffered( nodePos );
+
+	unsigned int node = _nodeData[nodePos[0] + _nodeGridSize * (nodePos[1] + _nodeGridSize * nodePos[2])];
 
 	// If node is empty, as we set a voxel data, the node information needs to be updated
-	if( isEmpty( _nodeBuffer ) )
+	if( node == _cEmptyNodeFlag)
 	{
 		// Update node info
 		// Mark the node as a region containing data (i.e. 0x40000000u flag) and add the associated brick index
-		_nodeBuffer = 0x40000000 | _brickNumber;
+		node = 0x40000000 | _brickNumber;
 
 		// Append 0 to brick files -> no need I calloced the brickData
 		//for ( unsigned int i = 0; i < _brickSize; ++i ) {
@@ -256,10 +255,14 @@ void GsDataStructureIOHandler::setVoxel_buffered( size_t pVoxelPos[ 3 ], const v
 
 		// Update the bricks counter
 		_brickNumber++;
+		_nodeData[nodePos[0] + _nodeGridSize * (nodePos[1] + _nodeGridSize * nodePos[2])] = node;
 	}
  
 	// Retrieve the voxel position in the current brick
 	// (take into account the border)
+
+	unsigned int offset = getBrickOffset(node);
+
 	size_t voxelPosInBrick[ 3 ];
 	/*
 	voxelPosInBrick[ 0 ] = pVoxelPos[ 0 ] % _brickWidth;
@@ -272,21 +275,8 @@ void GsDataStructureIOHandler::setVoxel_buffered( size_t pVoxelPos[ 3 ], const v
 	voxelPosInBrick[ 2 ] = pVoxelPos[ 2 ] % _brickWidth + 1;
 
 	// Write voxel data
-	unsigned int size;
-	if( pInputDataSize != 0 ) {
-		size = pInputDataSize;
-	} else {
-		size = GsDataTypeHandler::canalByteSize( _dataTypes[ pDataChannel ] );
-	}
-	// ça le met dans _brickbuffer apparemment ?
-	/*
-	memcpy( GsDataTypeHandler::getAddress( _dataTypes[ pDataChannel ], _brickBuffers[ pDataChannel ], voxelPosInBrick[ 0 ] + ( _brickWidth ) * ( voxelPosInBrick[ 1 ] + ( _brickWidth ) * voxelPosInBrick[ 2 ] ) ),
-			pVoxelData,
-			size );
-	*/
-	memcpy( GsDataTypeHandler::getAddress( _dataTypes[ pDataChannel ], _brickBuffers[ pDataChannel ], voxelPosInBrick[ 0 ] + ( _brickWidth + 2 ) * ( voxelPosInBrick[ 1 ] + ( _brickWidth + 2 ) * voxelPosInBrick[ 2 ] ) ),
-			pVoxelData,
-			size );
+	unsigned short* voxelData = (unsigned short *) pVoxelData;
+	_brickData[offset * _brickSize + voxelPosInBrick[0] + (_brickWidth + 2) * (voxelPosInBrick[1] + (_brickWidth + 2) * voxelPosInBrick[2])] = *voxelData;
 }
 
 /******************************************************************************
@@ -506,9 +496,9 @@ void GsDataStructureIOHandler::computeBorders()
 	std::cout << "GsDataStructureIOHandler::computeBorders()" << std::endl;
 	
 	// Iterate trough data ytpes
+	// On en a toujours qu'un seul donc GigaOsef
 	for ( size_t c = 0; c < _dataTypes.size(); ++c )
 	{
-		// Create two brick buffers
 		//Instead of using buffers we'll deal with pointers to the brick data to avoid copying memory
 		size_t brick = 0;
 		size_t brick2 = 0;
@@ -535,10 +525,10 @@ void GsDataStructureIOHandler::computeBorders()
 						continue; 
 					}
 
-					// Retrieve the associated brick data
+					// Retrieve the brick data of the current node (here brick is just a pointer to the data inside the brickData array)
 					brick = (size_t)getBrickOffset( node ) * (size_t)_brickSize;
 
-					// Iterate through each neighbor nodes (in 3D, there are 26 neighbors)
+					// Iterate through each neighbor nodes (in 3D, there are 26 (c'est 6 non ???) neighbors)
 					for ( int k2 =- 1; k2 <= 1; ++k2 )
 					for ( int j2 =- 1; j2 <= 1; ++j2 )
 					for ( int i2 =- 1; i2 <= 1; ++i2 )
@@ -574,43 +564,299 @@ void GsDataStructureIOHandler::computeBorders()
 
 						// In this part, the goal is to copy voxel data from original brick to voxel data
 						// of the current neighbor brick if it is on a border.
-						// For this, we use a flag telling that data has been modified in the neighbor brick.
-						bool modified = false;
 
-						// Iterate through voxels of the brick
-						for ( size_t z = 1; z < _brickWidth + 1; ++z )
-						for ( size_t y = 1; y < _brickWidth + 1; ++y )
-						for ( size_t x = 1; x < _brickWidth + 1; ++x )
-						{
-							// Store the voxel position of the neighbor brick
-							size_t x2 = (-i2) * (_brickWidth) + x;
-							size_t y2 = (-j2) * (_brickWidth) + y;
-							size_t z2 = (-k2) * (_brickWidth) + z;
+						// Iterate through voxels of the brick (the first one ?)
+						// Pourquoi ça commence pas en 0
 
-								// Check if ( HYPOTHESIS_1 && HYPOTHESIS_2 ) is true.
-								// If yes, it means that this voxel is in the border of the neighbor brick
-								// and we have to copy voxel data of the current brick
-								// to the voxel of the neighbor brick
-								if ( /*HYPOTHESIS_1*/( x2==0 || x2==_brickWidth+1 || 
-									y2==0 || y2==_brickWidth+1 || 
-									z2==0 || z2==_brickWidth+1 )
-									&& /*HYPOTHESIS_2*/ ( x2 >= 0 && x2 <= ( _brickWidth ) + 1 
-									&& y2 >= 0 && y2 <= ( _brickWidth ) + 1 
-									&& z2 >= 0 && z2 <= ( _brickWidth ) + 1 ) )
-								{
-									// Copy voxel data from original brick to "border" voxel of current neighbor brick
+						// 2DO : A la place de faire une boucle de golmon sur tous les voxels pourquoi pas dirctement prendre les bordures et les copier entre chaque briques vu que 
+						// de toute façon c'est déjà hardcodé donc quel est l'intéret de faire la boucle
 
-									/*for( unsigned int d = 0; d < components[ c ]; ++d )
-									{
-										brick2[(x2 + (brickWidth+2)*(y2 + (brickWidth+2)*z2))*components[c] + d] =
-											brick[(x + (brickWidth+2)*(y + (brickWidth+2)*z))*components[c] + d];
-									}*/
-									_brickData[ brick2 + x2 + ( _brickWidth + 2 ) * ( y2 + ( _brickWidth + 2 ) * z2 ) ] =
-										_brickData[ brick + x  + ( _brickWidth + 2 ) * ( y  + ( _brickWidth + 2 ) * z ) ];
+						// C'est effectivement plus compliqué que ce que je pensais
+						// Je vais faire des gros IF pour chaques cas possible 
+						// C'est horible mais je jure je repasse dessus un jour
 
-									// Update the flag telling that data has been modified in the neighbor brick.
-									modified = true;
+						if ((i2 == -1) && (j2 == -1) && (k2 == -1)) {
+							size_t x = 1;
+							size_t y = 1;
+							size_t z = 1;
+							size_t x2 = (-i2) * (_brickWidth)+x;
+							size_t y2 = (-j2) * (_brickWidth)+y;
+							size_t z2 = (-k2) * (_brickWidth)+z;
+							_brickData[brick2 + x2 + (_brickWidth + 2) * (y2 + (_brickWidth + 2) * z2)] =
+								_brickData[brick + x + (_brickWidth + 2) * (y + (_brickWidth + 2) * z)];
+						} else if ((i2 == 1) && (j2 == 1) && (k2 == 1)) {
+							size_t x = _brickWidth;
+							size_t y = _brickWidth;
+							size_t z = _brickWidth;
+							size_t x2 = (-i2) * (_brickWidth)+x;
+							size_t y2 = (-j2) * (_brickWidth)+y;
+							size_t z2 = (-k2) * (_brickWidth)+z;
+							_brickData[brick2 + x2 + (_brickWidth + 2) * (y2 + (_brickWidth + 2) * z2)] =
+								_brickData[brick + x + (_brickWidth + 2) * (y + (_brickWidth + 2) * z)];
+						}
+						else if ((i2 == -1) && (j2 == 1) && (k2 == 1)) {
+							size_t x = 1;
+							size_t y = _brickWidth;
+							size_t z = _brickWidth;
+							size_t x2 = (-i2) * (_brickWidth)+x;
+							size_t y2 = (-j2) * (_brickWidth)+y;
+							size_t z2 = (-k2) * (_brickWidth)+z;
+							_brickData[brick2 + x2 + (_brickWidth + 2) * (y2 + (_brickWidth + 2) * z2)] =
+								_brickData[brick + x + (_brickWidth + 2) * (y + (_brickWidth + 2) * z)];
+						}
+						else if ((i2 == -1) && (j2 == -1) && (k2 == 1)) {
+							size_t x = 1;
+							size_t y = 1;
+							size_t z = _brickWidth;
+							size_t x2 = (-i2) * (_brickWidth)+x;
+							size_t y2 = (-j2) * (_brickWidth)+y;
+							size_t z2 = (-k2) * (_brickWidth)+z;
+							_brickData[brick2 + x2 + (_brickWidth + 2) * (y2 + (_brickWidth + 2) * z2)] =
+								_brickData[brick + x + (_brickWidth + 2) * (y + (_brickWidth + 2) * z)];
+						}
+						else if ((i2 == 1) && (j2 == -1) && (k2 == 1)) {
+							size_t x = _brickWidth;
+							size_t y = 1;
+							size_t z = _brickWidth;
+							size_t x2 = (-i2) * (_brickWidth)+x;
+							size_t y2 = (-j2) * (_brickWidth)+y;
+							size_t z2 = (-k2) * (_brickWidth)+z;
+							_brickData[brick2 + x2 + (_brickWidth + 2) * (y2 + (_brickWidth + 2) * z2)] =
+								_brickData[brick + x + (_brickWidth + 2) * (y + (_brickWidth + 2) * z)];
+						}
+						else if ((i2 == 1) && (j2 == 1) && (k2 == -1)) {
+							size_t x = _brickWidth;
+							size_t y = _brickWidth;
+							size_t z = 1;
+							size_t x2 = (-i2) * (_brickWidth)+x;
+							size_t y2 = (-j2) * (_brickWidth)+y;
+							size_t z2 = (-k2) * (_brickWidth)+z;
+							_brickData[brick2 + x2 + (_brickWidth + 2) * (y2 + (_brickWidth + 2) * z2)] =
+								_brickData[brick + x + (_brickWidth + 2) * (y + (_brickWidth + 2) * z)];
+						}
+						else if ((i2 == 1) && (j2 == -1) && (k2 == -1)) {
+							size_t x = _brickWidth;
+							size_t y = 1;
+							size_t z = 1;
+							size_t x2 = (-i2) * (_brickWidth)+x;
+							size_t y2 = (-j2) * (_brickWidth)+y;
+							size_t z2 = (-k2) * (_brickWidth)+z;
+							_brickData[brick2 + x2 + (_brickWidth + 2) * (y2 + (_brickWidth + 2) * z2)] =
+								_brickData[brick + x + (_brickWidth + 2) * (y + (_brickWidth + 2) * z)];
+						}
+						else if ((i2 == -1) && (j2 == 1) && (k2 == -1)) {
+							size_t x = 1;
+							size_t y = _brickWidth;
+							size_t z = 1;
+							size_t x2 = (-i2) * (_brickWidth)+x;
+							size_t y2 = (-j2) * (_brickWidth)+y;
+							size_t z2 = (-k2) * (_brickWidth)+z;
+							_brickData[brick2 + x2 + (_brickWidth + 2) * (y2 + (_brickWidth + 2) * z2)] =
+								_brickData[brick + x + (_brickWidth + 2) * (y + (_brickWidth + 2) * z)];
+						}
+						else if ((i2 == -1) && (j2 == 0) && (k2 == 0)) {
+							size_t x = 1;
+							size_t x2 = (-i2) * (_brickWidth)+x;
+							for (size_t z = 1; z < _brickWidth + 1; ++z) {
+								for (size_t y = 1; y < _brickWidth + 1; ++y) {
+									size_t y2 = (-j2) * (_brickWidth)+y;
+									size_t z2 = (-k2) * (_brickWidth)+z;
+									_brickData[brick2 + x2 + (_brickWidth + 2) * (y2 + (_brickWidth + 2) * z2)] =
+										_brickData[brick + x + (_brickWidth + 2) * (y + (_brickWidth + 2) * z)];
 								}
+							}
+						}
+						else if ((i2 == 0) && (j2 == -1) && (k2 == 0)) {
+							size_t y = 1;
+							size_t y2 = (-j2) * (_brickWidth)+y;
+							for (size_t z = 1; z < _brickWidth + 1; ++z) {
+								for (size_t x = 1; x < _brickWidth + 1; ++x) {
+									size_t x2 = (-i2) * (_brickWidth)+x;
+									size_t z2 = (-k2) * (_brickWidth)+z;
+									_brickData[brick2 + x2 + (_brickWidth + 2) * (y2 + (_brickWidth + 2) * z2)] =
+										_brickData[brick + x + (_brickWidth + 2) * (y + (_brickWidth + 2) * z)];
+								}
+							}
+						}
+						else if ((i2 == 0) && (j2 == 0) && (k2 == -1)) {
+							size_t z = 1;
+							size_t z2 = (-k2) * (_brickWidth)+z;
+							for (size_t y = 1; y < _brickWidth + 1; ++y) {
+								for (size_t x = 1; x < _brickWidth + 1; ++x) {
+									size_t x2 = (-i2) * (_brickWidth)+x;
+									size_t y2 = (-j2) * (_brickWidth)+y;
+									_brickData[brick2 + x2 + (_brickWidth + 2) * (y2 + (_brickWidth + 2) * z2)] =
+										_brickData[brick + x + (_brickWidth + 2) * (y + (_brickWidth + 2) * z)];
+								}
+							}
+						}
+						else if ((i2 == 1) && (j2 == 0) && (k2 == 0)) {
+							size_t x = _brickWidth;
+							size_t x2 = (-i2) * (_brickWidth)+x;
+							for (size_t z = 1; z < _brickWidth + 1; ++z) {
+								for (size_t y = 1; y < _brickWidth + 1; ++y) {
+									size_t y2 = (-j2) * (_brickWidth)+y;
+									size_t z2 = (-k2) * (_brickWidth)+z;
+									_brickData[brick2 + x2 + (_brickWidth + 2) * (y2 + (_brickWidth + 2) * z2)] =
+										_brickData[brick + x + (_brickWidth + 2) * (y + (_brickWidth + 2) * z)];
+								}
+							}
+						}
+						else if ((i2 == 0) && (j2 == 1) && (k2 == 0)) {
+							size_t y = _brickWidth;
+							size_t y2 = (-j2) * (_brickWidth)+y;
+							for (size_t z = 1; z < _brickWidth + 1; ++z) {
+								for (size_t x = 1; x < _brickWidth + 1; ++x) {
+									size_t x2 = (-i2) * (_brickWidth)+x;
+									size_t z2 = (-k2) * (_brickWidth)+z;
+									_brickData[brick2 + x2 + (_brickWidth + 2) * (y2 + (_brickWidth + 2) * z2)] =
+										_brickData[brick + x + (_brickWidth + 2) * (y + (_brickWidth + 2) * z)];
+								}
+							}
+						}
+						else if ((i2 == 0) && (j2 == 0) && (k2 == 1)) {
+							size_t z = _brickWidth;
+							size_t z2 = (-k2) * (_brickWidth)+z;
+							for (size_t y = 1; y < _brickWidth + 1; ++y) {
+								for (size_t x = 1; x < _brickWidth + 1; ++x) {
+									size_t x2 = (-i2) * (_brickWidth)+x;
+									size_t y2 = (-j2) * (_brickWidth)+y;
+									_brickData[brick2 + x2 + (_brickWidth + 2) * (y2 + (_brickWidth + 2) * z2)] =
+										_brickData[brick + x + (_brickWidth + 2) * (y + (_brickWidth + 2) * z)];
+								}
+							}
+						}
+						else if ((i2 == -1) && (j2 == -1) && (k2 == 0)) {
+							size_t x = 1;
+							size_t y = 1;
+							size_t x2 = (-i2) * (_brickWidth)+x;
+							size_t y2 = (-j2) * (_brickWidth)+y;
+							for (size_t z = 1; z < _brickWidth + 1; ++z) {
+								size_t z2 = (-k2) * (_brickWidth)+z;
+								_brickData[brick2 + x2 + (_brickWidth + 2) * (y2 + (_brickWidth + 2) * z2)] =
+									_brickData[brick + x + (_brickWidth + 2) * (y + (_brickWidth + 2) * z)];
+							}
+						}
+						else if ((i2 == -1) && (j2 == 0) && (k2 == -1)) {
+							size_t x = 1;
+							size_t z = 1;
+							size_t x2 = (-i2) * (_brickWidth)+x;
+							size_t z2 = (-k2) * (_brickWidth)+z;
+							for (size_t y = 1; y < _brickWidth + 1; ++y) {
+								size_t y2 = (-j2) * (_brickWidth)+y;
+								_brickData[brick2 + x2 + (_brickWidth + 2) * (y2 + (_brickWidth + 2) * z2)] =
+									_brickData[brick + x + (_brickWidth + 2) * (y + (_brickWidth + 2) * z)];
+							}
+						}
+						else if ((i2 == 0) && (j2 == -1) && (k2 == -1)) {
+							size_t y = 1;
+							size_t z = 1;
+							size_t y2 = (-j2) * (_brickWidth)+y;
+							size_t z2 = (-k2) * (_brickWidth)+z;
+							for (size_t x = 1; x < _brickWidth + 1; ++x) {
+								size_t x2 = (-i2) * (_brickWidth)+x;
+								_brickData[brick2 + x2 + (_brickWidth + 2) * (y2 + (_brickWidth + 2) * z2)] =
+									_brickData[brick + x + (_brickWidth + 2) * (y + (_brickWidth + 2) * z)];
+							}
+						}
+						else if ((i2 == 1) && (j2 == 1) && (k2 == 0)) {
+							size_t x = _brickWidth;
+							size_t y = _brickWidth;
+							size_t x2 = (-i2) * (_brickWidth)+x;
+							size_t y2 = (-j2) * (_brickWidth)+y;
+							for (size_t z = 1; z < _brickWidth + 1; ++z) {
+								size_t z2 = (-k2) * (_brickWidth)+z;
+								_brickData[brick2 + x2 + (_brickWidth + 2) * (y2 + (_brickWidth + 2) * z2)] =
+									_brickData[brick + x + (_brickWidth + 2) * (y + (_brickWidth + 2) * z)];
+							}
+						}
+						else if ((i2 == 1) && (j2 == 0) && (k2 == 1)) {
+							size_t x = _brickWidth;
+							size_t z = _brickWidth;
+							size_t x2 = (-i2) * (_brickWidth)+x;
+							size_t z2 = (-k2) * (_brickWidth)+z;
+							for (size_t y = 1; y < _brickWidth + 1; ++y) {
+								size_t y2 = (-j2) * (_brickWidth)+y;
+								_brickData[brick2 + x2 + (_brickWidth + 2) * (y2 + (_brickWidth + 2) * z2)] =
+									_brickData[brick + x + (_brickWidth + 2) * (y + (_brickWidth + 2) * z)];
+							}
+						}
+						else if ((i2 == 0) && (j2 == 1) && (k2 == 1)) {
+							size_t y = _brickWidth;
+							size_t z = _brickWidth;
+							size_t y2 = (-j2) * (_brickWidth)+y;
+							size_t z2 = (-k2) * (_brickWidth)+z;
+							for (size_t x = 1; x < _brickWidth + 1; ++x) {
+								size_t x2 = (-i2) * (_brickWidth)+x;
+								_brickData[brick2 + x2 + (_brickWidth + 2) * (y2 + (_brickWidth + 2) * z2)] =
+									_brickData[brick + x + (_brickWidth + 2) * (y + (_brickWidth + 2) * z)];
+							}
+						}
+						else if ((i2 == -1) && (j2 == 1) && (k2 == 0)) {
+							size_t x = 1;
+							size_t y = _brickWidth;
+							size_t x2 = (-i2) * (_brickWidth)+x;
+							size_t y2 = (-j2) * (_brickWidth)+y;
+							for (size_t z = 1; z < _brickWidth + 1; ++z) {
+								size_t z2 = (-k2) * (_brickWidth)+z;
+								_brickData[brick2 + x2 + (_brickWidth + 2) * (y2 + (_brickWidth + 2) * z2)] =
+									_brickData[brick + x + (_brickWidth + 2) * (y + (_brickWidth + 2) * z)];
+							}
+						}
+						else if ((i2 == -1) && (j2 == 0) && (k2 == 1)) {
+							size_t x = 1;
+							size_t z = _brickWidth;
+							size_t x2 = (-i2) * (_brickWidth)+x;
+							size_t z2 = (-k2) * (_brickWidth)+z;
+							for (size_t y = 1; y < _brickWidth + 1; ++y) {
+								size_t y2 = (-j2) * (_brickWidth)+y;
+								_brickData[brick2 + x2 + (_brickWidth + 2) * (y2 + (_brickWidth + 2) * z2)] =
+									_brickData[brick + x + (_brickWidth + 2) * (y + (_brickWidth + 2) * z)];
+							}
+						}
+						else if ((i2 == 0) && (j2 == -1) && (k2 == 1)) {
+							size_t y = 1;
+							size_t z = _brickWidth;
+							size_t y2 = (-j2) * (_brickWidth)+y;
+							size_t z2 = (-k2) * (_brickWidth)+z;
+							for (size_t x = 1; x < _brickWidth + 1; ++x) {
+								size_t x2 = (-i2) * (_brickWidth)+x;
+								_brickData[brick2 + x2 + (_brickWidth + 2) * (y2 + (_brickWidth + 2) * z2)] =
+									_brickData[brick + x + (_brickWidth + 2) * (y + (_brickWidth + 2) * z)];
+							}
+						}
+						else if ((i2 == 1) && (j2 == -1) && (k2 == 0)) {
+							size_t x = _brickWidth;
+							size_t y = 1;
+							size_t x2 = (-i2) * (_brickWidth)+x;
+							size_t y2 = (-j2) * (_brickWidth)+y;
+							for (size_t z = 1; z < _brickWidth + 1; ++z) {
+								size_t z2 = (-k2) * (_brickWidth)+z;
+								_brickData[brick2 + x2 + (_brickWidth + 2) * (y2 + (_brickWidth + 2) * z2)] =
+									_brickData[brick + x + (_brickWidth + 2) * (y + (_brickWidth + 2) * z)];
+							}
+						}
+						else if ((i2 == 1) && (j2 == 0) && (k2 == -1)) {
+							size_t x = _brickWidth;
+							size_t z = 1;
+							size_t x2 = (-i2) * (_brickWidth)+x;
+							size_t z2 = (-k2) * (_brickWidth)+z;
+							for (size_t y = 1; y < _brickWidth + 1; ++y) {
+								size_t y2 = (-j2) * (_brickWidth)+y;
+								_brickData[brick2 + x2 + (_brickWidth + 2) * (y2 + (_brickWidth + 2) * z2)] =
+									_brickData[brick + x + (_brickWidth + 2) * (y + (_brickWidth + 2) * z)];
+							}
+						}
+						else if ((i2 == 0) && (j2 == 1) && (k2 == -1)) {
+							size_t y = _brickWidth;
+							size_t z = 1;
+							size_t y2 = (-j2) * (_brickWidth)+y;
+							size_t z2 = (-k2) * (_brickWidth)+z;
+							for (size_t x = 1; x < _brickWidth + 1; ++x) {
+								size_t x2 = (-i2) * (_brickWidth)+x;
+								_brickData[brick2 + x2 + (_brickWidth + 2) * (y2 + (_brickWidth + 2) * z2)] =
+									_brickData[brick + x + (_brickWidth + 2) * (y + (_brickWidth + 2) * z)];
+							}
 						}
 					}
 				}
