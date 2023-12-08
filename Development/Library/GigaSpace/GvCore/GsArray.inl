@@ -215,7 +215,7 @@ namespace GvCore
 	template< typename T >
 	inline T& Array3D< T >::get( const uint3& pPosition )
 	{
-		return _data[ pPosition.x + pPosition.y * _resolution.x + pPosition.z * _resolution.x * _resolution.y ];
+		return _data[ (size_t) pPosition.x + (size_t) pPosition.y * (size_t) _resolution.x + (size_t) pPosition.z * (size_t) _resolution.x * (size_t) _resolution.y ];
 	}
 
 	/******************************************************************************
@@ -241,7 +241,7 @@ namespace GvCore
 	template< typename T >
 	inline T Array3D< T >::getConst( const uint3& pPosition ) const
 	{
-		return _data[ pPosition.x + pPosition.y * _resolution.x + pPosition.z * _resolution.x * _resolution.y ];
+		return _data[ (size_t) pPosition.x + (size_t) pPosition.y * (size_t) _resolution.x + (size_t) pPosition.z * (size_t) _resolution.x * (size_t) _resolution.y ];
 	}
 
 	/******************************************************************************
@@ -256,7 +256,7 @@ namespace GvCore
 	{
 		pPosition = getSecureIndex( pPosition );
 
-		return _data[ pPosition.x + pPosition.y * _resolution.x + pPosition.z* _resolution.x * _resolution.y ];
+		return _data[ (size_t) pPosition.x + (size_t) pPosition.y * (size_t) _resolution.x + (size_t) pPosition.z * (size_t) _resolution.x * (size_t) _resolution.y ];
 	}
 
 	/******************************************************************************
@@ -270,7 +270,7 @@ namespace GvCore
 	template< typename T >
 	inline const T* Array3D< T >::getConstPointer( const uint3& pPosition ) const
 	{
-		return &_data[ pPosition.x + pPosition.y * _resolution.x + pPosition.z * _resolution.x * _resolution.y ];
+		return &_data[ (size_t) pPosition.x + (size_t) pPosition.y *(size_t)  _resolution.x + (size_t) pPosition.z * (size_t) _resolution.x *(size_t)  _resolution.y ];
 	}
 
 	/******************************************************************************
@@ -283,7 +283,7 @@ namespace GvCore
 	template< typename T >
 	inline T* Array3D< T >::getPointer( const uint3& pPosition ) const
 	{
-		return &_data[ pPosition.x + pPosition.y * _resolution.x + pPosition.z * _resolution.x * _resolution.y ];
+		return &_data[ (size_t) pPosition.x +(size_t)  pPosition.y * (size_t) _resolution.x + (size_t) pPosition.z * (size_t) _resolution.x *(size_t)  _resolution.y ];
 	}
 
 	/******************************************************************************

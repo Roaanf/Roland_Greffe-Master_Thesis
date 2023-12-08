@@ -484,12 +484,6 @@ inline void GsSimplePipeline< TShaderType, TDataStructureType, TCacheType >
 	size_t nodePoolNbElements = _nodePoolMemorySize / nodeTileMemorySize;
 	size_t brickPoolNbElements = _brickPoolMemorySize / brickTileMemorySize;
 
-	std::cout << "Oui bonjour je debug" << std::endl;
-	std::cout << nodePoolNbElements << std::endl;
-	std::cout << brickPoolNbElements << std::endl;
-	std::cout << _brickPoolMemorySize << std::endl;
-	std::cout << brickTileMemorySize << std::endl;
-
 	// Compute the resolution of the pools
 	pNodePoolResolution = make_uint3( static_cast< uint >( floorl( powl( static_cast< long double >( nodePoolNbElements ), 1.0l / 3.0l ) ) ) ) * NodeTileResolution::get();
 	pBrickPoolResolution = make_uint3( static_cast< uint >( floorl( powl( static_cast< long double >( brickPoolNbElements ), 1.0l / 3.0l ) ) ) ) * RealBrickTileResolution::get();

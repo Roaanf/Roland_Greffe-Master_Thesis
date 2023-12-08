@@ -125,8 +125,8 @@ SampleCore::SampleCore()
 ,	_producerThresholdLow( 0.f )
 ,	_producerThresholdHigh( 65025.f )
 ,	_shaderThresholdLow( 0.f )
-,	_shaderThresholdHigh( 1.f )
-,	_fullOpacityDistance( 0.f )
+,	_shaderThresholdHigh( 1000.f )
+,	_fullOpacityDistance( 300.f )
 ,	_gradientStep( 0.f )
 ,	_transferFunction( NULL )
 ,	_minDataValue( 0.f )
@@ -193,11 +193,8 @@ void SampleCore::init()
 
 	// Define cache sizes
 	_nodeMemoryPool = 64 * 1024 * 1024;
-	_brickMemoryPool = (size_t) 2047 * (size_t) 1024 * (size_t) 1024;
+	_brickMemoryPool = (size_t) 6000 * (size_t) 1024 * (size_t) 1024;
 
-	std::cout << "debug " << _brickMemoryPool << std::endl;
-
-	//feurddddfdfdfdfdfrrdgege
 	QString filename( get3DModelFilename().c_str() );
 	QFileInfo dataFileInfo( filename );
 	std::cout << dataFileInfo.suffix().toStdString() << std::endl;
@@ -370,7 +367,7 @@ void SampleCore::init()
 	setProducerThresholdLow( 0.f );	// no threshold by default
 	setProducerThresholdHigh( 65025.f);	// no threshold by default
 	setShaderThresholdLow( 0.f );	// no threshold by default
-	setShaderThresholdHigh( 1.f );	// no threshold by default
+	setShaderThresholdHigh( 1000.f );	// no threshold by default
 	setFullOpacityDistance( dataResolution ); // the distance ( 1 / FullOpacityDistance ) is the distance after which opacity is full.
 	setGradientStep( 0.25f );
 	_transferFunction->updateDeviceMemory();

@@ -171,7 +171,7 @@ GsNodeCacheManager< TDataStructure >
 	
 	// TO DO
 	// Attention, il arrive que ce "plan" soir partager entre les deux caches de brick et de noeuds
-	// et lors de la destruction du 2ème cache manager, cela produit une erreur CUDPP.
+	// et lors de la destruction du 2ï¿½me cache manager, cela produit une erreur CUDPP.
 	// ...
 	// TO DO
 	// Move this in another place
@@ -571,7 +571,7 @@ uint GsNodeCacheManager< TDataStructure >
 			std::cout << "\t_lastNumLoads : " << _lastNumLoads << std::endl;
 			std::cout << "\t_numElemsNotUsed : " << _numElemsNotUsed << std::endl;*/
 
-			invalidateElements( numElems, numValidNodes );		// WARNING !!!! numElems a été modifié auparavant !!!! ===> ERREUR !!!!!!!!!!!!!!
+			invalidateElements( numElems, numValidNodes );		// WARNING !!!! numElems a ï¿½tï¿½ modifiï¿½ auparavant !!!! ===> ERREUR !!!!!!!!!!!!!!
 			
 			// ---- [ 3 ] ---- 3rd step
 			//

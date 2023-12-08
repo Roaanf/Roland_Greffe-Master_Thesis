@@ -173,7 +173,7 @@ inline size_t GsLinearMemory< T >::getMemorySize() const
 template< typename T >
 inline T* GsLinearMemory< T >::getPointer( const uint3& pos ) const
 {
-	return &_data[ pos.x + pos.y * _resolution.x + pos.z * _resolution.x * _resolution.y ];
+	return &_data[ (size_t)pos.x + (size_t)pos.y * (size_t)_resolution.x + (size_t)pos.z * (size_t)_resolution.x * (size_t)_resolution.y ];
 }
 
 /******************************************************************************
@@ -210,7 +210,7 @@ inline T* GsLinearMemory< T >::getPointer() const
 template< typename T >
 inline const T* GsLinearMemory< T >::getConstPointer( const uint3& pos ) const
 {
-	return &_data[ pos.x + pos.y * _resolution.x + pos.z * _resolution.x * _resolution.y ];
+	return &_data[ (size_t) pos.x + (size_t) pos.y * (size_t) _resolution.x + (size_t) pos.z * (size_t) _resolution.x * (size_t) _resolution.y ];
 }
 
 /******************************************************************************
