@@ -171,7 +171,7 @@ void CustomSectionEditor::on__shaderThresholdDoubleSpinBoxLow_valueChanged( doub
 	SampleCore* sampleCore = dynamic_cast< SampleCore* >( pipeline );
 	assert( sampleCore != NULL );
 
-	sampleCore->setShaderThresholdLow( pValue );
+	sampleCore->setShaderThresholdLow( pValue / 1000 );
 }
 
 /******************************************************************************
@@ -188,7 +188,7 @@ void CustomSectionEditor::on__shaderThresholdDoubleSpinBoxHigh_valueChanged( dou
 	SampleCore* sampleCore = dynamic_cast< SampleCore* >( pipeline );
 	assert( sampleCore != NULL );
 
-	sampleCore->setShaderThresholdHigh( pValue );
+	sampleCore->setShaderThresholdHigh( pValue / 1000 );
 }
 
 /******************************************************************************

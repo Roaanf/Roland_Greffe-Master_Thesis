@@ -692,6 +692,10 @@ private:
 	 */
 	PipelineType* _pipeline;
 
+	size_t _nodeMemoryPool;
+
+	size_t _brickMemoryPool;
+
 	/**
 	 * GigaSpace producer
 	 */

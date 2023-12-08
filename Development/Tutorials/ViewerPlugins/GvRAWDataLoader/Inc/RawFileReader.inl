@@ -137,9 +137,10 @@ bool RawFileReader< TType >::optimizedReadData()
 		std::cout << "Nb values : " << nbValues << std::endl;
 		// Hardcoded RN because try to see if it works
 		// TODO : find an elegant solution to the problem
-		size_t trueX = 1867;
-		size_t trueY = 2451;
-		size_t trueZ = 1867;
+		size_t trueX = 3091;
+		size_t trueY = 3091;
+		size_t trueZ = 3298;
+		//test 
 
 		const size_t trueNbValues = trueX * trueY * trueZ;
 

@@ -44,6 +44,42 @@
 /******************************************************************************
  ******************************* INCLUDE SECTION ******************************
  ******************************************************************************/
+/* Stupid fix to have dependencies from.cu files in the Visual Studio external dependencies
+// GigaVoxels
+#include <GvCore/GsVector.h>
+#include <GvStructure/GsVolumeTree.h>
+#include <GvStructure/GsDataProductionManager.h>
+#include <GvRendering/GsRendererCUDA.h>
+#include <GvUtils/GsSimplePipeline.h>
+#include <GvUtils/GsSimpleHostShader.h>
+#include <GvUtils/GsSimplePriorityPoliciesManagerKernel.h>
+#include <GvUtils/GsDataLoader.h>
+#include <GvUtils/GsTransferFunction.h>
+#include <GvPerfMon/GsPerformanceMonitor.h>
+#include <GvCore/GsError.h>
+#include <GvStructure/GsWriter.h>
+#include <GvCore/GsDataTypeList.h>
+
+// Project
+#include "Producer.h"
+#include "ShaderKernel.h"
+#include "RawFileReader.h"
+
+// GvViewer
+#include <GvvApplication.h>
+
+// Cuda SDK
+#include <helper_math.h>
+
+// Qt
+#include <QCoreApplication>
+#include <QString>
+#include <QDir>
+
+// STL
+#include <vector>
+#include <string>
+*/
 
 /******************************************************************************
  ****************************** NAMESPACE SECTION *****************************

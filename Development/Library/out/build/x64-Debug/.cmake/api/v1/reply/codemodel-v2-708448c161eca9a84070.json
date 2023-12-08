@@ -1,0 +1,155 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3
+					],
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.8"
+					},
+					"projectIndex" : 0,
+					"source" : "."
+				},
+				{
+					"build" : "GigaSpace",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.8"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "GigaSpace",
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"build" : "GsGraphics",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.8"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 2,
+					"source" : "GsGraphics",
+					"targetIndexes" : 
+					[
+						2
+					]
+				},
+				{
+					"build" : "GsCompute",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.8"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 3,
+					"source" : "GsCompute",
+					"targetIndexes" : 
+					[
+						1
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "Library"
+				},
+				{
+					"directoryIndexes" : 
+					[
+						1
+					],
+					"name" : "GigaSpace",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						2
+					],
+					"name" : "GsGraphics",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						2
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						3
+					],
+					"name" : "GsCompute",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						1
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 1,
+					"id" : "GigaSpace::@3ecc2bd025a35fdca8de",
+					"jsonFile" : "target-GigaSpace-Debug-df2bfb33f7b8e7c6c9ba.json",
+					"name" : "GigaSpace",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "GsCompute::@2af3d63b35aae63d98e7",
+					"jsonFile" : "target-GsCompute-Debug-b7011567549904213116.json",
+					"name" : "GsCompute",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "GsGraphics::@04005a2970bb7697c1bb",
+					"jsonFile" : "target-GsGraphics-Debug-b8bb8eb1c765c7bfbdf8.json",
+					"name" : "GsGraphics",
+					"projectIndex" : 2
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "D:/GVDev/Development/Library/out/build/x64-Debug",
+		"source" : "D:/GVDev/Development/Library"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 2
+	}
+}

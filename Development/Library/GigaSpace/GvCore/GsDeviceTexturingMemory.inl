@@ -300,6 +300,7 @@ inline void GsDeviceTexturingMemory< T >::allocArray( const uint3& res, cudaChan
 {
 	_resolution = res;
 	_channelFormatDesc = channelFormatDesc;
+	std::cout << _resolution << std::endl;
 
 	GS_CUDA_SAFE_CALL( cudaMalloc3DArray( &_dataArray, &channelFormatDesc, make_cudaExtent( _resolution ), cudaArraySurfaceLoadStore ) );
 }

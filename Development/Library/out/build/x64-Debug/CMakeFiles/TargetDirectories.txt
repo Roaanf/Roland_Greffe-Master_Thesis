@@ -1,0 +1,11 @@
+D:/GVDev/Development/Library/out/build/x64-Debug/CMakeFiles/edit_cache.dir
+D:/GVDev/Development/Library/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir
+D:/GVDev/Development/Library/out/build/x64-Debug/GigaSpace/CMakeFiles/rebuild_cache.dir
+D:/GVDev/Development/Library/out/build/x64-Debug/GigaSpace/CMakeFiles/GigaSpace.dir
+D:/GVDev/Development/Library/out/build/x64-Debug/GigaSpace/CMakeFiles/edit_cache.dir
+D:/GVDev/Development/Library/out/build/x64-Debug/GsGraphics/CMakeFiles/GsGraphics.dir
+D:/GVDev/Development/Library/out/build/x64-Debug/GsGraphics/CMakeFiles/edit_cache.dir
+D:/GVDev/Development/Library/out/build/x64-Debug/GsGraphics/CMakeFiles/rebuild_cache.dir
+D:/GVDev/Development/Library/out/build/x64-Debug/GsCompute/CMakeFiles/edit_cache.dir
+D:/GVDev/Development/Library/out/build/x64-Debug/GsCompute/CMakeFiles/GsCompute.dir
+D:/GVDev/Development/Library/out/build/x64-Debug/GsCompute/CMakeFiles/rebuild_cache.dir

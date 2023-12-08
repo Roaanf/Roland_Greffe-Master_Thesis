@@ -69,8 +69,11 @@ using namespace std;
  ******************************************************************************/
 
 // Defines the size allowed for each type of pool
+// Théorie -> ça overflow (0o0)
+/*
 #define NODEPOOL_MEMSIZE	(64*1024*1024)		// 8 Mo
 #define BRICKPOOL_MEMSIZE	(2047*1024*1024)		// 256 Mo
+*/
 
 ///**
 // * Tag name identifying a space profile element
@@ -187,7 +190,14 @@ const char* SampleCore::getName() const
 void SampleCore::init()
 {
 	CUDAPM_INIT();
-	
+
+	// Define cache sizes
+	_nodeMemoryPool = 64 * 1024 * 1024;
+	_brickMemoryPool = (size_t) 2047 * (size_t) 1024 * (size_t) 1024;
+
+	std::cout << "debug " << _brickMemoryPool << std::endl;
+
+	//feurddddfdfdfdfdfrrdgege
 	QString filename( get3DModelFilename().c_str() );
 	QFileInfo dataFileInfo( filename );
 	std::cout << dataFileInfo.suffix().toStdString() << std::endl;
@@ -196,7 +206,7 @@ void SampleCore::init()
 	// Compute the size of one node in the cache
 	size_t nodeElemSize = PipelineType::NodeTileResolution::numElements * sizeof( GvStructure::GsNode );
 	// Compute how many we can fit into the given memory size
-	size_t nodePoolNumElems = NODEPOOL_MEMSIZE / nodeElemSize; // Seulement utilisé pour calculer nodePoolRes
+	size_t nodePoolNumElems = _nodeMemoryPool / nodeElemSize; // Seulement utilisé pour calculer nodePoolRes
 	// Compute the resolution of the pools
 	uint3 nodePoolRes = make_uint3((uint)floorf(powf((float)nodePoolNumElems, 1.0f / 3.0f))) * NodeRes::get(); // Donnée au producer
 
@@ -317,7 +327,7 @@ void SampleCore::init()
 
 	// Pipeline initialization
 	_pipeline = new PipelineType();
-	_pipeline->initialize( NODEPOOL_MEMSIZE, BRICKPOOL_MEMSIZE, shader ); // Juste donnée à la pipeline
+	_pipeline->initialize( _nodeMemoryPool, _brickMemoryPool, shader ); // Juste donnée à la pipeline
 
 	// Producer initialization
 	_producer = new ProducerType( 64 * 1024 * 1024, nodePoolRes.x * nodePoolRes.y * nodePoolRes.z ); // Hardcoded cache size ?
@@ -1260,7 +1270,7 @@ unsigned int SampleCore::getNbTreeNodes() const
  ******************************************************************************/
 unsigned int SampleCore::getNodeCacheMemory() const
 {
-	return NODEPOOL_MEMSIZE / ( 1024U * 1024U );
+	return _nodeMemoryPool / ( 1024U * 1024U );
 }
 
 /******************************************************************************
@@ -1280,7 +1290,7 @@ unsigned int SampleCore::getNodeCacheCapacity() const
  ******************************************************************************/
 unsigned int SampleCore::getBrickCacheMemory() const
 {
-	return BRICKPOOL_MEMSIZE / ( 1024U * 1024U );
+	return _brickMemoryPool / ( 1024U * 1024U );
 }
 
 /******************************************************************************
