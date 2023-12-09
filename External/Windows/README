@@ -1,0 +1,48 @@
+--------------------
+Externals
+--------------------
+
+Loki
+http://loki-lib.sourceforge.net/
+- modified version for GigaVoxels/GigaSpace
+
+glew
+- version 1.12.0
+
+glm
+- version 0.9.5.1
+
+freeglut
+- version 2.8.1
+
+CUDPP - CUDA Data Parallel Primitives Library
+http://cudpp.github.io/
+- version 2.1
+
+Tiny XML
+- website : http://www.grinninglizard.com/tinyxml/
+- TODO : zlib license
+
+Qt
+- version 4.8.7
+- TO DO : pass to 5.5 (check LINUX Ubuntu)
+
+QGLViewer
+http://www.libqglviewer.com/
+- version 2.5.0
+
+Qwt
+http://qwt.sourceforge.net/
+- version 6.0.0
+
+Assimp
+http://assimp.sourceforge.net/
+- version 3.0
+
+CImg
+- website : http://cimg.eu/
+- version 1.5.0
+The CImg Library is an open-source product distributed under two distinct licenses : the library core itself is dual-licensed and can be governed either by the CeCILL-C License (LGPL-like), or the CeCILL License (GPL-compatible). Most of the other package files are distributed under the CeCILL License. Both are open source licenses, the CeCILL-C being less restrictive than the CeCILL.
+
+Image Magick
+- TO DO : check version
