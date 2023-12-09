@@ -127,9 +127,9 @@ message (STATUS "OPENGL_glu_LIBRARY = ${OPENGL_glu_LIBRARY}")
 MESSAGE ( STATUS "" )
 
 # Search for ImageMagick
-MESSAGE ( STATUS "REQUIRED PACKAGE : ImageMagick" )
-find_package (ImageMagick COMPONENTS Magick++)
-MESSAGE ( STATUS "" )
+#MESSAGE ( STATUS "REQUIRED PACKAGE : ImageMagick" )
+#find_package (ImageMagick COMPONENTS Magick++)
+#MESSAGE ( STATUS "" )
 
 #----------------------------------------------------------------
 # ASSIMP library settings
@@ -149,13 +149,13 @@ endif ()
 # CIMG library settings
 #----------------------------------------------------------------
 
-if (WIN32)
-	set (GV_CIMG_RELEASE "${GV_EXTERNAL}/CImg")
-	set (GV_CIMG_INC "${GV_CIMG_RELEASE}")
-else ()
-	set (GV_CIMG_RELEASE "/usr")
-	set (GV_CIMG_INC "${GV_CIMG_RELEASE}/include")
-endif ()
+#if (WIN32)
+#	set (GV_CIMG_RELEASE "${GV_EXTERNAL}/CImg")
+#	set (GV_CIMG_INC "${GV_CIMG_RELEASE}")
+#else ()
+#	set (GV_CIMG_RELEASE "/usr")
+#	set (GV_CIMG_INC "${GV_CIMG_RELEASE}/include")
+#endif ()
 
 #----------------------------------------------------------------
 # CUDPP library settings
@@ -247,13 +247,13 @@ endif ()
 # to the library, but not the path to the directory, that's why we use
 # the IMAGEMAGICK_BINARY_PATH path on Windows.
 
-if (WIN32)
-	set (GV_IMAGEMAGICK_INC "${ImageMagick_Magick++_INCLUDE_DIR}")
-	set (GV_IMAGEMAGICK_LIB "${ImageMagick_EXECUTABLE_DIR}/lib")
-else ()
-	set (GV_IMAGEMAGICK_INC "${ImageMagick_Magick++_INCLUDE_DIR}")
-	set (GV_IMAGEMAGICK_LIB "/usr/lib")
-endif ()
+#if (WIN32)
+#	set (GV_IMAGEMAGICK_INC "${ImageMagick_Magick++_INCLUDE_DIR}")
+#	set (GV_IMAGEMAGICK_LIB "${ImageMagick_EXECUTABLE_DIR}/lib")
+#else ()
+#	set (GV_IMAGEMAGICK_INC "${ImageMagick_Magick++_INCLUDE_DIR}")
+#	set (GV_IMAGEMAGICK_LIB "/usr/lib")
+#endif ()
 
 #----------------------------------------------------------------
 # LOKI library settings
@@ -410,7 +410,8 @@ endif ()
 #----------------------------------------------------------------
 
 option (GV_ENABLE_DEBUGABLE_DEVICE_CODE "Enable/disable generation of debug-able device code" OFF)
-option (GV_USE_CUDPP_LIBRARY "Enable/disable use of CUDPP library to speed up some device kernels. If OFF, it uses Thrust library." ON)
+# seems unused unfortunately ...
+option (GV_USE_CUDPP_LIBRARY "Enable/disable use of CUDPP library to speed up some device kernels. If OFF, it uses Thrust library." OFF) 
 
 option ( GV_USE_64_BITS "Enable/disable compilation in 64 bits." ON )
 if ( GV_USE_64_BITS )

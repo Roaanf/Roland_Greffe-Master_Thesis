@@ -1,0 +1,18 @@
+# CMake generation dependency list for this directory.
+C:/Program Files/CMake/share/cmake-3.27/Modules/FindCUDA/run_nvcc.cmake
+C:/Users/rolan/Desktop/GigaVoxelsDev/Development/CMake/CUDPP_CMakeImport.cmake
+C:/Users/rolan/Desktop/GigaVoxelsDev/Development/CMake/GLU_CMakeImport.cmake
+C:/Users/rolan/Desktop/GigaVoxelsDev/Development/CMake/GPU_COMPUTING_SDK_CMakeImport.cmake
+C:/Users/rolan/Desktop/GigaVoxelsDev/Development/CMake/GV_CMakeCommon.cmake
+C:/Users/rolan/Desktop/GigaVoxelsDev/Development/CMake/GigaVoxels_CMakeImport.cmake
+C:/Users/rolan/Desktop/GigaVoxelsDev/Development/CMake/GvSettings_CMakeImport.cmake
+C:/Users/rolan/Desktop/GigaVoxelsDev/Development/CMake/Loki_CMakeImport.cmake
+C:/Users/rolan/Desktop/GigaVoxelsDev/Development/CMake/OpenGL_CMakeImport.cmake
+C:/Users/rolan/Desktop/GigaVoxelsDev/Development/CMake/TinyXML_CMakeImport.cmake
+C:/Users/rolan/Desktop/GigaVoxelsDev/Development/CMake/freeglut_CMakeImport.cmake
+C:/Users/rolan/Desktop/GigaVoxelsDev/Development/CMake/glew_CMakeImport.cmake
+C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Library/GigaSpace/CMakeLists.txt
+C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC22_x64/Library/GigaSpace/CMakeFiles/GigaSpace.dir/GvCache/GigaSpace_generated_GsCacheManagerResources.cu.obj.cmake.pre-gen
+C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC22_x64/Library/GigaSpace/CMakeFiles/GigaSpace.dir/GvCache/GigaSpace_generated_GsCacheManagerResources.cu.obj.depend
+C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC22_x64/Library/GigaSpace/CMakeFiles/GigaSpace.dir/GvPerfMon/GigaSpace_generated_GsPerformanceMonitor.cu.obj.cmake.pre-gen
+C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC22_x64/Library/GigaSpace/CMakeFiles/GigaSpace.dir/GvPerfMon/GigaSpace_generated_GsPerformanceMonitor.cu.obj.depend

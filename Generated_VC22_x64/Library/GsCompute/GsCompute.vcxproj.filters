@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute\GsCompute\GsDataParallelPrimitives.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute\GsCompute\GsDevice.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute\GsCompute\GsDeviceManager.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute\GsCompute\GsDeviceProperties.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute\GsCompute\GsComputeConfig.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute\GsCompute\GsDataParallelPrimitives.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute\GsCompute\GsDevice.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute\GsCompute\GsDeviceManager.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute\GsCompute\GsDeviceProperties.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute\GsCompute\GsDataParallelPrimitives.inl">
+      <Filter>Inl</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Inc">
+      <UniqueIdentifier>{7F5FFA6E-EBAE-3711-8766-4F6B21588B25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Inl">
+      <UniqueIdentifier>{CC4B7363-C9D5-3D98-934C-DD7653A29456}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src">
+      <UniqueIdentifier>{07AA8E81-5D0A-3FBF-8AA0-472265D32D38}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

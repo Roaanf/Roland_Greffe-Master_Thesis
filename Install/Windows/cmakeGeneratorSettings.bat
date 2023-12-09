@@ -13,6 +13,7 @@ rem set GV_COMPILER=Visual_Studio_11
 rem set GV_COMPILER=Visual_Studio_11_Win64
 rem set GV_COMPILER=Visual_Studio_12
 set GV_COMPILER=Visual_Studio_12_Win64
+rem set GV_COMPILER=Visual_Studio_17_2022_Win64
 
 rem **************************************************************************
 rem 7z path : tools to uncompress archives

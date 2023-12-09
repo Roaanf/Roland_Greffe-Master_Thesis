@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ALL_BUILD", "ALL_BUILD.vcxproj", "{3E4AACF8-91CF-3E39-8629-AA59ACD7C89D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BB801E7A-D0C4-31DD-8E67-3CD170E3563E} = {BB801E7A-D0C4-31DD-8E67-3CD170E3563E}
+		{6A68EECA-F36F-3A9C-B782-0689BCB27389} = {6A68EECA-F36F-3A9C-B782-0689BCB27389}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GvRAWDataLoader", "GvRAWDataLoader\GvRAWDataLoader.vcxproj", "{BB801E7A-D0C4-31DD-8E67-3CD170E3563E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6A68EECA-F36F-3A9C-B782-0689BCB27389} = {6A68EECA-F36F-3A9C-B782-0689BCB27389}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZERO_CHECK", "ZERO_CHECK.vcxproj", "{6A68EECA-F36F-3A9C-B782-0689BCB27389}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3E4AACF8-91CF-3E39-8629-AA59ACD7C89D}.Debug|x64.ActiveCfg = Debug|x64
+		{3E4AACF8-91CF-3E39-8629-AA59ACD7C89D}.Release|x64.ActiveCfg = Release|x64
+		{BB801E7A-D0C4-31DD-8E67-3CD170E3563E}.Debug|x64.ActiveCfg = Debug|x64
+		{BB801E7A-D0C4-31DD-8E67-3CD170E3563E}.Debug|x64.Build.0 = Debug|x64
+		{BB801E7A-D0C4-31DD-8E67-3CD170E3563E}.Release|x64.ActiveCfg = Release|x64
+		{BB801E7A-D0C4-31DD-8E67-3CD170E3563E}.Release|x64.Build.0 = Release|x64
+		{6A68EECA-F36F-3A9C-B782-0689BCB27389}.Debug|x64.ActiveCfg = Debug|x64
+		{6A68EECA-F36F-3A9C-B782-0689BCB27389}.Debug|x64.Build.0 = Debug|x64
+		{6A68EECA-F36F-3A9C-B782-0689BCB27389}.Release|x64.ActiveCfg = Release|x64
+		{6A68EECA-F36F-3A9C-B782-0689BCB27389}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7CDCAC74-6DB8-32C1-AFCA-6822F491B84E}
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

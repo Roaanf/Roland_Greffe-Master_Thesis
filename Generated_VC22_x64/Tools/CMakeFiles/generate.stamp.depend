@@ -1,0 +1,31 @@
+# CMake generation dependency list for this directory.
+C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeCInformation.cmake
+C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeCXXInformation.cmake
+C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeCommonLanguageInclude.cmake
+C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeGenericSystem.cmake
+C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeInitializeConfigs.cmake
+C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeLanguageInformation.cmake
+C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeRCInformation.cmake
+C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeSystemSpecificInformation.cmake
+C:/Program Files/CMake/share/cmake-3.27/Modules/CMakeSystemSpecificInitialize.cmake
+C:/Program Files/CMake/share/cmake-3.27/Modules/Compiler/CMakeCommonCompilerMacros.cmake
+C:/Program Files/CMake/share/cmake-3.27/Modules/Compiler/MSVC-C.cmake
+C:/Program Files/CMake/share/cmake-3.27/Modules/Compiler/MSVC-CXX.cmake
+C:/Program Files/CMake/share/cmake-3.27/Modules/Compiler/MSVC.cmake
+C:/Program Files/CMake/share/cmake-3.27/Modules/FindCUDA.cmake
+C:/Program Files/CMake/share/cmake-3.27/Modules/FindCUDA/select_compute_arch.cmake
+C:/Program Files/CMake/share/cmake-3.27/Modules/FindOpenGL.cmake
+C:/Program Files/CMake/share/cmake-3.27/Modules/FindPackageHandleStandardArgs.cmake
+C:/Program Files/CMake/share/cmake-3.27/Modules/FindPackageMessage.cmake
+C:/Program Files/CMake/share/cmake-3.27/Modules/Platform/Windows-Initialize.cmake
+C:/Program Files/CMake/share/cmake-3.27/Modules/Platform/Windows-MSVC-C.cmake
+C:/Program Files/CMake/share/cmake-3.27/Modules/Platform/Windows-MSVC-CXX.cmake
+C:/Program Files/CMake/share/cmake-3.27/Modules/Platform/Windows-MSVC.cmake
+C:/Program Files/CMake/share/cmake-3.27/Modules/Platform/Windows.cmake
+C:/Program Files/CMake/share/cmake-3.27/Modules/Platform/WindowsPaths.cmake
+C:/Users/rolan/Desktop/GigaVoxelsDev/Development/CMake/GvSettings_CMakeImport.cmake
+C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/CMakeLists.txt
+C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC22_x64/Tools/CMakeFiles/3.27.6/CMakeCCompiler.cmake
+C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC22_x64/Tools/CMakeFiles/3.27.6/CMakeCXXCompiler.cmake
+C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC22_x64/Tools/CMakeFiles/3.27.6/CMakeRCCompiler.cmake
+C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC22_x64/Tools/CMakeFiles/3.27.6/CMakeSystem.cmake

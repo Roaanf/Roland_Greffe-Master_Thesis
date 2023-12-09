@@ -38,7 +38,7 @@ SET (RELEASE_BIN_DIR ${GV_RELEASE}/Bin)
 # Others
 #########################################################################
 
-add_subdirectory ("${CMAKE_SOURCE_DIR}/DepthOfField")
+#add_subdirectory ("${CMAKE_SOURCE_DIR}/DepthOfField")
 
 #########################################################################
 # Add all the sub projects
@@ -53,31 +53,31 @@ add_subdirectory ("${CMAKE_SOURCE_DIR}/IOStreaming/DynamicLoad")
 #########################################################################
 
 # Noise
-add_subdirectory ("${CMAKE_SOURCE_DIR}/ProceduralTechnics/Noise/AmplifiedSurface")
-add_subdirectory ("${CMAKE_SOURCE_DIR}/ProceduralTechnics/Noise/AmplifiedVolume")
-add_subdirectory ("${CMAKE_SOURCE_DIR}/ProceduralTechnics/Noise/SmartPerlinNoise")
-add_subdirectory ("${CMAKE_SOURCE_DIR}/ProceduralTechnics/Noise/ProceduralTerrain")
-add_subdirectory ("${CMAKE_SOURCE_DIR}/ProceduralTechnics/Noise/NoiseInheritance")
+#add_subdirectory ("${CMAKE_SOURCE_DIR}/ProceduralTechnics/Noise/AmplifiedSurface")
+#add_subdirectory ("${CMAKE_SOURCE_DIR}/ProceduralTechnics/Noise/AmplifiedVolume")
+#add_subdirectory ("${CMAKE_SOURCE_DIR}/ProceduralTechnics/Noise/SmartPerlinNoise")
+#add_subdirectory ("${CMAKE_SOURCE_DIR}/ProceduralTechnics/Noise/ProceduralTerrain")
+#add_subdirectory ("${CMAKE_SOURCE_DIR}/ProceduralTechnics/Noise/NoiseInheritance")
 
 # Geometry
-add_subdirectory ("${CMAKE_SOURCE_DIR}/ProceduralTechnics/SimpleSphere")
-add_subdirectory ("${CMAKE_SOURCE_DIR}/ProceduralTechnics/SimpleSphereCPU")
+#add_subdirectory ("${CMAKE_SOURCE_DIR}/ProceduralTechnics/SimpleSphere")
+#add_subdirectory ("${CMAKE_SOURCE_DIR}/ProceduralTechnics/SimpleSphereCPU")
 
 # Fractal
-add_subdirectory ("${CMAKE_SOURCE_DIR}/ProceduralTechnics/MandelbrotSet")
+#add_subdirectory ("${CMAKE_SOURCE_DIR}/ProceduralTechnics/MandelbrotSet")
 
 # Fractal + Instancing
-add_subdirectory ("${CMAKE_SOURCE_DIR}/ProceduralTechnics/MengerSponge")
+#add_subdirectory ("${CMAKE_SOURCE_DIR}/ProceduralTechnics/MengerSponge")
 
 # Distance field
-add_subdirectory ("${CMAKE_SOURCE_DIR}/ProceduralTechnics/Slisesix")
+#add_subdirectory ("${CMAKE_SOURCE_DIR}/ProceduralTechnics/Slisesix")
 
 # Clipping planes
-add_subdirectory ("${CMAKE_SOURCE_DIR}/ClippingPlane")
+#add_subdirectory ("${CMAKE_SOURCE_DIR}/ClippingPlane")
 
 # BVH - kd-tree
 # - temporary removed => need to pass to new API
-add_subdirectory ("${CMAKE_SOURCE_DIR}/SimpleTriangles")
+#add_subdirectory ("${CMAKE_SOURCE_DIR}/SimpleTriangles")
 
 #########################################################################
 # Add all the sub projects
@@ -85,9 +85,9 @@ add_subdirectory ("${CMAKE_SOURCE_DIR}/SimpleTriangles")
 #########################################################################
 
 # OpenGL
-add_subdirectory ("${CMAKE_SOURCE_DIR}/GraphicsInteroperability/RendererGLSL")
-add_subdirectory ("${CMAKE_SOURCE_DIR}/GraphicsInteroperability/RendererGLSLSphere")
-add_subdirectory ("${CMAKE_SOURCE_DIR}/GraphicsInteroperability/OpenGLScene")
+#add_subdirectory ("${CMAKE_SOURCE_DIR}/GraphicsInteroperability/RendererGLSL")
+#add_subdirectory ("${CMAKE_SOURCE_DIR}/GraphicsInteroperability/RendererGLSLSphere")
+#add_subdirectory ("${CMAKE_SOURCE_DIR}/GraphicsInteroperability/OpenGLScene")
 
 # Environment Mapping
 #add_subdirectory ("${CMAKE_SOURCE_DIR}/GraphicsInteroperability/CastShadows")
@@ -95,7 +95,7 @@ add_subdirectory ("${CMAKE_SOURCE_DIR}/GraphicsInteroperability/OpenGLScene")
 #add_subdirectory ("${CMAKE_SOURCE_DIR}/GraphicsInteroperability/RefractingLayer")
 
 # Proxy geometry
-add_subdirectory ("${CMAKE_SOURCE_DIR}/GraphicsInteroperability/ProxyGeometry")
+#add_subdirectory ("${CMAKE_SOURCE_DIR}/GraphicsInteroperability/ProxyGeometry")
 
 #########################################################################
 # Add all the sub projects
@@ -110,12 +110,12 @@ add_subdirectory ("${CMAKE_SOURCE_DIR}/GUI/GLUTWindow")
 # Voxelization
 #########################################################################
 
-add_subdirectory ("${CMAKE_SOURCE_DIR}/Voxelization/Voxelization")
-add_subdirectory ("${CMAKE_SOURCE_DIR}/Voxelization/VoxelizationSignedDistanceField")
+#add_subdirectory ("${CMAKE_SOURCE_DIR}/Voxelization/Voxelization")
+#add_subdirectory ("${CMAKE_SOURCE_DIR}/Voxelization/VoxelizationSignedDistanceField")
 
 #########################################################################
 # Add all the sub projects
 # Multi-Objects
 #########################################################################
 
-add_subdirectory ("${CMAKE_SOURCE_DIR}/ProceduralTechnics/MultiObjects")
+#add_subdirectory ("${CMAKE_SOURCE_DIR}/ProceduralTechnics/MultiObjects")

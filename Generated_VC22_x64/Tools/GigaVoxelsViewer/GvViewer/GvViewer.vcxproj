@@ -1,0 +1,428 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{B0856C4D-D9C3-3AD8-9F8F-A2657302FBE2}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.22621.0</WindowsTargetPlatformVersion>
+    <Platform>x64</Platform>
+    <ProjectName>GvViewer</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">GvViewer.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">GvViewer.d</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">GvViewer.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">GvViewer</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\Inc;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewer\Inc;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\Release\Tools\GigaVoxelsViewer\Inc;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\glew\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\freeglut\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\tinyxml\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\assimp\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\QGLViewer\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qt\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qt\include\QtCore;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qt\include\QtGui;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qt\include\QtOpenGL;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qt\include\QtXml;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qwt\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\Release\Inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;NOMINMAX;QWT_DLL;WIN32_LEAN_AND_MEAN;GVVIEWER_MAKEDLL;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;NOMINMAX;QWT_DLL;WIN32_LEAN_AND_MEAN;GVVIEWER_MAKEDLL;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\Inc;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewer\Inc;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\Release\Tools\GigaVoxelsViewer\Inc;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\glew\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\freeglut\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\tinyxml\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\assimp\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\QGLViewer\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qt\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qt\include\QtCore;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qt\include\QtGui;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qt\include\QtOpenGL;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qt\include\QtXml;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qwt\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\Release\Inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\Inc;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewer\Inc;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\Release\Tools\GigaVoxelsViewer\Inc;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\glew\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\freeglut\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\tinyxml\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\assimp\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\QGLViewer\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qt\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qt\include\QtCore;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qt\include\QtGui;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qt\include\QtOpenGL;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qt\include\QtXml;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qwt\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\Release\Inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <PostBuildEvent>
+      <Message>										</Message>
+      <Command>setlocal
+echo Copying files to release directory...
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+IF EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\DEBUG\GvViewer.pdb" copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\DEBUG\GvViewer.pdb" "C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../Release/Tools/GigaVoxelsViewer/Bin/GvViewer.d.pdb"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+IF EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\DEBUG\GvViewer.d.pdb" copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\DEBUG\GvViewer.d.pdb" "C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../Release/Tools/GigaVoxelsViewer/Bin/GvViewer.d.pdb"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+IF EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\DEBUG\GvViewer.d.exe" copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\DEBUG\GvViewer.d.exe" "C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../Release/Tools/GigaVoxelsViewer/Bin/GvViewer.d.exe"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+IF EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\RELEASE\GvViewer.exe" copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\RELEASE\GvViewer.exe" "C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../Release/Tools/GigaVoxelsViewer/Bin/GvViewer.exe"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+IF EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\DEBUG\GvViewer.d.exe" copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\DEBUG\GvViewer.d.exe" "C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../Release/Bin/GvViewer.d.exe"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+IF EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\RELEASE\GvViewer.exe" copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\RELEASE\GvViewer.exe" "C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../Release/Bin/GvViewer.exe"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+IF EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\DEBUG\GvViewer.d.lib" copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\DEBUG\GvViewer.d.lib" "C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../Release/Tools/GigaVoxelsViewer/Lib/GvViewer.d.lib"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+IF EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\RELEASE\GvViewer.lib" copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\RELEASE\GvViewer.lib" "C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../Release/Tools/GigaVoxelsViewer/Lib/GvViewer.lib"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewer\Inc\*.h*" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewer\Inc\*.h*" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\Release\Tools\GigaVoxelsViewer\Inc"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewer\Inc\*.h*" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\Release\Tools\GigaVoxelsViewer\Inc"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+echo Finish copying files...
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PostBuildEvent>
+    <Link>
+      <AdditionalDependencies>GvViewerCore.d.lib;GvViewerScene.d.lib;GvViewerGui.d.lib;opengl32.lib;glu32.lib;glew32.lib;freeglut.lib;tinyxml.d.lib;assimpd.lib;QGLViewerd2.lib;QtCored4.lib;QtGuid4.lib;QtOpenGLd4.lib;QtXmld4.lib;qwtd.lib;GsGraphics.d.lib;GvViewerCore.d.lib;GvViewerScene.d.lib;GvViewerGui.d.lib;opengl32.lib;glu32.lib;glew32.lib;freeglut.lib;tinyxml.d.lib;assimpd.lib;QGLViewerd2.lib;QtCored4.lib;QtGuid4.lib;QtOpenGLd4.lib;QtXmld4.lib;qwtd.lib;GsGraphics.d.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../Release/Tools/GigaVoxelsViewer/Lib;C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../Release/Tools/GigaVoxelsViewer/Lib/$(Configuration);C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../External/Windows/x64/glew/lib;C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../External/Windows/x64/glew/lib/$(Configuration);C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../External/Windows/x64/freeglut/lib;C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../External/Windows/x64/freeglut/lib/$(Configuration);C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../External/Windows/x64/tinyxml/lib;C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../External/Windows/x64/tinyxml/lib/$(Configuration);C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../External/Windows/x64/assimp/lib;C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../External/Windows/x64/assimp/lib/$(Configuration);C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../External/Windows/x64/QGLViewer/lib;C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../External/Windows/x64/QGLViewer/lib/$(Configuration);C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../External/Windows/x64/Qt/lib;C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../External/Windows/x64/Qt/lib/$(Configuration);C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../External/Windows/x64/Qwt/lib;C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../External/Windows/x64/Qwt/lib/$(Configuration);C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../Release/Lib;C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../Release/Lib/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC22_x64/Tools/GigaVoxelsViewer/GvViewer/Debug/GvViewer.d.lib</ImportLibrary>
+      <ProgramDataBaseFile>C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC22_x64/Tools/GigaVoxelsViewer/GvViewer/Debug/GvViewer.d.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\Inc;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewer\Inc;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\Release\Tools\GigaVoxelsViewer\Inc;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\glew\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\freeglut\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\tinyxml\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\assimp\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\QGLViewer\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qt\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qt\include\QtCore;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qt\include\QtGui;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qt\include\QtOpenGL;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qt\include\QtXml;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qwt\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\Release\Inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;NOMINMAX;QWT_DLL;WIN32_LEAN_AND_MEAN;GVVIEWER_MAKEDLL;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;NOMINMAX;QWT_DLL;WIN32_LEAN_AND_MEAN;GVVIEWER_MAKEDLL;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\Inc;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewer\Inc;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\Release\Tools\GigaVoxelsViewer\Inc;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\glew\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\freeglut\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\tinyxml\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\assimp\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\QGLViewer\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qt\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qt\include\QtCore;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qt\include\QtGui;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qt\include\QtOpenGL;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qt\include\QtXml;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qwt\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\Release\Inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\Inc;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewer\Inc;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\Release\Tools\GigaVoxelsViewer\Inc;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\glew\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\freeglut\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\tinyxml\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\assimp\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\QGLViewer\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qt\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qt\include\QtCore;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qt\include\QtGui;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qt\include\QtOpenGL;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qt\include\QtXml;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qwt\include;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\Release\Inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <PostBuildEvent>
+      <Message>										</Message>
+      <Command>setlocal
+echo Copying files to release directory...
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+IF EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\DEBUG\GvViewer.pdb" copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\DEBUG\GvViewer.pdb" "C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../Release/Tools/GigaVoxelsViewer/Bin/GvViewer.d.pdb"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+IF EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\DEBUG\GvViewer.d.pdb" copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\DEBUG\GvViewer.d.pdb" "C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../Release/Tools/GigaVoxelsViewer/Bin/GvViewer.d.pdb"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+IF EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\DEBUG\GvViewer.d.exe" copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\DEBUG\GvViewer.d.exe" "C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../Release/Tools/GigaVoxelsViewer/Bin/GvViewer.d.exe"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+IF EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\RELEASE\GvViewer.exe" copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\RELEASE\GvViewer.exe" "C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../Release/Tools/GigaVoxelsViewer/Bin/GvViewer.exe"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+IF EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\DEBUG\GvViewer.d.exe" copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\DEBUG\GvViewer.d.exe" "C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../Release/Bin/GvViewer.d.exe"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+IF EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\RELEASE\GvViewer.exe" copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\RELEASE\GvViewer.exe" "C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../Release/Bin/GvViewer.exe"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+IF EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\DEBUG\GvViewer.d.lib" copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\DEBUG\GvViewer.d.lib" "C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../Release/Tools/GigaVoxelsViewer/Lib/GvViewer.d.lib"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+IF EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\RELEASE\GvViewer.lib" copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\RELEASE\GvViewer.lib" "C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../Release/Tools/GigaVoxelsViewer/Lib/GvViewer.lib"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewer\Inc\*.h*" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewer\Inc\*.h*" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\Release\Tools\GigaVoxelsViewer\Inc"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewer\Inc\*.h*" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\Release\Tools\GigaVoxelsViewer\Inc"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+echo Finish copying files...
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PostBuildEvent>
+    <Link>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;freeglut.lib;tinyxml.lib;assimp.lib;QGLViewer2.lib;QtCore4.lib;QtGui4.lib;QtOpenGL4.lib;QtXml4.lib;qwt.lib;GsGraphics.lib;..\GvViewerGui\Release\GvViewerGui.lib;..\GvViewerScene\Release\GvViewerScene.lib;..\GvViewerCore\Release\GvViewerCore.lib;opengl32.lib;glu32.lib;glew32.lib;freeglut.lib;tinyxml.lib;assimp.lib;QGLViewer2.lib;QtCore4.lib;QtGui4.lib;QtOpenGL4.lib;QtXml4.lib;qwt.lib;GsGraphics.lib;GsCompute.lib;GigaSpace.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../Release/Tools/GigaVoxelsViewer/Lib;C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../Release/Tools/GigaVoxelsViewer/Lib/$(Configuration);C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../External/Windows/x64/glew/lib;C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../External/Windows/x64/glew/lib/$(Configuration);C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../External/Windows/x64/freeglut/lib;C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../External/Windows/x64/freeglut/lib/$(Configuration);C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../External/Windows/x64/tinyxml/lib;C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../External/Windows/x64/tinyxml/lib/$(Configuration);C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../External/Windows/x64/assimp/lib;C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../External/Windows/x64/assimp/lib/$(Configuration);C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../External/Windows/x64/QGLViewer/lib;C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../External/Windows/x64/QGLViewer/lib/$(Configuration);C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../External/Windows/x64/Qt/lib;C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../External/Windows/x64/Qt/lib/$(Configuration);C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../External/Windows/x64/Qwt/lib;C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../External/Windows/x64/Qwt/lib/$(Configuration);C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../Release/Lib;C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/../../Release/Lib/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC22_x64/Tools/GigaVoxelsViewer/GvViewer/Release/GvViewer.lib</ImportLibrary>
+      <ProgramDataBaseFile>C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC22_x64/Tools/GigaVoxelsViewer/GvViewer/Release/GvViewer.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewer\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/GigaVoxelsViewer/GvViewer/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools -BC:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC22_x64/Tools --check-stamp-file C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC22_x64/Tools/GigaVoxelsViewer/GvViewer/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\rolan\Desktop\GigaVoxelsDev\Development\CMake\GLU_CMakeImport.cmake;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\CMake\GV_CMakeCommonTools.cmake;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\CMake\GigaVoxels_CMakeImport.cmake;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\CMake\GvSettings_CMakeImport.cmake;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\CMake\OpenGL_CMakeImport.cmake;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\CMake\Project_CMakeImport.cmake;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\CMake\QGLViewer_CMakeImport.cmake;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\CMake\Qt_CMakeImport.cmake;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\CMake\Qwt_CMakeImport.cmake;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\CMake\TinyXML_CMakeImport.cmake;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\CMake\assimp_CMakeImport.cmake;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\CMake\freeglut_CMakeImport.cmake;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\CMake\glew_CMakeImport.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/GigaVoxelsViewer/GvViewer/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools -BC:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC22_x64/Tools --check-stamp-file C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC22_x64/Tools/GigaVoxelsViewer/GvViewer/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\rolan\Desktop\GigaVoxelsDev\Development\CMake\GLU_CMakeImport.cmake;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\CMake\GV_CMakeCommonTools.cmake;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\CMake\GigaVoxels_CMakeImport.cmake;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\CMake\GvSettings_CMakeImport.cmake;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\CMake\OpenGL_CMakeImport.cmake;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\CMake\Project_CMakeImport.cmake;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\CMake\QGLViewer_CMakeImport.cmake;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\CMake\Qt_CMakeImport.cmake;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\CMake\Qwt_CMakeImport.cmake;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\CMake\TinyXML_CMakeImport.cmake;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\CMake\assimp_CMakeImport.cmake;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\CMake\freeglut_CMakeImport.cmake;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\CMake\glew_CMakeImport.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewer\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewer\Src\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\ZERO_CHECK.vcxproj">
+      <Project>{FF293B9B-6F66-352A-9285-12AED885E0D5}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewerCore\GvViewerCore.vcxproj">
+      <Project>{6A804656-3E41-3638-9471-99E419EE3E91}</Project>
+      <Name>GvViewerCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewerGui\GvViewerGui.vcxproj">
+      <Project>{0B2628CB-D0C0-3C5F-BDBB-C292F92CC40E}</Project>
+      <Name>GvViewerGui</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC22_x64\Tools\GigaVoxelsViewer\GvViewerScene\GvViewerScene.vcxproj">
+      <Project>{D4BE8AB4-1477-38F4-BE0B-D1821A9012A5}</Project>
+      <Name>GvViewerScene</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

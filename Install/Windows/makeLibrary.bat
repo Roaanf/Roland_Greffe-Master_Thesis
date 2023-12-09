@@ -35,6 +35,9 @@ if %GV_COMPILER%==Visual_Studio_9_2008 (
 ) else if %GV_COMPILER%==Visual_Studio_12_Win64 (
     call :generate_Visual_Studio_12_Win64
 	goto :finish
+) else if %GV_COMPILER%==Visual_Studio_17_2022_Win64 (
+    call :generate_Visual_Studio_17_2022_Win64
+        goto :finish
 )
 
 :generate_Visual_Studio_9_2008
@@ -157,6 +160,21 @@ mkdir Library
 cd Library
 rem CMake the application
 cmake -G "Visual Studio 12 Win64" ..\..\Development\Library
+if NOT ERRORLEVEL 0 pause
+cd %CURRENTSCRIPTPATH%
+pause
+goto :finish
+
+:generate_Visual_Studio_17_2022_Win64
+set CURRENTSCRIPTPATH=%CD%
+cd ..
+cd ..
+mkdir Generated_VC22_x64
+cd Generated_VC22_x64
+mkdir Library
+cd Library
+rem CMake the application
+cmake -G "Visual Studio 17 2022" -A x64 ..\..\Development\Library
 if NOT ERRORLEVEL 0 pause
 cd %CURRENTSCRIPTPATH%
 pause

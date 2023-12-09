@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewer\Src\main.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewer\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Src">
+      <UniqueIdentifier>{6CC341FA-DF1F-314F-8EDF-C532C32CDD41}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
