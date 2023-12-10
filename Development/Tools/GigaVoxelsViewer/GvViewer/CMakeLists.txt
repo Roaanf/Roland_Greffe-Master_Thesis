@@ -25,7 +25,7 @@ SET (GV_TARGET_TYPE "GV_EXE")
 #----------------------------------------------------------------
 
 # add custom PROJECT LINK LIBRARY
-SET (projectLibList "GvViewerCore" "GvViewerScene" "GvViewerGui")
+SET (projectLibList "GvViewerCore" "GvViewerGui")
 INCLUDE (Project_CMakeImport)
 
 INCLUDE (OpenGL_CMakeImport)
@@ -35,9 +35,6 @@ INCLUDE (freeglut_CMakeImport)
 
 # Add XML parsing library
 INCLUDE (TinyXML_CMakeImport)
-
-# Add 3D format load library
-INCLUDE (assimp_CMakeImport)
 
 # Add IHM third party dependencies
 INCLUDE (QGLViewer_CMakeImport)

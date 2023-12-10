@@ -26,8 +26,6 @@
 #include "GvvPipelineInterface.h"
 #include "GvvPipelineManager.h"
 #include "GvvPluginManager.h"
-#include "GvvGLSceneInterface.h"
-#include "GvvGLSceneManager.h"
 
 /******************************************************************************
  ****************************** NAMESPACE SECTION *****************************
@@ -102,19 +100,6 @@ void GvvRemoveBrowsableAction::execute()
 			//pipeline = NULL;
 			GvvPluginManager::get().unloadAll();
 			// ----------------------------------
-		}
-		else
-		{
-			//** Remove the element
-			GvvGLSceneInterface* scene = dynamic_cast< GvvGLSceneInterface* >( browsable );
-			if ( scene != NULL )
-			{
-				GvvGLSceneManager::get().removeGLScene( scene );
-
-				// Destroy object
-				delete scene;
-				scene = NULL;
-			}
 		}
 	}
 }

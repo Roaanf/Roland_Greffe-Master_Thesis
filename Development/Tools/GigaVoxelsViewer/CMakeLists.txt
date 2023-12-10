@@ -6,5 +6,5 @@ SET(GIGASPACE_RELEASE_BIN_DIR ${GV_RELEASE}/Bin)
 
 add_subdirectory ("${CMAKE_SOURCE_DIR}/GigaVoxelsViewer/GvViewer")
 add_subdirectory ("${CMAKE_SOURCE_DIR}/GigaVoxelsViewer/GvViewerCore")
-add_subdirectory ("${CMAKE_SOURCE_DIR}/GigaVoxelsViewer/GvViewerScene")
+#add_subdirectory ("${CMAKE_SOURCE_DIR}/GigaVoxelsViewer/GvViewerScene")
 add_subdirectory ("${CMAKE_SOURCE_DIR}/GigaVoxelsViewer/GvViewerGui")
