@@ -14,6 +14,9 @@ rem **************************************************************************
 if %GV_COMPILER%==Visual_Studio_12_Win64 (
     call :generate_Visual_Studio_12_Win64
 	goto :finish
+) else if %GV_COMPILER%==Visual_Studio_16_2019_Win64 (
+    call :generate_Visual_Studio_16_2019_Win64
+        goto :finish
 ) else if %GV_COMPILER%==Visual_Studio_17_2022_Win64 (
     call :generate_Visual_Studio_17_2022_Win64
         goto :finish
@@ -29,6 +32,21 @@ mkdir Tools
 cd Tools
 rem CMake the application
 cmake -G "Visual Studio 12 Win64" ..\..\Development\Tools
+if NOT ERRORLEVEL 0 pause
+cd %CURRENTSCRIPTPATH%
+pause
+goto :finish
+
+:generate_Visual_Studio_16_2019_Win64
+set CURRENTSCRIPTPATH=%CD%
+cd ..
+cd ..
+mkdir Generated_VC19_x64
+cd Generated_VC19_x64
+mkdir Tools
+cd Tools
+rem CMake the application
+cmake -G "Visual Studio 16 2019" -A x64 ..\..\Development\Tools
 if NOT ERRORLEVEL 0 pause
 cd %CURRENTSCRIPTPATH%
 pause

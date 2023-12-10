@@ -931,8 +931,10 @@ void GsDataStructureIOHandler::openFiles( const string& pName, bool pNewFiles )
 		_brickData = (unsigned short *) calloc( (size_t)_brickNumber * (size_t)_brickSize, sizeof( unsigned short ) );
 		brickFile = fopen( getFileNameBrick( pName, _level, _brickWidth, 0, GsDataTypeHandler::getTypeName( _dataTypes[ 0 ] ) ).data(), "rb+" );
 		if ( brickFile ) {
-			fread( _brickData,  sizeof(unsigned short), _brickNumber * _brickSize, brickFile );
-			fclose( brickFile );
+			if (_brickData) {
+				fread(_brickData, sizeof(unsigned short), _brickNumber * _brickSize, brickFile);
+				fclose(brickFile);
+			}
 		}
 	}
 	for ( int c = 0; c < _dataTypes.size(); ++c )

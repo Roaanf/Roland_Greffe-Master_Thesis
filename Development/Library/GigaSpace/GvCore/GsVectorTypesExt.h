@@ -50,7 +50,7 @@
 #include "GvCore/GsCoreConfig.h"
 
 #include <cuda.h>	// without this include, Linux has problem to compile. TO DO : resolve this.
-#include <device_functions.h> // float <-> half
+#include <cuda_fp16.h> // float <-> half
 #include <vector_types.h>
 #include <vector_functions.h>
 //#include <driver_types.h>
@@ -82,7 +82,7 @@
 typedef unsigned int uint;
 typedef unsigned char uchar;
 
-struct /*__align__(4)*/ half2
+struct /*__align__(4)*/ half2_host
 {
 	unsigned short x, y;
 };
@@ -153,7 +153,7 @@ inline int iDivUp( int a, int b )
 /**
  * ...
  */
-template<> __inline__ __host__ cudaChannelFormatDesc cudaCreateChannelDesc<half2>(void)
+template<> __inline__ __host__ cudaChannelFormatDesc cudaCreateChannelDesc<half2_host>(void)
 {
 	return cudaCreateChannelDescHalf2();
 }
@@ -166,9 +166,9 @@ template<> __inline__ __host__ cudaChannelFormatDesc cudaCreateChannelDesc<half4
 #ifdef __CUDA_ARCH__
 
 __device__
-__forceinline__ half2 make_half2(float x, float y)
+__forceinline__ half2_host make_half2(float x, float y)
 {
-	half2 t;
+	half2_host t;
 
 	t.x = __float2half_rn(x);
 	t.y = __float2half_rn(y);
@@ -238,9 +238,9 @@ inline unsigned short __float2half_rn_host(float f)
 	return sign | (exponent << 10) | mantissa;
 }
 
-inline half2 make_half2(float x, float y)
+inline half2_host make_half2(float x, float y)
 {
-	half2 t;
+	half2_host t;
 
 	t.x = __float2half_rn_host(x);
 	t.y = __float2half_rn_host(y);
