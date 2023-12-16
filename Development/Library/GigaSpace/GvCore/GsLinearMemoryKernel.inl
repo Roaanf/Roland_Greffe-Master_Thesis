@@ -47,6 +47,8 @@
  ****************************** INLINE DEFINITION *****************************
  ******************************************************************************/
 
+#include <stdio.h>
+
 namespace GvCore
 {
 
@@ -63,7 +65,7 @@ inline void GsLinearMemoryKernel< T >::init( T* pData, const uint3& pRes, size_t
 	_resolution = pRes;
 	_data = pData;
 	_pitch = pPitch;
-	_pitchxy = _resolution.x * _resolution.y;
+	_pitchxy = (size_t)_resolution.x * (size_t)_resolution.y;
 }
 
 /******************************************************************************
@@ -87,7 +89,7 @@ template< typename T >
 __device__
 __forceinline__ size_t GsLinearMemoryKernel< T >::getMemorySize() const
 {
-	return __uimul( __uimul( __uimul( _resolution.x, _resolution.y ), _resolution.z ), sizeof( T ) );
+	return (size_t)__uimul(__uimul(__uimul((size_t)_resolution.x, (size_t)_resolution.y), (size_t)_resolution.z), sizeof(T));
 }
 
 /******************************************************************************
@@ -99,7 +101,7 @@ __forceinline__ size_t GsLinearMemoryKernel< T >::getMemorySize() const
  ******************************************************************************/
 template< typename T >
 __device__
-__forceinline__ /*const*/ T GsLinearMemoryKernel< T >::get( uint pAddress ) const
+__forceinline__ /*const*/ T GsLinearMemoryKernel< T >::get( size_t pAddress ) const
 {
 	return _data[ pAddress ];
 }
@@ -142,7 +144,7 @@ __forceinline__ /*const*/ T GsLinearMemoryKernel< T >::get( const uint3& pPositi
  ******************************************************************************/
 template< typename T >
 __device__
-__forceinline__ /*const*/ T GsLinearMemoryKernel< T >::getSafe( uint pAddress ) const
+__forceinline__ /*const*/ T GsLinearMemoryKernel< T >::getSafe( size_t pAddress ) const
 {
 	uint numelem = _pitchxy * _resolution.z;
 	if
@@ -180,7 +182,7 @@ __forceinline__ /*const*/ T GsLinearMemoryKernel< T >::getSafe( uint3 pPosition 
  ******************************************************************************/
 template< typename T >
 __device__
-__forceinline__ T* GsLinearMemoryKernel< T >::getPointer( uint pAddress )
+__forceinline__ T* GsLinearMemoryKernel< T >::getPointer( size_t pAddress )
 {
 	return _data + pAddress;
 }
@@ -193,7 +195,7 @@ __forceinline__ T* GsLinearMemoryKernel< T >::getPointer( uint pAddress )
  ******************************************************************************/
 template< typename T >
 __device__
-__forceinline__ void GsLinearMemoryKernel< T >::set( const uint pAddress, T pVal )
+__forceinline__ void GsLinearMemoryKernel< T >::set( const size_t pAddress, T pVal )
 {
 	_data[ pAddress ] = pVal;
 }
@@ -265,10 +267,10 @@ __forceinline__ uint3 GsLinearMemoryKernel< T >::getSecureIndex( uint3 pPosition
  ******************************************************************************/
 template< typename T >
 __device__
-__forceinline__ uint GsLinearMemoryKernel< T >::getOffset( const uint3& pPosition ) const
+__forceinline__ size_t GsLinearMemoryKernel< T >::getOffset( const uint3& pPosition ) const
 {
 	//return position.x + position.y * _resolution.x + position.z * _pitchxy;
-	return pPosition.x + __uimul( pPosition.y, _resolution.x ) + __uimul( pPosition.z, _pitchxy );
+	return (size_t)pPosition.x + (size_t)__uimul((size_t)pPosition.y, (size_t)_resolution.x) + (size_t)__uimul((size_t)pPosition.z, (size_t)_pitchxy);
 }
 
 /******************************************************************************
@@ -281,10 +283,10 @@ __forceinline__ uint GsLinearMemoryKernel< T >::getOffset( const uint3& pPositio
  ******************************************************************************/
 template< typename T >
 __device__
-__forceinline__ uint GsLinearMemoryKernel< T >::getOffset( const uint2& pPosition ) const
+__forceinline__ size_t GsLinearMemoryKernel< T >::getOffset( const uint2& pPosition ) const
 {
 	//return pPosition.x + pPosition.y * _resolution.x ;
-	return pPosition.x + __uimul( pPosition.y, _resolution.x ) ;
+	return (size_t)pPosition.x + __uimul((size_t)pPosition.y, (size_t)_resolution.x ) ;
 }
 
 } // namespace GvCore

@@ -197,7 +197,7 @@ inline uint ProducerKernel< TDataStructureType >
 	__syncthreads();
 
 	// Iterate through voxels of the current brick
-	const size_t blockStartAddress = (size_t)pRequestID/*brickIndex*/ * ProducerKernel< TDataStructureType >::BrickVoxelAlignment;
+	const size_t blockStartAddress = (size_t)pRequestID/*brickIndex*/ * (size_t)ProducerKernel< TDataStructureType >::BrickVoxelAlignment;
 	const size_t nbThreads = (size_t)blockDim.x * (size_t)blockDim.y * (size_t)blockDim.z;
 	for ( size_t index = pProcessID; index < BrickFullRes::numElements/*nbVoxels*/; index += nbThreads )
 	{

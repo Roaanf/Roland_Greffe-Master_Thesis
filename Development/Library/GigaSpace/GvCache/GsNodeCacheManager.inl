@@ -483,7 +483,7 @@ uint GsNodeCacheManager< TDataStructure >
 		//
 		// Temporary buffer "_d_elemAddressListTmp" where non-used elements are the beginning and used elements at the end,
 		// is swapped with _d_elemAddressList
-		thrust::device_vector< uint >* tmpl = _d_elemAddressList;
+		thrust::device_vector< uint >* tmpl = _d_elemAddressList; // Le putain de elemAddressList est un vecteur de uint je vais cabler si c'est ça qu'utilise tout pour les addresses 
 		_d_elemAddressList = _d_elemAddressListTmp;
 		_d_elemAddressListTmp = tmpl;
 

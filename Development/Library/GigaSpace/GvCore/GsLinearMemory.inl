@@ -149,7 +149,7 @@ inline uint3 GsLinearMemory< T >::getResolution() const
 template< typename T >
 inline size_t GsLinearMemory< T >::getNumElements() const
 {
-	return _resolution.x * _resolution.y * _resolution.z;
+	return (size_t)_resolution.x * (size_t)_resolution.y * (size_t)_resolution.z;
 }
 
 /******************************************************************************

@@ -784,7 +784,7 @@ uint GsDataProductionManager< TDataStructure, TPriorityPoliciesManager >
 	// Production of elements if any
 	if ( nbRequests > 0 )
 	{
-		unsigned int offset = 0;
+		size_t offset = 0;
 		for ( size_t i = 0; i < _producers.size(); i++ )
 		{
 			if ( _nodesCacheManager->_lastNumLoads )

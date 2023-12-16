@@ -136,10 +136,10 @@ bool RawFileReader< TType >::optimizedReadData()
 		const size_t nbValues = (size_t)_dataResolution * (size_t)_dataResolution * (size_t)_dataResolution;
 		std::cout << "Nb values : " << nbValues << std::endl;
 		// Hardcoded RN because try to see if it works
-		// TODO : find an elegant solution to the problem
-		size_t trueX = 840;
-		size_t trueY = 1103;
-		size_t trueZ = 840;
+		// TODO : use the .mhd file that should always be there
+		size_t trueX = 3091;
+		size_t trueY = 3091;
+		size_t trueZ = 3298;
 		//test 
 
 		const size_t trueNbValues = trueX * trueY * trueZ;

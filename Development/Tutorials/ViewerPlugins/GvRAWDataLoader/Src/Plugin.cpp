@@ -31,10 +31,6 @@
 // STL
 #include <sstream>
 
-// OpenGL
-#include <GL/glew.h>
-#include <GL/freeglut.h>
-
 // Project
 #include "SampleCore.h"
 #include "CustomEditor.h"

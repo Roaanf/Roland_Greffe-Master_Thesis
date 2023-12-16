@@ -193,7 +193,7 @@ void SampleCore::init()
 
 	// Define cache sizes
 	_nodeMemoryPool = 64 * 1024 * 1024;
-	_brickMemoryPool = (size_t) 2048 * (size_t) 1024 * (size_t) 1024;
+	_brickMemoryPool = (size_t) 3096 * (size_t) 1024 * (size_t) 1024;
 
 	QString filename( get3DModelFilename().c_str() );
 	QFileInfo dataFileInfo( filename );
@@ -338,7 +338,7 @@ void SampleCore::init()
 	_pipeline->addRenderer( _renderer );
 
 	// Pipeline configuration
-	_maxVolTreeDepth = 6; // Hardcoded again ?
+	_maxVolTreeDepth = 10; // Hardcoded again ?
 	_pipeline->editDataStructure()->setMaxDepth( _maxVolTreeDepth );
 	
 	////------------------------------------------------------------
