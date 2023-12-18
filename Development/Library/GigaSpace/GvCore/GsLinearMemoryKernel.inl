@@ -89,7 +89,7 @@ template< typename T >
 __device__
 __forceinline__ size_t GsLinearMemoryKernel< T >::getMemorySize() const
 {
-	return (size_t)__uimul(__uimul(__uimul((size_t)_resolution.x, (size_t)_resolution.y), (size_t)_resolution.z), sizeof(T));
+	return (size_t)__uimul((size_t)__uimul((size_t)__uimul((size_t)_resolution.x, (size_t)_resolution.y), (size_t)_resolution.z), (size_t)sizeof(T));
 }
 
 /******************************************************************************
@@ -286,7 +286,7 @@ __device__
 __forceinline__ size_t GsLinearMemoryKernel< T >::getOffset( const uint2& pPosition ) const
 {
 	//return pPosition.x + pPosition.y * _resolution.x ;
-	return (size_t)pPosition.x + __uimul((size_t)pPosition.y, (size_t)_resolution.x ) ;
+	return (size_t)pPosition.x + (size_t)__uimul((size_t)pPosition.y, (size_t)_resolution.x ) ;
 }
 
 } // namespace GvCore

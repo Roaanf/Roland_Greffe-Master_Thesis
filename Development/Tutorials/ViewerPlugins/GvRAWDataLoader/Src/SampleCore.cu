@@ -193,14 +193,14 @@ void SampleCore::init()
 
 	// Define cache sizes
 	_nodeMemoryPool = 64 * 1024 * 1024;
-	_brickMemoryPool = (size_t) 3096 * (size_t) 1024 * (size_t) 1024;
+	_brickMemoryPool = (size_t) 2500 * (size_t) 1024 * (size_t) 1024;
 
 	QString filename( get3DModelFilename().c_str() );
 	QFileInfo dataFileInfo( filename );
 	std::cout << dataFileInfo.suffix().toStdString() << std::endl;
 	QString dataFilename;
 	GvCore::GvDataTypeInspector< DataType > dataTypeInspector; // Seems to be just a vector of DataTypes
-	// Compute the size of one node in the cache
+	// Compute the size of one node in the cache 
 	size_t nodeElemSize = PipelineType::NodeTileResolution::numElements * sizeof( GvStructure::GsNode );
 	// Compute how many we can fit into the given memory size
 	size_t nodePoolNumElems = _nodeMemoryPool / nodeElemSize; // Seulement utilisé pour calculer nodePoolRes

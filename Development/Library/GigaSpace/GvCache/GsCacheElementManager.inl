@@ -500,7 +500,7 @@ uint GsCacheElementManager< TId, ElementRes, AddressType, PageTableArrayType, Pa
 			std::cout << "\t_numElemsNotUsed : " << _numElemsNotUsed << std::endl;*/
 
 			CUDAPM_START_EVENT_CHANNEL( 1, cacheId, gpucache_bricks_bricksInvalidation );
-			invalidateElements( nbRequests, numValidNodes );		// WARNING !!!! nbRequests a été modifié auparavant !!!! ===> ERREUR !!!!!!!!!!!!!!
+			invalidateElements( nbRequests, numValidNodes );		// WARNING !!!! nbRequests a ï¿½tï¿½ modifiï¿½ auparavant !!!! ===> ERREUR !!!!!!!!!!!!!!
 			CUDAPM_STOP_EVENT_CHANNEL( 1, cacheId, gpucache_bricks_bricksInvalidation );
 		}
 	}
@@ -586,7 +586,7 @@ uint GsCacheElementManager< TId, ElementRes, AddressType, PageTableArrayType, Pa
 			std::cout << "\t_numElemsNotUsed : " << _numElemsNotUsed << std::endl;*/
 
 			CUDAPM_START_EVENT_CHANNEL( 1, cacheId, gpucache_bricks_bricksInvalidation );
-			invalidateElements( nbRequests, numValidNodes );		// WARNING !!!! nbRequests a été modifié auparavant !!!! ===> ERREUR !!!!!!!!!!!!!!
+			invalidateElements( nbRequests, numValidNodes );		// WARNING !!!! nbRequests a ï¿½tï¿½ modifiï¿½ auparavant !!!! ===> ERREUR !!!!!!!!!!!!!!
 			CUDAPM_STOP_EVENT_CHANNEL( 1, cacheId, gpucache_bricks_bricksInvalidation );
 		}
 	}

@@ -117,7 +117,7 @@ void GsCacheManagerResources::finalize()
 }
 
 /******************************************************************************
- * Get the temp usage mask1
+ * Get the temp usage mask1dsdsds
  *
  * @param pSize ...
  *
