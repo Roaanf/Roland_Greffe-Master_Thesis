@@ -105,8 +105,8 @@ bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& p
 	bool result = false;
 
 	unsigned int dataResolution = pDataResolution;
-	unsigned int levelOfResolution = static_cast< unsigned int >( log( static_cast< float >( dataResolution / 32 ) ) / log( static_cast< float >( 2 ) ) );
-	unsigned int brickWidth = 32; // TO DO : template different size
+	unsigned int levelOfResolution = static_cast< unsigned int >( log( static_cast< float >( dataResolution / 16 ) ) / log( static_cast< float >( 2 ) ) );
+	unsigned int brickWidth = 16; // TO DO : template different size
 	//GsDataTypeHandler::VoxelDataType dataType = GsDataTypeHandler::gvUCHAR4;	// TO DO : template differents type
 	//GsDataTypeHandler::VoxelDataType dataType = GsDataTypeHandler::gvUCHAR;
 	//GsDataTypeHandler::VoxelDataType dataType = GsDataTypeHandler::gvUSHORT;
@@ -137,7 +137,7 @@ bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& p
 
 		// The coarser data handler is allocated dynamically due to memory consumption considerations.
 		size_t nbOfvalues = (1 << level);
-		dataStructureIOHandlerDOWN = new GsDataStructureIOHandler( pFileName, level, brickWidth, dataTypes[0], true, (nbOfvalues* nbOfvalues* nbOfvalues * 34*34*34)/1.2);
+		dataStructureIOHandlerDOWN = new GsDataStructureIOHandler( pFileName, level, brickWidth, dataTypes[0], true, (nbOfvalues* nbOfvalues* nbOfvalues * brickWidth*brickWidth*brickWidth)/1.5);
 
 		// Iterate through nodes of the structure
 		size_t nodePos[ 3 ];

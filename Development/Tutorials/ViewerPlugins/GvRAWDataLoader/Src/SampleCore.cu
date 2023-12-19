@@ -193,7 +193,7 @@ void SampleCore::init()
 
 	// Define cache sizes
 	_nodeMemoryPool = 64 * 1024 * 1024;
-	_brickMemoryPool = (size_t) 2500 * (size_t) 1024 * (size_t) 1024;
+	_brickMemoryPool = (size_t) 2200 * (size_t) 1024 * (size_t) 1024;
 
 	QString filename( get3DModelFilename().c_str() );
 	QFileInfo dataFileInfo( filename );

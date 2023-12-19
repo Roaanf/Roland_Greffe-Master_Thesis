@@ -137,9 +137,9 @@ bool RawFileReader< TType >::optimizedReadData()
 		std::cout << "Nb values : " << nbValues << std::endl;
 		// Hardcoded RN because try to see if it works
 		// TODO : use the .mhd file that should always be there
-		size_t trueX = 3091;
-		size_t trueY = 3091;
-		size_t trueZ = 3298;
+		size_t trueX = 840;
+		size_t trueY = 1103;
+		size_t trueZ = 840;
 		//test 
 
 		const size_t trueNbValues = trueX * trueY * trueZ;
@@ -168,7 +168,7 @@ bool RawFileReader< TType >::optimizedReadData()
 
 		// Write equivalent GigaSpace voxels file
 		// - create a file/streamer handler to read/write GigaVoxels data
-		const size_t brickWidth = 32;
+		const size_t brickWidth = 16;
 		const size_t levelOfResolution = static_cast<size_t>( log( static_cast< float >( getDataResolution() / brickWidth ) ) / log( static_cast< float >( 2 ) ) );
 		std::cout << "Level of resolution : " << levelOfResolution << std::endl;
 		
