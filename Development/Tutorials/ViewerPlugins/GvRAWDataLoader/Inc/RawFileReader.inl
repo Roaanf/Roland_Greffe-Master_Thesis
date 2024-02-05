@@ -105,13 +105,13 @@ TType RawFileReader< TType >::getMaxDataValue() const
  * Load/import the scene the scene
  ******************************************************************************/
 template< typename TType >
-bool RawFileReader< TType >::readData()
+bool RawFileReader< TType >::readData(const size_t brickWidth)
 {
 	bool result = false;
 
 	// Read data and create the GigaSpace mip-map pyramid of files
 	//result = bruteForceReadData();
-	result = optimizedReadData();
+	result = optimizedReadData(brickWidth);
 	
 	return result;
 }
@@ -120,7 +120,7 @@ bool RawFileReader< TType >::readData()
  * ...
  ******************************************************************************/
 template< typename TType >
-bool RawFileReader< TType >::optimizedReadData()
+bool RawFileReader< TType >::optimizedReadData(const size_t brickWidth)
 {
 	std::string dataFilename = getFilename() + ".raw";
 
@@ -168,7 +168,6 @@ bool RawFileReader< TType >::optimizedReadData()
 
 		// Write equivalent GigaSpace voxels file
 		// - create a file/streamer handler to read/write GigaVoxels data
-		const size_t brickWidth = 16;
 		const size_t levelOfResolution = static_cast<size_t>( log( static_cast< float >( getDataResolution() / brickWidth ) ) / log( static_cast< float >( 2 ) ) );
 		std::cout << "Level of resolution : " << levelOfResolution << std::endl;
 		

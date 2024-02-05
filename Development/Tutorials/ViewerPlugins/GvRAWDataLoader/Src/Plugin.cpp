@@ -140,6 +140,8 @@ void GvMyPlugin::initialize()
 	GvvRawDataLoaderDialog* dataLoaderDialog = new GvvRawDataLoaderDialog( NULL );
 	QString modelFilename;
 	unsigned int modelResolution;
+	unsigned int brickSize;
+select: // Awful solution imo
 	if ( dataLoaderDialog != NULL )
 	{
 		// Retrieve USER selections
@@ -148,7 +150,22 @@ void GvMyPlugin::initialize()
 		{
 			// Retrieve data from loader
 			modelFilename = dataLoaderDialog->get3DModelFilename();
-			modelResolution = dataLoaderDialog->get3DModelResolution();
+			
+			if (false) {
+				// TODO parsing of the .mhd
+			}
+			else {
+				modelResolution = dataLoaderDialog->get3DModelResolution();
+				brickSize = dataLoaderDialog->getBrickSize();
+				
+				std::cout << "Checking the values..." << std::endl;
+				std::cout << "modelResolution: " << modelResolution << std::endl;
+				std::cout << "brickSize: " << brickSize << std::endl;
+			}
+		}
+		
+		if (modelFilename == "") {
+			goto select;
 		}
 
 		//dataLoaderDialog->hide();
@@ -169,14 +186,14 @@ void GvMyPlugin::initialize()
 	editorWindow->registerEditorFactory( SampleCore::cTypeName, &CustomEditor::create );
 
 	// Create the GigaVoxels pipeline
-	_pipeline = new SampleCore();
+	_pipeline = new SampleCore<GvCore::GsVec1D< 2 >,GvCore::GsVec1D< 16 >>();
 	if ( _pipeline != NULL )
 	{
 		_pipeline->set3DModelFilename( modelFilename.toLatin1().constData() );
 		_pipeline->set3DModelResolution( modelResolution );
 
 		// TO DO
-		// add resolution too !!!
+		// add true resolution too !!!
 	}
 	
 	// Pipeline BEGIN

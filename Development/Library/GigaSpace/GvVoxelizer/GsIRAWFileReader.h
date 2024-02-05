@@ -121,7 +121,7 @@ public:
 	/**
 	 * Load/import the scene
 	 */
-	virtual bool read();
+	virtual bool read(const size_t brickWidth);
 
 	/**
 	 * 3D model file name
@@ -213,7 +213,7 @@ protected:
 	/**
 	 * Load/import the scene
 	 */
-	virtual bool readData() = 0;
+	virtual bool readData(const size_t brickWidth) = 0;
 
 	/**
 	 * Apply the mip-mapping algorithmn.

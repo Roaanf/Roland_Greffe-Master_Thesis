@@ -75,7 +75,6 @@ Producer< TDataStructureType, TDataProductionManager >
 	std::cout << "Brick size: " << brickSize << "\n";
 	this->_nbMaxRequests = gpuCacheSize / brickSize; // gpuCacheSize defines the maximum number of request (per ask ?) 
 	this->_bufferNbVoxels = gpuCacheSize / voxelSize;
-	std::cout << "Among Us " << this->_nbMaxRequests << " " << this->_bufferNbVoxels << std::endl;
 
 	// Allocate caches in mappable pinned memory
 	_channelsCachesPool	= new DataCachePool( make_uint3( this->_bufferNbVoxels, 1, 1 ), 2 );

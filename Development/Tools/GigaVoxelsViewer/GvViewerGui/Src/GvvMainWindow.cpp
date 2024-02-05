@@ -400,14 +400,26 @@ void GvvMainWindow::initialize()
 void GvvMainWindow::onActionOpenFile()
 {
 	QString defaultDirectory = GvvEnvironment::getDemoPath().c_str();
-	QString fileName = QFileDialog::getOpenFileName( this, "Choose a file", defaultDirectory, tr( "Demo Files (*.gvp)" ) );
-	if ( ! fileName.isEmpty() )
+	QString fileName;
+#ifdef _DEBUG
+	fileName = defaultDirectory + "GvRAWDataLoader.d.gvp";
+#else
+	fileName = defaultDirectory + "GvRAWDataLoader.gvp";
+#endif
+
+	cout << fileName.toStdString() << endl;
+	
+	if (!QFile::exists(fileName)) {
+		fileName = QFileDialog::getOpenFileName(this, "Choose a file", defaultDirectory, tr("Demo Files (*.gvp)"));
+	}
+
+	if (!fileName.isEmpty())
 	{
 		//loadModel( lFileName );
 
 		//const std::string pluginFilename = "DynamicLoad.d.gvp";
 		GvvPluginManager::get().unloadAll();
-		GvvPluginManager::get().loadPlugin( fileName.toStdString() );
+		GvvPluginManager::get().loadPlugin(fileName.toStdString());
 
 		mFilename = fileName;
 
