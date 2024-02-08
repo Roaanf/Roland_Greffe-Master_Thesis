@@ -141,7 +141,7 @@ void GvMyPlugin::initialize()
 	QString modelFilename;
 	unsigned int modelResolution;
 	unsigned int brickSize;
-select: // Awful solution imo
+
 	if ( dataLoaderDialog != NULL )
 	{
 		// Retrieve USER selections
@@ -165,7 +165,9 @@ select: // Awful solution imo
 		}
 		
 		if (modelFilename == "") {
-			goto select;
+			delete dataLoaderDialog;
+			dataLoaderDialog = NULL;
+			return finalize();
 		}
 
 		//dataLoaderDialog->hide();
@@ -183,10 +185,38 @@ select: // Awful solution imo
 
 	// Register custom editor's factory method
 	GvViewerGui::GvvEditorWindow* editorWindow = mainWindow->getEditorWindow();
-	editorWindow->registerEditorFactory( SampleCore::cTypeName, &CustomEditor::create );
-
+	editorWindow->registerEditorFactory(SampleCore::cTypeName, &CustomEditor::create);
 	// Create the GigaVoxels pipeline
-	_pipeline = new SampleCore<GvCore::GsVec1D< 2 >,GvCore::GsVec1D< 16 >>();
+	_pipeline = new SampleCore();
+	/*
+	switch (brickSize)
+	{
+	case 4:
+		_pipeline = new SampleCore<GvCore::GsVec1D<4>>();
+		break;
+	case 8:
+		_pipeline = new SampleCore<GvCore::GsVec1D<8>>();
+		break;
+	case 16:
+		_pipeline = new SampleCore<GvCore::GsVec1D<16>>();
+		break;
+	case 32:
+		_pipeline = new SampleCore<GvCore::GsVec1D<32>>();
+		break;
+	case 64:
+		_pipeline = new SampleCore<GvCore::GsVec1D<64>>();
+		break;
+	case 128:
+		_pipeline = new SampleCore<GvCore::GsVec1D<128>>();
+		break;
+	case 256:
+		_pipeline = new SampleCore<GvCore::GsVec1D<256>>();
+		break;
+	default:
+		break;
+	}
+	*/
+
 	if ( _pipeline != NULL )
 	{
 		_pipeline->set3DModelFilename( modelFilename.toLatin1().constData() );
@@ -228,7 +258,6 @@ void GvMyPlugin::finalize()
 	
 	// Register custom editor's factory method
 	GvViewerGui::GvvEditorWindow* editorWindow = mainWindow->getEditorWindow();
-	editorWindow->unregisterEditorFactory( SampleCore::cTypeName );
 
 	// Finalize GigaSpace
 	GsCompute::GsDeviceManager::get().finalize();

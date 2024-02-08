@@ -124,7 +124,7 @@ public:
 	 *
 	 * @return a pointer on the allocated memory space
      */
-	static void* allocateVoxels( VoxelDataType pDataType, unsigned int pNbElements );
+	static void* allocateVoxels( VoxelDataType pDataType, size_t pNbElements );
 
 	/**
      * Retrieve the address of an element of a given data type in an associated buffer
@@ -137,7 +137,7 @@ public:
 	 *
 	 * @return the address of the element in the buffer
      */
-	static void* getAddress( VoxelDataType pDataType, void* pDataBuffer, unsigned int pElementPosition );
+	static void* getAddress( VoxelDataType pDataType, void* pDataBuffer, size_t pElementPosition );
 
 	/**
      * Retrieve the name representing a given data type

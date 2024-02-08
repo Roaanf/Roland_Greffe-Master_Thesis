@@ -176,7 +176,7 @@ void GsTransferFunction::bindToTextureReference( const void* pTextureReferenceSy
 {
 	std::cout << "bindToTextureReference : " << pTexRefName << std::endl;
 
-	// Compiler cry when I do it here so need to report the commented code directly inside SampleCore.cu
+	// program crash when I do it here so need to report the commented code directly inside SampleCore.cu
 	//textureReference* texRefPtr;
 	//GS_CUDA_SAFE_CALL( cudaGetTextureReference( (const textureReference **)&texRefPtr, pTextureReferenceSymbol ) );
 

@@ -151,8 +151,8 @@ GsCacheElementManager< TId, ElementRes, AddressType, PageTableArrayType, PageTab
 
 	// LOG info
 	std::cout << "\nCache Manager [ id " << Id::value << " ]" << std::endl;
-	std::cout << "- cache size : " << _cacheSize << std::endl;
-	std::cout << "- elements cache size : " << _elemsCacheSize << std::endl;
+	std::cout << "- cache size (Bytes) : " << _cacheSize << std::endl;
+	std::cout << "- elements cache size (Bricks) : " << _elemsCacheSize << std::endl;
 	std::cout << "- nb elements : " << this->_numElements << std::endl;
 	std::cout << "- page table's linear resolution : " << pageTableResLinear << std::endl;
 }
@@ -929,6 +929,8 @@ void GsCacheElementManager< TId, ElementRes, AddressType, PageTableArrayType, Pa
 	// Algorithme : WRITE in temporary buffer _d_elemAddressListTmp, the compacted list of NON-USED elements from _d_elemAddressList
 	// - number of un-used is returned in _d_numElementsPtr
 	// - elements are written at the beginning of the array
+	// See : https://cudpp.github.io/cudpp/2.0/group__public_interface.html#gab3fd0152a8e5b1860b1b7b09a3753ae0
+	// See : https://thrust.github.io/doc/group__stream__compaction_ga36d9d6ed8e17b442c1fd8dc40bd515d5.html#ga36d9d6ed8e17b442c1fd8dc40bd515d5 (used in GsGLCacheManager.inl)
 	GsCompute::GsDataParallelPrimitives::get().compact(
 		/* OUT : compacted output */_d_elemAddressListTmp->getPointer( pNbInactiveElements ),
 		/* OUT :  number of elements valid flags in the d_isValid input array */_d_numElementsPtr,

@@ -153,13 +153,6 @@ public:
 	GvvTransferFunctionEditor* getTransferFunctionEditor();
 
 	/**
-	 * Get the scene browser.
-	 *
-	 * return the scene browser
-	 */
-	GvvGLSceneBrowser* getSceneBrowser();
-
-	/**
 	 * Get the programmable shader browser.
 	 *
 	 * return the programmable shader browser.
