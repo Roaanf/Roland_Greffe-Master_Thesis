@@ -407,6 +407,7 @@ Distributions/
 Release/
 Release - Copie/
 Generated_VC12_x64/
+Generated_VC16_x64/
 Generated_VC19_x64/
 Generated_VC22_x64/
 External/Windows/x64/cudpp/lib/cudpp64.dll
