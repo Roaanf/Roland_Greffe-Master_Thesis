@@ -93,7 +93,7 @@ CustomSectionEditor::~CustomSectionEditor()
 void CustomSectionEditor::populate( GvViewerCore::GvvBrowsable* pBrowsable )
 {
 	assert( pBrowsable != NULL );
-	SampleCore* pipeline = dynamic_cast< SampleCore* >( pBrowsable );
+	SampleCore* pipeline = dynamic_cast<SampleCore* >( pBrowsable );
 	assert( pipeline != NULL );
 	if ( pipeline != NULL )
 	{
@@ -170,6 +170,7 @@ void CustomSectionEditor::on__shaderThresholdDoubleSpinBoxLow_valueChanged( doub
 
 	SampleCore* sampleCore = dynamic_cast< SampleCore* >( pipeline );
 	assert( sampleCore != NULL );
+
 
 	sampleCore->setShaderThresholdLow( pValue / 1000 );
 }

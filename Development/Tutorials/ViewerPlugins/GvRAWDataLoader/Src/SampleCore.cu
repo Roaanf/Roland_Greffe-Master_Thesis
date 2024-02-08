@@ -200,8 +200,10 @@ void SampleCore::init()
 	// cudaMemGetInfo isn't giving me the correct value bruh -> might be correct actually but does swap stuff ?
 	size_t freeGPUMem, totalGPUMem;
 	cudaMemGetInfo( &freeGPUMem, &totalGPUMem);
-	_brickMemoryPool = (size_t)3000 * (size_t)1024 * (size_t)1024;
+  
+	_brickMemoryPool = (size_t)2048 * (size_t)1024 * (size_t)1024;
 	freeGPUMem *= 0.70;
+  
 	// Temp fix because we have issue with data pools > 2Go
 	if (freeGPUMem <= _brickMemoryPool){
 		_brickMemoryPool = freeGPUMem;
@@ -253,12 +255,12 @@ void SampleCore::init()
 		if ( strcmp( dataTypeName, "uchar" ) == 0 )
 		{
 			voxelDataType = GvVoxelizer::GsDataTypeHandler::gvUCHAR;
-			std::cout << "Uchar UwU" << std::endl;
+			std::cout << "Uchar" << std::endl;
 		}
 		else if ( strcmp( dataTypeName, "ushort" ) == 0 )
 		{
 			voxelDataType = GvVoxelizer::GsDataTypeHandler::gvUSHORT;
-			std::cout << "UShort UwU" << std::endl;
+			std::cout << "UShort" << std::endl;
 		}
 		else if ( strcmp( dataTypeName, "float" ) == 0 )
 		{
@@ -1141,6 +1143,9 @@ bool SampleCore::initializeTransferFunction()
 	texRefPtr->addressMode[ 1 ] = cudaAddressModeClamp;
 	texRefPtr->addressMode[ 2 ] = cudaAddressModeClamp;
 	GS_CUDA_SAFE_CALL( cudaBindTextureToArray( (const textureReference *)texRefPtr, _transferFunction->_dataArray, &_transferFunction->_channelFormatDesc ) );
+
+	// TODO RESOUDRE LE BUG DE LA TRANSFER FUNCTION (enft pas important mnt que j'y pense)
+	//onTransferfunctionChanged();
 	
 	return true;
 }

@@ -130,18 +130,22 @@ namespace GvCore
 	template< typename T >
 	inline uint3 Array3D< T >::getSecureIndex( uint3 pPosition ) const
 	{
+		std::cout << "Oui bonjour je suis curieux HMMMMMMMMMMMMMM " << pPosition.x << " " << pPosition.y << " " << pPosition.z << std::endl;
 		if ( pPosition.x >= _resolution.x )
 		{
+			std::cout << "INVALID INDEX GIVEN !!!!" << pPosition.x << " " << pPosition.y << " " << pPosition.z << std::endl;
 			pPosition.x = _resolution.x - 1;
 		}
 
 		if ( pPosition.y >= _resolution.y )
 		{
+			std::cout << "INVALID INDEX GIVEN !!!!" << pPosition.x << " " << pPosition.y << " " << pPosition.z << std::endl;
 			pPosition.y = _resolution.y - 1;
 		}
 
 		if ( pPosition.z >= _resolution.z )
 		{
+			std::cout << "INVALID INDEX GIVEN !!!!" << pPosition.x << " " << pPosition.y << " " << pPosition.z << std::endl;
 			pPosition.z = _resolution.z - 1;
 		}
 

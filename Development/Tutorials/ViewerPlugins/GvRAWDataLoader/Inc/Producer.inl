@@ -75,6 +75,8 @@ Producer< TDataStructureType, TDataProductionManager >
 	std::cout << "Brick size: " << brickSize << "\n";
 	this->_nbMaxRequests = gpuCacheSize / brickSize; // gpuCacheSize defines the maximum number of request (per ask ?) 
 	this->_bufferNbVoxels = gpuCacheSize / voxelSize;
+	std::cout << "GPUCacheSize : " << gpuCacheSize << std::endl;
+	std::cout << "BufferNbVoxel : " << this->_bufferNbVoxels << std::endl;
 
 	// Allocate caches in mappable pinned memory
 	_channelsCachesPool	= new DataCachePool( make_uint3( this->_bufferNbVoxels, 1, 1 ), 2 );
@@ -257,6 +259,7 @@ inline void Producer< TDataStructureType, TDataProductionManager >
 	this->_kernelProducer.init( _maxDepth, _h_nodesBuffer->getDeviceArray(), _channelsCachesPool->getKernelPool() );
 	GvCore::GsIProviderKernel< 1, KernelProducerType > kernelProvider( this->_kernelProducer );
 	
+	// TODO C'EST QUOI UN KERNEL BLOCK ?
 	// Define kernel block size
 	dim3 blockSize( 16, 8, 1 );
 

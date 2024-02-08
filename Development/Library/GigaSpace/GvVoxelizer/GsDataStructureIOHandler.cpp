@@ -122,7 +122,7 @@ GsDataStructureIOHandler::GsDataStructureIOHandler( const std::string& pName,
 	std::cout << (size_t)_nodeGridSize * (size_t)_nodeGridSize * (size_t)_nodeGridSize * (size_t)_brickSize << std::endl;
 	std::cout << (size_t)_nodeGridSize * (size_t)_nodeGridSize * (size_t)_nodeGridSize << std::endl;
 
-	size_t sizeBufferCalloc = (_trueNbOfValues * 1.5); // TEMP FIX !!! ddd
+	size_t sizeBufferCalloc = (_trueNbOfValues * 1.5); // TEMP FIX !!!
 	std::cout << sizeBufferCalloc << std::endl;
 	std::cout << sizeBufferCalloc * sizeof(unsigned short) << std::endl;
 	

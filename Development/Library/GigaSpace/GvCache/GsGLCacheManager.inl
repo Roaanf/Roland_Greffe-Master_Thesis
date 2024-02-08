@@ -154,7 +154,7 @@ GsGLCacheManager< TId, ElementRes, AddressType, PageTableArrayType, PageTableTyp
 	_d_cacheManagerKernel._timeStampArray = _d_TimeStampArray->getDeviceArray();
 
 	// LOG info
-	std::cout << "\nCache Manager [ id " << Id::value << " ]" << std::endl;
+	std::cout << "\nCache AMONGIQUDGIDQSHGKSDGJKManager [ id " << Id::value << " ]" << std::endl;
 	std::cout << "- cache size : " << _cacheSize << std::endl;
 	std::cout << "- elements cache size : " << _elemsCacheSize << std::endl;
 	std::cout << "- nb elements : " << this->_numElements << std::endl;
@@ -172,7 +172,7 @@ GsGLCacheManager< TId, ElementRes, AddressType, PageTableArrayType, PageTableTyp
 	
 	// TO DO
 	// Attention, il arrive que ce "plan" soir partager entre les deux caches de brick et de noeuds
-	// et lors de la destruction du 2ème cache manager, cela produit une erreur CUDPP.
+	// et lors de la destruction du 2Ã¨me cache manager, cela produit une erreur CUDPP.
 	// ...
 	// TO DO
 	// Move this in another place
@@ -486,6 +486,7 @@ uint GsGLCacheManager< TId, ElementRes, AddressType, PageTableArrayType, PageTab
 			// Stream compaction to collect used elements at the end
 			CUDAPM_START_EVENT( cache_updateTimestamps_threadReduc2 );
 
+			// COPY IF ICI LET'S GOOOOOOOOO
 			thrust::copy_if(
 				/*input first*/elemAddressListFirst, /*input last*/elemAddressListLast,
 				/*input stencil*/_d_TempMaskList2->begin(),
@@ -670,7 +671,7 @@ uint GsGLCacheManager< TId, ElementRes, AddressType, PageTableArrayType, PageTab
 
 			CUDAPM_START_EVENT_CHANNEL( 1, cacheId, gpucache_bricks_bricksInvalidation );
 
-			invalidateElements( numElems, numValidNodes );		// WARNING !!!! numElems a été modifié auparavant !!!! ===> ERREUR !!!!!!!!!!!!!!
+			invalidateElements( numElems, numValidNodes );		// WARNING !!!! numElems a Ã©tÃ© modifiÃ© auparavant !!!! ===> ERREUR !!!!!!!!!!!!!!
 			
 			CUDAPM_STOP_EVENT_CHANNEL( 1, cacheId, gpucache_bricks_bricksInvalidation );
 
@@ -861,7 +862,7 @@ uint GsCacheManager< TId, ElementRes, AddressType, PageTableArrayType, PageTable
 
 			CUDAPM_START_EVENT_CHANNEL( 1, cacheId, gpucache_bricks_bricksInvalidation );
 
-			invalidateElements( numElems, numValidNodes );		// WARNING !!!! numElems a été modifié auparavant !!!! ===> ERREUR !!!!!!!!!!!!!!
+			invalidateElements( numElems, numValidNodes );		// WARNING !!!! numElems a Ã©tÃ© modifiÃ© auparavant !!!! ===> ERREUR !!!!!!!!!!!!!!
 			
 			CUDAPM_STOP_EVENT_CHANNEL( 1, cacheId, gpucache_bricks_bricksInvalidation );
 
