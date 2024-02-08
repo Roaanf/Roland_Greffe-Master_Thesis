@@ -105,7 +105,7 @@ GsDataStructureIOHandler::GsDataStructureIOHandler( const std::string& pName,
 ,	_brickSize( ( pBrickWidth + 2 ) * ( pBrickWidth + 2 ) * ( pBrickWidth + 2 ) )
 ,	_isBufferLoaded( false )
 ,	_brickNumber( 0 )
-,	_nodeGridSize( 1 << pLevel )
+,	_nodeGridSize( (size_t)1 << pLevel )
 ,	_voxelGridSize( _nodeGridSize * pBrickWidth )
 ,   _trueNbOfValues(pTrueNbOfValues)
 {
@@ -160,7 +160,7 @@ GsDataStructureIOHandler::GsDataStructureIOHandler( const std::string& pName,
 ,	_dataTypes( pDataTypes )
 ,	_isBufferLoaded( false )
 ,	_brickNumber( 0 )
-,	_nodeGridSize( 1 << pLevel )
+,	_nodeGridSize((size_t)1 << pLevel )
 ,	_voxelGridSize( _nodeGridSize * pBrickWidth )
 ,   _trueNbOfValues(0)
 {
@@ -931,8 +931,10 @@ void GsDataStructureIOHandler::openFiles( const string& pName, bool pNewFiles )
 		_brickData = (unsigned short *) calloc( (size_t)_brickNumber * (size_t)_brickSize, sizeof( unsigned short ) );
 		brickFile = fopen( getFileNameBrick( pName, _level, _brickWidth, 0, GsDataTypeHandler::getTypeName( _dataTypes[ 0 ] ) ).data(), "rb+" );
 		if ( brickFile ) {
-			fread( _brickData,  sizeof(unsigned short), _brickNumber * _brickSize, brickFile );
-			fclose( brickFile );
+			if (_brickData) {
+				fread(_brickData, sizeof(unsigned short), _brickNumber * _brickSize, brickFile);
+				fclose(brickFile);
+			}
 		}
 	}
 	for ( int c = 0; c < _dataTypes.size(); ++c )
@@ -971,7 +973,7 @@ void GsDataStructureIOHandler::openFiles( const string& pName, bool pNewFiles )
  *
  * @return the node file name in GigaVoxels format.
  ******************************************************************************/
-string GsDataStructureIOHandler::getFileNameNode( const std::string& pName, unsigned int pLevel, unsigned int pBrickWidth )
+string GsDataStructureIOHandler::getFileNameNode( const std::string& pName, size_t pLevel, size_t pBrickWidth )
 {
 	std::ostringstream oss;
 	
@@ -996,7 +998,7 @@ string GsDataStructureIOHandler::getFileNameNode( const std::string& pName, unsi
  *
  * @return the brick file name in GigaVoxels format.
  ******************************************************************************/
-string GsDataStructureIOHandler::getFileNameBrick( const string& pName, unsigned int pLevel, unsigned int pBrickWidth, unsigned int pDataChannelIndex, const string& pDataTypeName )
+string GsDataStructureIOHandler::getFileNameBrick( const string& pName, size_t pLevel, size_t pBrickWidth, unsigned int pDataChannelIndex, const string& pDataTypeName )
 {
 	std::ostringstream oss;
 

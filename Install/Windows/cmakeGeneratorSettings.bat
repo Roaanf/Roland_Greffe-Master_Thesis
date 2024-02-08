@@ -5,8 +5,8 @@ rem USER : Choose your compiler
 rem **************************************************************************
 
 rem Select requested CMAKE compiler (Visual Studio 2010, 2012, etc...)
-set GV_COMPILER=Visual_Studio_12_Win64
-rem set GV_COMPILER=Visual_Studio_16_2019_Win64
+rem set GV_COMPILER=Visual_Studio_12_Win64
+set GV_COMPILER=Visual_Studio_16_2019_Win64
 rem set GV_COMPILER=Visual_Studio_17_2022_Win64
 
 rem **************************************************************************

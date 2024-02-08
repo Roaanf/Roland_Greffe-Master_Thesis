@@ -200,8 +200,10 @@ void SampleCore::init()
 	// cudaMemGetInfo isn't giving me the correct value bruh -> might be correct actually but does swap stuff ?
 	size_t freeGPUMem, totalGPUMem;
 	cudaMemGetInfo( &freeGPUMem, &totalGPUMem);
+  
 	_brickMemoryPool = (size_t)2048 * (size_t)1024 * (size_t)1024;
 	freeGPUMem *= 0.70;
+  
 	// Temp fix because we have issue with data pools > 2Go
 	if (freeGPUMem <= _brickMemoryPool){
 		_brickMemoryPool = freeGPUMem;

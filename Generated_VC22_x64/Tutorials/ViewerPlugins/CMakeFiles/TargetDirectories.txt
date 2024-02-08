@@ -1,4 +1,0 @@
-C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC22_x64/Tutorials/ViewerPlugins/CMakeFiles/ALL_BUILD.dir
-C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC22_x64/Tutorials/ViewerPlugins/CMakeFiles/ZERO_CHECK.dir
-C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC22_x64/Tutorials/ViewerPlugins/GvRAWDataLoader/CMakeFiles/GvRAWDataLoader.dir
-C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC22_x64/Tutorials/ViewerPlugins/GvRAWDataLoader/CMakeFiles/ALL_BUILD.dir

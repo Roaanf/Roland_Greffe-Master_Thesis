@@ -141,7 +141,7 @@ void GvMyPlugin::initialize()
 	QString modelFilename;
 	unsigned int modelResolution;
 	unsigned int brickSize;
-
+  
 	if ( dataLoaderDialog != NULL )
 	{
 		// Retrieve USER selections
