@@ -98,6 +98,13 @@ public:
 	 */
 	unsigned int getModelDataType() const;
 
+	/**
+	 * Get the 3D model resolution
+	 *
+	 * @return the 3D model resolution
+	 */
+	unsigned int getBrickSize() const;
+
 	/**************************************************************************
 	 **************************** PROTECTED SECTION ***************************
 	 **************************************************************************/

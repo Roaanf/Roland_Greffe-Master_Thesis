@@ -160,7 +160,7 @@ bool GsTransferFunction::create( unsigned int pResolution )
 void GsTransferFunction::updateDeviceMemory()
 {
 	// Copy to device memory some data located at address _data in host memory
-	cudaMemcpyToArray( _dataArray, 0, 0, _data, _resolution * sizeof( float4 ), cudaMemcpyHostToDevice );
+	cudaMemcpy2DToArray( _dataArray, 0, 0, _data, _resolution * sizeof( float4 ), _resolution * sizeof(float4), 1, cudaMemcpyHostToDevice);
 }
 
 /******************************************************************************
@@ -175,6 +175,8 @@ void GsTransferFunction::updateDeviceMemory()
 void GsTransferFunction::bindToTextureReference( const void* pTextureReferenceSymbol, const char* pTexRefName, bool pNormalizedAccess, cudaTextureFilterMode pFilterMode, cudaTextureAddressMode pAddressMode )
 {
 	std::cout << "bindToTextureReference : " << pTexRefName << std::endl;
+
+	// See : https://forums.developer.nvidia.com/t/cudabindtexturetoarray-deprecated/176713/2
 
 	// Compiler cry when I do it here so need to report the commented code directly inside SampleCore.cu
 	//textureReference* texRefPtr;

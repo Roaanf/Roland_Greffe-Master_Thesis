@@ -22,7 +22,6 @@
 #include <GL/freeglut.h>
 
 #include "GvvPipelineInterface.h"
-#include "GvvGLSceneInterface.h"
 
 #include "GvvApplication.h"
 #include "GvvMainWindow.h"
@@ -77,9 +76,7 @@ using namespace GsGraphics;
 GvvPipelineInterfaceViewer::GvvPipelineInterfaceViewer( QWidget* parent, const QGLWidget* shareWidget, Qt::WindowFlags flags )
 :	QGLViewer( parent, shareWidget, flags )
 ,	GvvPipelineManagerListener()
-,	GvvGLSceneManagerListener()
 ,	mPipeline( NULL )
-,	_scene( NULL )
 {
 	setBackgroundColor( Qt::green );
 }
@@ -168,7 +165,7 @@ void GvvPipelineInterfaceViewer::init()
 		//	}
 		//}
 	}
-	//----------- A priori crash lorsque c'est appelé 2 fois ??------
+	//----------- A priori crash lorsque c'est appelï¿½ 2 fois ??------
 	// Initialize CUDA with OpenGL Interoperability
 	//cudaGLSetGLDevice( cutGetMaxGflopsDeviceId() );	// deprecated, use cudaSetDevice()
 	//CUT_CHECK_ERROR( "cudaGLSetGLDevice" );
@@ -278,13 +275,6 @@ void GvvPipelineInterfaceViewer::draw()
 	// Clear default frame buffer
 	// glClearColor( 0.0f, 0.1f, 0.3f, 0.0f );					// already done by SampleViewer::setBackgroundColor()
 	// glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );	// already done in QGLViewer::preDraw() method
-
-	// Scene BEGIN
-	if ( _scene != NULL )
-	{
-		_scene->draw();
-	}
-	// Scene END
 
 	float lightPos[ 4 ] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	if ( mPipeline != NULL )
@@ -568,26 +558,6 @@ void GvvPipelineInterfaceViewer::onFrameManipulated()
 
 		mPipeline->setLightPosition( pos[ 0 ], pos[ 1 ], pos[ 2 ] );
 	}
-}
-
-/******************************************************************************
- * Add a scene.
- *
- * @param pScene the scene to add
- ******************************************************************************/
-void GvvPipelineInterfaceViewer::onGLSceneAdded( GvvGLSceneInterface* pScene )
-{
-	_scene = pScene;
-}
-
-/******************************************************************************
- * Remove a scene.
- *
- * @param pScene the scene to remove
- ******************************************************************************/
-void GvvPipelineInterfaceViewer::onGLSceneRemoved( GvvGLSceneInterface* pScene )
-{
-	_scene = NULL;
 }
 
 /******************************************************************************

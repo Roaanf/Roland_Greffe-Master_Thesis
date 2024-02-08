@@ -22,7 +22,6 @@
 // GvViewer
 #include "GvvGuiConfig.h"
 #include "GvvPipelineManagerListener.h"
-#include "GvvGLSceneManagerListener.h"
 
 // OpenGL
 #include <GL/glew.h>
@@ -47,7 +46,6 @@
 namespace GvViewerCore
 {
 	class GvvPipelineInterface;
-	class GvvGLSceneInterface;
 }
 
 // QGLViewer
@@ -70,7 +68,7 @@ namespace GvViewerGui
  *
  * ...
  */
-class GVVIEWERGUI_EXPORT GvvPipelineInterfaceViewer : public QGLViewer, public GvViewerCore::GvvPipelineManagerListener, public GvViewerCore::GvvGLSceneManagerListener
+class GVVIEWERGUI_EXPORT GvvPipelineInterfaceViewer : public QGLViewer, public GvViewerCore::GvvPipelineManagerListener
 {
 	// Qt Macro
 	Q_OBJECT
@@ -243,20 +241,6 @@ protected:
 	 */
 	virtual void onPipelineRemoved( GvViewerCore::GvvPipelineInterface* pPipeline );
 
-	/**
-	 * Add a scene.
-	 *
-	 * @param pScene the scene to add
-	 */
-	virtual void onGLSceneAdded( GvViewerCore::GvvGLSceneInterface* pScene );
-
-	/**
-	 * Remove a scene.
-	 *
-	 * @param pScene the scene to remove
-	 */
-	virtual void onGLSceneRemoved( GvViewerCore::GvvGLSceneInterface* pScene );
-
 	/********************************* SLOTS **********************************/
 
 protected slots:
@@ -288,11 +272,6 @@ private:
 	 * QGLViewer frame
 	 */
 	qglviewer::ManipulatedFrame* _manipulatedFrame;
-
-	/**
-	 * GL scene
-	 */
-	GvViewerCore::GvvGLSceneInterface* _scene;
 
 	/******************************** METHODS *********************************/
 

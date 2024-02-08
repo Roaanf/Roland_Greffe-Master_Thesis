@@ -189,23 +189,31 @@ const char* SampleCore::getName() const
  ******************************************************************************/
 void SampleCore::init()
 {
+
 	CUDAPM_INIT();
 
 	// Define cache sizes
-	_nodeMemoryPool = 64 * 1024 * 1024;
-	_brickMemoryPool = (size_t) 2048 * (size_t) 1024 * (size_t) 1024;
+	_nodeMemoryPool = 64 * 1024 * 1024; // Hardcoded for now but we'll see if there is a need for more (but I don't think so)
+
+	// TO DO :
+	// Define the brick memory pool size according to the available VRAM
+	// cudaMemGetInfo isn't giving me the correct value bruh -> might be correct actually but does swap stuff ?
+	size_t freeGPUMem, totalGPUMem;
+	cudaMemGetInfo( &freeGPUMem, &totalGPUMem);
+	_brickMemoryPool = (size_t)3000 * (size_t)1024 * (size_t)1024;
+	freeGPUMem *= 0.70;
+	// Temp fix because we have issue with data pools > 2Go
+	if (freeGPUMem <= _brickMemoryPool){
+		_brickMemoryPool = freeGPUMem;
+	}
+	
+	std::cout << "Free mem: " << freeGPUMem << " Total mem: " << totalGPUMem << " The one I set myself " << _brickMemoryPool << std::endl;
 
 	QString filename( get3DModelFilename().c_str() );
 	QFileInfo dataFileInfo( filename );
 	std::cout << dataFileInfo.suffix().toStdString() << std::endl;
 	QString dataFilename;
 	GvCore::GvDataTypeInspector< DataType > dataTypeInspector; // Seems to be just a vector of DataTypes
-	// Compute the size of one node in the cache
-	size_t nodeElemSize = PipelineType::NodeTileResolution::numElements * sizeof( GvStructure::GsNode );
-	// Compute how many we can fit into the given memory size
-	size_t nodePoolNumElems = _nodeMemoryPool / nodeElemSize; // Seulement utilisé pour calculer nodePoolRes
-	// Compute the resolution of the pools
-	uint3 nodePoolRes = make_uint3((uint)floorf(powf((float)nodePoolNumElems, 1.0f / 3.0f))) * NodeRes::get(); // Donnée au producer
 
 	// Fill the data type list used to store voxels in the data structure
 	GvViewerCore::GvvDataType& dataTypes = editDataTypes();
@@ -266,7 +274,7 @@ void SampleCore::init()
 		rawFileReader->setDataType( voxelDataType );
 
 		// Read file and build GigaSpace mip-map pyramid files
-		rawFileReader->read();
+		rawFileReader->read(16); // Must be changed !!!!!
 		
 		// Update internal info
 		_minDataValue = static_cast< float >( rawFileReader->getMinDataValue() );
@@ -309,8 +317,14 @@ void SampleCore::init()
 	delete gigaSpaceWriter;
 	gigaSpaceWriter = NULL;
 	
-	fileload:
-	unsigned int dataResolution = get3DModelResolution();
+fileload:
+
+	// Compute the size of one node in the cache 
+	size_t nodeElemSize = PipelineType::NodeTileResolution::numElements * sizeof(GvStructure::GsNode);
+	// Compute how many we can fit into the given memory size
+	size_t nodePoolNumElems = _nodeMemoryPool / nodeElemSize; // Seulement utilisé pour calculer nodePoolRes
+	// Compute the resolution of the pools
+	uint3 nodePoolRes = make_uint3((uint)floorf(powf((float)nodePoolNumElems, 1.0f / 3.0f))) * NodeRes::get(); // Donnée au producer
 	
 	// TO DO :
 	// Test empty and existence of filename
@@ -318,7 +332,7 @@ void SampleCore::init()
 	GvUtils::GsDataLoader< DataType >* dataLoader = new GvUtils::GsDataLoader< DataType >(
 														dataFilename.toStdString(),
 														PipelineType::BrickTileResolution::get(), PipelineType::BrickTileBorderSize, true );
-
+	unsigned int dataResolution = dataLoader->getDataResolution().x;
 	// Shader creation
 	ShaderType* shader = new ShaderType();
 
@@ -338,7 +352,7 @@ void SampleCore::init()
 	_pipeline->addRenderer( _renderer );
 
 	// Pipeline configuration
-	_maxVolTreeDepth = 6; // Hardcoded again ?
+	_maxVolTreeDepth = 10; // Hardcoded again ?
 	_pipeline->editDataStructure()->setMaxDepth( _maxVolTreeDepth );
 	
 	////------------------------------------------------------------

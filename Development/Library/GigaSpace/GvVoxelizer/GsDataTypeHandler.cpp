@@ -118,7 +118,7 @@ unsigned int GsDataTypeHandler::canalByteSize( VoxelDataType pDataType )
  *
  * @return a pointer on the allocated memory space
  ******************************************************************************/
-void* GsDataTypeHandler::allocateVoxels( VoxelDataType pDataType, unsigned int pNbElements )
+void* GsDataTypeHandler::allocateVoxels( VoxelDataType pDataType, size_t pNbElements )
 {
 	void* result = NULL;
 
@@ -178,7 +178,7 @@ void* GsDataTypeHandler::allocateVoxels( VoxelDataType pDataType, unsigned int p
  *
  * @return the address of the element in the buffer
  ******************************************************************************/
-void* GsDataTypeHandler::getAddress( VoxelDataType pDataType, void* pDataBuffer, unsigned int pElementPosition )
+void* GsDataTypeHandler::getAddress( VoxelDataType pDataType, void* pDataBuffer, size_t pElementPosition )
 {
 	void* result = NULL;
 

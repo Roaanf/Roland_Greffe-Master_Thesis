@@ -147,9 +147,6 @@ GsGLCacheManager< TId, ElementRes, AddressType, PageTableArrayType, PageTableTyp
 	}
 	// Dont use element zero !
 	GvCore::memcpyArray( _d_elemAddressList, tmpelemaddress.getPointer( _cNbLockedElements )  );
-	
-	uint cudppNumElem = std::max( pageTableRes.x * pageTableRes.y * pageTableRes.z, this->_numElements );
-	_scanplan = GsCacheManagerResources::getScanPlan( cudppNumElem );
 
 	GS_CUDA_SAFE_CALL( cudaMalloc( (void**) &_d_numElementsPtr, sizeof( size_t ) ) );
 
@@ -472,47 +469,6 @@ uint GsGLCacheManager< TId, ElementRes, AddressType, PageTableArrayType, PageTab
 			// Stream compaction to collect non-used elements at the beginning
 			CUDAPM_START_EVENT( cache_updateTimestamps_threadReduc1 );
 
-# if USE_CUDPP_LIBRARY
-			// Given an array d_in and an array of 1/0 flags in deviceValid, returns a compacted array in d_out of corresponding only the "valid" values from d_in.
-			//
-			// Takes as input an array of elements in GPU memory (d_in) and an equal-sized unsigned int array in GPU memory (deviceValid) that indicate which of those input elements are valid.
-			// The output is a packed array, in GPU memory, of only those elements marked as valid.
-			//
-			// Internally, uses cudppScan.
-			//
-			// Algorithmn : WRITE in temporary buffer _d_elemAddressListTmp, the compacted list of NON-USED elements from _d_elemAddressList
-			// - number of un-used is returned in _d_numElementsPtr
-			// - elements are written at the beginning of the array
-			cudppCompact( /*handle to CUDPPCompactPlan*/_scanplan,
-				//---------------------------------------------------------------
-				///* OUT : compacted output */thrust::raw_pointer_cast( &(*_d_elemAddressListTmp)[ inactiveNumElems ] ),
-				/* OUT : compacted output */_d_elemAddressListTmp->getPointer( inactiveNumElems ),
-				//---------------------------------------------------------------
-				/* OUT :  number of elements valid flags in the d_isValid input array */_d_numElementsPtr,
-				//---------------------------------------------------------------
-				///* input to compact */thrust::raw_pointer_cast( &(*_d_elemAddressList)[ sortingStartPos ] ),
-				/* input to compact */_d_elemAddressList->getPointer( sortingStartPos ),
-				//---------------------------------------------------------------
-				/* which elements in input are valid */thrust::raw_pointer_cast( &(*_d_TempMaskList)[ 0 ] ),	/*non-used elements*/
-				/* nb of elements in input */nbElemToSort );
-
-			// ---- [ 3 ] ---- 3rd step
-			//
-			// ...
-
-			// Get number of non-used elements
-			size_t numElemsNotUsedST;
-			GS_CUDA_SAFE_CALL( cudaMemcpy( &numElemsNotUsedST, _d_numElementsPtr, sizeof( size_t ), cudaMemcpyDeviceToHost ) );
-			_numElemsNotUsed = (uint)numElemsNotUsedST + inactiveNumElems;
-
-			//--------------------------------------------------------
-			// TO DO
-			//
-			// - optimization : if _numElemsNotUsed is equal to max elements in cache, exit o avoid launching all following kernels
-			//--------------------------------------------------------
-
-# else // USE_CUDPP_LIBRARY
-
 			size_t numElemsNotUsedST = thrust::copy_if(
 				/*input first*/elemAddressListFirst, /*input last*/elemAddressListLast,
 				/*input stencil*/_d_TempMaskList->begin(),
@@ -520,8 +476,6 @@ uint GsGLCacheManager< TId, ElementRes, AddressType, PageTableArrayType, PageTab
 				/*predicate*/GvCore::not_equal_to_zero< uint >() ) - ( elemAddressListTmpFirst + inactiveNumElems );
 
 			_numElemsNotUsed = (uint)numElemsNotUsedST + inactiveNumElems;
-
-# endif // USE_CUDPP_LIBRARY
 
 			CUDAPM_STOP_EVENT( cache_updateTimestamps_threadReduc1 );
 
@@ -532,39 +486,11 @@ uint GsGLCacheManager< TId, ElementRes, AddressType, PageTableArrayType, PageTab
 			// Stream compaction to collect used elements at the end
 			CUDAPM_START_EVENT( cache_updateTimestamps_threadReduc2 );
 
-# if USE_CUDPP_LIBRARY
-
-			// Given an array d_in and an array of 1/0 flags in deviceValid, returns a compacted array in d_out of corresponding only the "valid" values from d_in.
-			//
-			// Takes as input an array of elements in GPU memory (d_in) and an equal-sized unsigned int array in GPU memory (deviceValid) that indicate which of those input elements are valid.
-			// The output is a packed array, in GPU memory, of only those elements marked as valid.
-			//
-			// Internally, uses cudppScan.
-			//
-			// Algorithmn : WRITE in temporary buffer _d_elemAddressListTmp, the compacted list of USED elements from _d_elemAddressList
-			// - elements are written at the end of the array, i.e. after the previous NON-USED ones
-			cudppCompact( /*handle to CUDPPCompactPlan*/_scanplan,
-				//---------------------------------------------------------------
-				///* OUT : compacted output */thrust::raw_pointer_cast( &(*_d_elemAddressListTmp)[ _numElemsNotUsed ] ),
-				/* OUT : compacted output */_d_elemAddressListTmp->getPointer( _numElemsNotUsed ),
-				//---------------------------------------------------------------
-				/* OUT :  number of elements valid flags in the d_isValid input array */_d_numElementsPtr,
-				//---------------------------------------------------------------
-				///* input to compact */thrust::raw_pointer_cast( &(*_d_elemAddressList)[ sortingStartPos ] ),
-				/* input to compact */_d_elemAddressList->getPointer( sortingStartPos ),
-				//---------------------------------------------------------------
-				/* which elements in input are valid */thrust::raw_pointer_cast( &(*_d_TempMaskList2)[ 0 ] ),
-				/* nb of elements in input */nbElemToSort );
-
-# else // USE_CUDPP_LIBRARY
-
 			thrust::copy_if(
 				/*input first*/elemAddressListFirst, /*input last*/elemAddressListLast,
 				/*input stencil*/_d_TempMaskList2->begin(),
 				/*output result*/elemAddressListTmpFirst + _numElemsNotUsed,
 				/*predicate*/GvCore::not_equal_to_zero< uint >() );
-
-# endif // USE_CUDPP_LIBRARY
 			
 			CUDAPM_STOP_EVENT( cache_updateTimestamps_threadReduc2 );
 
@@ -994,7 +920,6 @@ uint GsCacheManager< TId, ElementRes, AddressType, PageTableArrayType, PageTable
 }
 #endif
 
-#ifndef GS_USE_OPTIMIZED_NON_BLOCKING_ASYNCHRONOUS_CALLS_PIPELINE_PRODUCER
 /******************************************************************************
  * Create the "update" list of a given type.
  *
@@ -1037,145 +962,16 @@ uint GsGLCacheManager< TId, ElementRes, AddressType, PageTableArrayType, PageTab
 
 	CUDAPM_START_EVENT( gpucachemgr_createUpdateList_elemsReduction );
 
-#if USE_CUDPP_LIBRARY
-	
-	// Stream compaction
-	cudppCompact( _scanplan,
-		//---------------------------------------------------------------
-		///*output*/thrust::raw_pointer_cast( &(*_d_UpdateCompactList)[ 0 ] ), /*nbValidElements*/_d_numElementsPtr,
-		/*output*/_d_UpdateCompactList->getPointer(), /*nbValidElements*/_d_numElementsPtr,
-		//---------------------------------------------------------------
-		/*input*/inputList, /*isValid*/(uint*)thrust::raw_pointer_cast( &(*_d_TempUpdateMaskList)[ 0 ] ),
-		/*nbElements*/inputNumElem );
-	GV_CHECK_CUDA_ERROR( "cudppCompact" );
-
-	// Get number of elements
-	size_t numElems;
-	GS_CUDA_SAFE_CALL( cudaMemcpy( &numElems, _d_numElementsPtr, sizeof( size_t ), cudaMemcpyDeviceToHost ) );
-
-#else // USE_CUDPP_LIBRARY
-
 	thrust::device_ptr< uint > firstPtr = thrust::device_ptr< uint >( inputList );
 	thrust::device_ptr< uint > lastPtr = thrust::device_ptr< uint >( inputList + inputNumElem );
 
 	uint numElems = thrust::copy_if( firstPtr, lastPtr, _d_TempUpdateMaskList->begin(),
 									_d_UpdateCompactList->begin(), GvCore::not_equal_to_zero< uint >() ) - _d_UpdateCompactList->begin();
-	GV_CHECK_CUDA_ERROR( "cudppCompact" );
-
-#endif // USE_CUDPP_LIBRARY
 
 	CUDAPM_STOP_EVENT( gpucachemgr_createUpdateList_elemsReduction );
 
 	return static_cast< uint >( numElems );
 }
-#else // GS_USE_OPTIMIZED_NON_BLOCKING_ASYNCHRONOUS_CALLS_PIPELINE_GVCACHEMANAGER
-/******************************************************************************
- * Create the "update" list of a given type.
- *
- * "Update list" is the list of elements and their associated requests of a given type (node subdivision or brick load/produce)
- *
- * @param inputList Buffer of node addresses and their associated requests. First two bits of their 32 bit addresses stores the type of request
- * @param inputNumElem Number of elements to process
- * @param pTestFlag type of request (node subdivision or brick load/produce)
- *
- * @return the number of requests of given type
- ******************************************************************************/
-template< unsigned int TId, typename ElementRes, typename AddressType, typename PageTableArrayType, typename PageTableType >
-uint GsCacheManager< TId, ElementRes, AddressType, PageTableArrayType, PageTableType >
-::createUpdateList( uint* inputList, uint inputNumElem, uint pTestFlag )
-{
-	const uint cacheId = Id::value;
-
-	// ---- [ 1 ] ---- 1st step
-	//
-	// Fill the buffer of masks of valid elements whose attribute is equal to "pTestFlag"
-	// Result is placed in "_d_TempUpdateMaskList"
-
-	CUDAPM_START_EVENT( gpucachemgr_createUpdateList_createMask );
-
-	// Set kernel execution configuration
-	dim3 blockSize( 64, 1, 1 );
-	uint numBlocks = iDivUp( inputNumElem, blockSize.x );
-	dim3 gridSize = dim3( std::min( numBlocks, 65535U ) , iDivUp( numBlocks, 65535U ), 1 );
-
-	// Given a flag indicating a type of request (subdivision or load), and the updated global buffer of requests,
-	// it fills a resulting mask buffer.
-	// In fact, this mask indicates, for each element of the usage list, if it was used in the current rendering pass
-	CacheManagerCreateUpdateMask<<< gridSize, blockSize, 0 >>>( inputNumElem, inputList, /*output*/(uint*)thrust::raw_pointer_cast( &(*_d_TempUpdateMaskList)[ 0 ] ), pTestFlag );
-	GV_CHECK_CUDA_ERROR( "UpdateCreateSubdivMask" );
-
-	CUDAPM_STOP_EVENT( gpucachemgr_createUpdateList_createMask );
-
-	// ---- [ 2 ] ---- 2nd step
-	//
-	// Concatenate only previous valid elements from input data in "inputList" into the buffer of requests
-	// Result is placed in "_d_UpdateCompactList"
-
-	CUDAPM_START_EVENT( gpucachemgr_createUpdateList_elemsReduction );
-
-	// Stream compaction
-	cudppCompact( _scanplan,
-	#ifndef GS_USE_OPTIMIZED_NON_BLOCKING_ASYNCHRONOUS_CALLS_PIPELINE_WITH_COMBINED_COPY
-		/*output*/thrust::raw_pointer_cast( &(*_d_UpdateCompactList)[ 0 ] ), /*nbValidElements*/_d_numElementsPtr,
-	#else
-		//------------------------------------------------------------------------
-		///*output*/thrust::raw_pointer_cast( &(*_d_UpdateCompactList)[ 0 ] ), /*nbValidElements*/_d_nbValidRequests + cacheId + 1,
-		/*output*/_d_UpdateCompactList->getPointer(), /*nbValidElements*/_d_nbValidRequests + cacheId + 1,
-		//------------------------------------------------------------------------
-	#endif
-		/*input*/inputList, /*isValid*/(uint*)thrust::raw_pointer_cast( &(*_d_TempUpdateMaskList)[ 0 ] ),
-		/*nbElements*/inputNumElem );
-	GV_CHECK_CUDA_ERROR( "cudppCompact" );
-
-	// Get number of elements
-	size_t numElems = 0;
-	//#ifndef GS_USE_OPTIMIZED_NON_BLOCKING_ASYNCHRONOUS_CALLS_PIPELINE_WITH_COMBINED_COPY
-	//GS_CUDA_SAFE_CALL( cudaMemcpy( &numElems, _d_numElementsPtr, sizeof( size_t ), cudaMemcpyDeviceToHost ) );
-	//#else
-	//GS_CUDA_SAFE_CALL( cudaMemcpy( &numElems, _d_nbValidRequests + cacheId + 1, sizeof( size_t ), cudaMemcpyDeviceToHost ) );
-	//#endif
-
-	CUDAPM_STOP_EVENT( gpucachemgr_createUpdateList_elemsReduction );
-
-	return static_cast< uint >( numElems );
-}
-/******************************************************************************
- * Create the "update" list of a given type.
- *
- * "Update list" is the list of elements and their associated requests of a given type (node subdivision or brick load/produce)
- *
- * @param inputList Buffer of node addresses and their associated requests. First two bits of their 32 bit addresses stores the type of request
- * @param inputNumElem Number of elements to process
- * @param pTestFlag type of request (node subdivision or brick load/produce)
- *
- * @return the number of requests of given type
- ******************************************************************************/
-template< unsigned int TId, typename ElementRes, typename AddressType, typename PageTableArrayType, typename PageTableType >
-uint GsCacheManager< TId, ElementRes, AddressType, PageTableArrayType, PageTableType >
-::createUpdateListCopyAsync( uint* inputList, uint inputNumElem, uint pTestFlag )
-{
-	const uint cacheId = Id::value;
-
-	// ---- [ 2 ] ---- 2nd step
-	//
-	// Concatenate only previous valid elements from input data in "inputList" into the buffer of requests
-	// Result is placed in "_d_UpdateCompactList"
-
-//	CUDAPM_START_EVENT( gpucachemgr_createUpdateList_elemsReduction );
-
-	// Get number of elements
-	size_t numElems;
-	#ifndef GS_USE_OPTIMIZED_NON_BLOCKING_ASYNCHRONOUS_CALLS_PIPELINE_WITH_COMBINED_COPY
-	GS_CUDA_SAFE_CALL( cudaMemcpy( &numElems, _d_numElementsPtr, sizeof( size_t ), cudaMemcpyDeviceToHost ) );
-	#else
-	GS_CUDA_SAFE_CALL( cudaMemcpy( &numElems, _d_nbValidRequests + cacheId + 1, sizeof( size_t ), cudaMemcpyDeviceToHost ) );
-	#endif
-
-//	CUDAPM_STOP_EVENT( gpucachemgr_createUpdateList_elemsReduction );
-
-	return static_cast< uint >( numElems );
-}
-#endif //GS_USE_OPTIMIZED_NON_BLOCKING_ASYNCHRONOUS_CALLS_PIPELINE_PRODUCER
 
 /******************************************************************************
  * Invalidate elements

@@ -24,7 +24,6 @@
 #include "Gvv3DWindow.h"
 #include "GvvPipelineInterfaceViewer.h"
 #include "GvvPipelineInterface.h"
-#include "GvvGLSceneInterface.h"
 #include "GvvContextManager.h"
 #include "GvvBrowsable.h"
 
@@ -105,29 +104,6 @@ void GvvZoomToAction::execute()
 		{
 			// TO DO
 			// ...
-		}
-
-		//** Zoom to element
-		GvvGLSceneInterface* scene = dynamic_cast< GvvGLSceneInterface* >( browsable );
-		if ( scene != NULL )
-		{
-			GvvApplication& application = GvvApplication::get();
-			GvvMainWindow* mainWindow = application.getMainWindow();
-			Gvv3DWindow* window3D = mainWindow->get3DWindow();
-			GvvPipelineInterfaceViewer* pipelineViewer = window3D->getPipelineViewer();
-			if ( pipelineViewer != NULL )
-			{
-				// Scene bounding box
-				qglviewer::Vec bboxMin( scene->_minX, scene->_minY, scene->_minZ );
-				qglviewer::Vec bboxMax( scene->_maxX, scene->_maxY, scene->_maxZ );
-
-				// Modify scene radius
-				const float sceneRadius = qglviewer::Vec( bboxMax - bboxMin ).norm();
-				pipelineViewer->setSceneRadius( sceneRadius );
-				
-				// Fit to bounding box
-				pipelineViewer->camera()->fitBoundingBox( bboxMin, bboxMax );
-			}
 		}
 	}
 }

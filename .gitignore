@@ -21,7 +21,7 @@ mono_crash.*
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
-x64/
+#x64/
 x86/
 [Ww][Ii][Nn]32/
 [Aa][Rr][Mm]/
@@ -409,3 +409,5 @@ Release - Copie/
 Generated_VC12_x64/
 Generated_VC19_x64/
 Generated_VC22_x64/
+External/Windows/x64/cudpp/lib/cudpp64.dll
+External/Windows/x64/cudpp/lib/cudpp64d.dll

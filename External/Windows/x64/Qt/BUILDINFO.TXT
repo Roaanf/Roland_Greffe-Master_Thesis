@@ -1,0 +1,54 @@
+Qt framework version:
+	4.8.7
+OpenSSL library version:
+	1.0.2a
+PostgreSQL client library version:
+	9.4.2
+MySQL client library version:
+	5.6.24
+Qt source path for mapping:
+	c:\Qt\4.8.7\qt-4.8.7-x64-msvc2013-build
+Compiler friendly name:
+	MSVC2013 (x64)
+Compiler identification string:
+	Microsoft (R) C/C++ Optimizing Compiler Version 18.00.31101 for x64
+Package GUID:
+	4040554B-3FC1-4692-BA27-EEFC301F60B0
+Qt configuration options:
+	-debug-and-release
+	-opensource
+	-confirm-license
+	-largefile
+	-plugin-sql-sqlite
+	-plugin-sql-odbc
+	-no-neon
+	-mmx
+	-no-3dnow
+	-sse
+	-sse2
+	-qt-zlib
+	-qt-libpng
+	-qt-libmng
+	-qt-libtiff
+	-qt-libjpeg
+	-phonon
+	-audio-backend
+	-webkit
+	-script
+	-scripttools
+	-declarative
+	-qt-style-windowsxp
+	-qt-style-windowsvista
+	-nomake
+	examples
+	-nomake
+	demos
+	-opengl
+	desktop
+	-openssl
+	-plugin-sql-mysql
+	-prefix
+	c:\Qt\4.8.7\qt-4.8.7-x64-msvc2013
+	-platform
+	win32-msvc2013
+	-no-dsp

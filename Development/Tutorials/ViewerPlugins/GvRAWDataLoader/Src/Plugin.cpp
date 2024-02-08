@@ -31,10 +31,6 @@
 // STL
 #include <sstream>
 
-// OpenGL
-#include <GL/glew.h>
-#include <GL/freeglut.h>
-
 // Project
 #include "SampleCore.h"
 #include "CustomEditor.h"
@@ -144,6 +140,8 @@ void GvMyPlugin::initialize()
 	GvvRawDataLoaderDialog* dataLoaderDialog = new GvvRawDataLoaderDialog( NULL );
 	QString modelFilename;
 	unsigned int modelResolution;
+	unsigned int brickSize;
+select: // Awful solution imo
 	if ( dataLoaderDialog != NULL )
 	{
 		// Retrieve USER selections
@@ -152,7 +150,24 @@ void GvMyPlugin::initialize()
 		{
 			// Retrieve data from loader
 			modelFilename = dataLoaderDialog->get3DModelFilename();
-			modelResolution = dataLoaderDialog->get3DModelResolution();
+			
+			if (false) {
+				// TODO parsing of the .mhd
+			}
+			else {
+				modelResolution = dataLoaderDialog->get3DModelResolution();
+				brickSize = dataLoaderDialog->getBrickSize();
+				
+				std::cout << "Checking the values..." << std::endl;
+				std::cout << "modelResolution: " << modelResolution << std::endl;
+				std::cout << "brickSize: " << brickSize << std::endl;
+			}
+		}
+		
+		if (modelFilename == "") {
+			delete dataLoaderDialog;
+			dataLoaderDialog = NULL;
+			return finalize();
 		}
 
 		//dataLoaderDialog->hide();
@@ -180,7 +195,7 @@ void GvMyPlugin::initialize()
 		_pipeline->set3DModelResolution( modelResolution );
 
 		// TO DO
-		// add resolution too !!!
+		// add true resolution too !!!
 	}
 	
 	// Pipeline BEGIN

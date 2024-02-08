@@ -138,7 +138,7 @@ public:
 	 * @return the value at the given address
 	 */
 	__device__
-	__forceinline__ /*const*/ T get( uint pAddress ) const;
+	__forceinline__ /*const*/ T get( size_t pAddress ) const;
 
 	/**
 	 * Get the value at a given 2D position.
@@ -169,7 +169,7 @@ public:
 	 * @return the value at the given address
 	 */
 	__device__
-	__forceinline__ /*const*/ T getSafe( uint pAddress ) const;
+	__forceinline__ /*const*/ T getSafe( size_t pAddress ) const;
 
 	/**
 	 * Get the value at a given 3D position in a safe way.
@@ -190,7 +190,7 @@ public:
 	 * @return the pointer at the given address
 	 */
 	__device__
-	__forceinline__ T* getPointer( uint pAddress = 0 );
+	__forceinline__ T* getPointer( size_t pAddress = 0 );
 
 	/**
 	 * Set the value at a given 1D address in the data array.
@@ -199,7 +199,7 @@ public:
 	 * @param pVal a value
 	 */
 	__device__
-	__forceinline__ void set( const uint pAddress, T val );
+	__forceinline__ void set( const size_t pAddress, T val );
 
 	/**
 	 * Set the value at a given 2D position in the data array.
@@ -280,7 +280,7 @@ private:
 	 * @return the corresponding offset in the 1D linear data array
 	 */
 	__device__
-	__forceinline__ uint getOffset( const uint2& pPosition ) const;
+	__forceinline__ size_t getOffset( const uint2& pPosition ) const;
 
 	/**
 	 * Helper function used to get the offset in the 1D linear data array
@@ -291,7 +291,7 @@ private:
 	 * @return the corresponding offset in the 1D linear data array
 	 */
 	__device__
-	__forceinline__ uint getOffset( const uint3& pPosition ) const;
+	__forceinline__ size_t getOffset( const uint3& pPosition ) const;
 
 };
 

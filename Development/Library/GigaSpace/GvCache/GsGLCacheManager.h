@@ -72,12 +72,6 @@
  ************************* DEFINE AND CONSTANT SECTION ************************
  ******************************************************************************/
 
-/**
- * CUDPP library
- *
- * By default, the cudpp library is used
- */
-#define USE_CUDPP_LIBRARY 1
 
 /**
  * ...

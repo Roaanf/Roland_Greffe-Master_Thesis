@@ -25,7 +25,7 @@ SET (GV_TARGET_TYPE "GV_SHARED_LIB")
 #----------------------------------------------------------------
 
 # add custom PROJECT LINK LIBRARY
-SET (projectLibList "GvViewerCore" "GvViewerScene")
+SET (projectLibList "GvViewerCore")
 INCLUDE (Project_CMakeImport)
 
 INCLUDE (OpenGL_CMakeImport)
@@ -40,9 +40,6 @@ INCLUDE (Qt_CMakeImport)
 # Qwt : plot
 INCLUDE (Qwt_CMakeImport)
 add_definitions(-DQWT_DLL)
-
-# Add 3D format load library
-INCLUDE (assimp_CMakeImport)
 
 # Add math 3D maths, matrix/vector library
 INCLUDE (GLM_CMakeImport)

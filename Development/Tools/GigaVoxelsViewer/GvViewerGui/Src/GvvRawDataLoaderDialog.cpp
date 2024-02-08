@@ -54,9 +54,6 @@ GvvRawDataLoaderDialog::GvvRawDataLoaderDialog( QWidget* pParent )
 
 	//** Initalizes the dialog
 	setupUi( this );
-
-	// Custom initialization
-	_nbLevelsLineEdit->setText( QString::number( get3DModelResolution() ) );
 }
 
 /******************************************************************************
@@ -87,7 +84,6 @@ void GvvRawDataLoaderDialog::on__3DModelDirectoryToolButton_released()
 void GvvRawDataLoaderDialog::on__maxResolutionComboBox_currentIndexChanged( const QString& pText )
 {
 	unsigned int maxResolution = pText.toUInt() - 1;
-	_nbLevelsLineEdit->setText( QString::number( ( 1 << maxResolution ) * 8 ) );
 }
 
 /******************************************************************************
@@ -131,4 +127,16 @@ unsigned int GvvRawDataLoaderDialog::getModelFileMode() const
 unsigned int GvvRawDataLoaderDialog::getModelDataType() const
 {
 	return _3DModelDataTypeComboBox->currentIndex();
+}
+
+/******************************************************************************
+ * Get the 3D model resolution
+ *
+ * @return the 3D model resolution
+ ******************************************************************************/
+unsigned int GvvRawDataLoaderDialog::getBrickSize() const
+{
+	unsigned int brickResolution = _brickSize->currentText().toInt();
+
+	return brickResolution;
 }

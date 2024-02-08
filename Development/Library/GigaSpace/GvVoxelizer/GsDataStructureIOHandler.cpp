@@ -105,7 +105,7 @@ GsDataStructureIOHandler::GsDataStructureIOHandler( const std::string& pName,
 ,	_brickSize( ( pBrickWidth + 2 ) * ( pBrickWidth + 2 ) * ( pBrickWidth + 2 ) )
 ,	_isBufferLoaded( false )
 ,	_brickNumber( 0 )
-,	_nodeGridSize( 1 << pLevel )
+,	_nodeGridSize( (size_t)1 << pLevel )
 ,	_voxelGridSize( _nodeGridSize * pBrickWidth )
 ,   _trueNbOfValues(pTrueNbOfValues)
 {
@@ -122,7 +122,7 @@ GsDataStructureIOHandler::GsDataStructureIOHandler( const std::string& pName,
 	std::cout << (size_t)_nodeGridSize * (size_t)_nodeGridSize * (size_t)_nodeGridSize * (size_t)_brickSize << std::endl;
 	std::cout << (size_t)_nodeGridSize * (size_t)_nodeGridSize * (size_t)_nodeGridSize << std::endl;
 
-	size_t sizeBufferCalloc = (_trueNbOfValues * 1.3); // TEMP FIX !!!
+	size_t sizeBufferCalloc = (_trueNbOfValues * 1.5); // TEMP FIX !!! ddd
 	std::cout << sizeBufferCalloc << std::endl;
 	std::cout << sizeBufferCalloc * sizeof(unsigned short) << std::endl;
 	
@@ -160,7 +160,7 @@ GsDataStructureIOHandler::GsDataStructureIOHandler( const std::string& pName,
 ,	_dataTypes( pDataTypes )
 ,	_isBufferLoaded( false )
 ,	_brickNumber( 0 )
-,	_nodeGridSize( 1 << pLevel )
+,	_nodeGridSize((size_t)1 << pLevel )
 ,	_voxelGridSize( _nodeGridSize * pBrickWidth )
 ,   _trueNbOfValues(0)
 {
@@ -973,7 +973,7 @@ void GsDataStructureIOHandler::openFiles( const string& pName, bool pNewFiles )
  *
  * @return the node file name in GigaVoxels format.
  ******************************************************************************/
-string GsDataStructureIOHandler::getFileNameNode( const std::string& pName, unsigned int pLevel, unsigned int pBrickWidth )
+string GsDataStructureIOHandler::getFileNameNode( const std::string& pName, size_t pLevel, size_t pBrickWidth )
 {
 	std::ostringstream oss;
 	
@@ -998,7 +998,7 @@ string GsDataStructureIOHandler::getFileNameNode( const std::string& pName, unsi
  *
  * @return the brick file name in GigaVoxels format.
  ******************************************************************************/
-string GsDataStructureIOHandler::getFileNameBrick( const string& pName, unsigned int pLevel, unsigned int pBrickWidth, unsigned int pDataChannelIndex, const string& pDataTypeName )
+string GsDataStructureIOHandler::getFileNameBrick( const string& pName, size_t pLevel, size_t pBrickWidth, unsigned int pDataChannelIndex, const string& pDataTypeName )
 {
 	std::ostringstream oss;
 

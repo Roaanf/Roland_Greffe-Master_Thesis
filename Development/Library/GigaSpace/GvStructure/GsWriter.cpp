@@ -110,7 +110,7 @@ bool GsWriter::write()
 	// - add a validator to check data
 	// ...
 
-	// Model Document
+	// Model Documentgfxdsdssdssddsdffsdfssssssssssssssssssskpokop
 	//
 	// NOTE:
 	// the node to be added is passed by pointer, and will be henceforth owned (and deleted) by tinyXml.

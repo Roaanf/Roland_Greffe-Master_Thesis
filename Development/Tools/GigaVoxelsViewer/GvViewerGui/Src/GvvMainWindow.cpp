@@ -55,8 +55,6 @@
 #include "GvvPreferencesDialog.h"
 #include "GvvPipelineEditor.h"
 #include "GvvTransferFunctionEditor.h"
-#include "GvvGLSceneBrowser.h"
-#include "GvvAddSceneAction.h"
 #include "GvvGLSLSourceEditor.h"
 #include "GvvCUDASourceEditor.h"
 #include "GvvPlotView.h"
@@ -67,7 +65,6 @@
 #include "GvvCaptureVideoAction.h"
 #include "GvvMeshInterface.h"
 #include "GvvProgrammableShaderInterface.h"
-#include "GvvGLSceneInterface.h"
 #include "GvvZoomToAction.h"
 #include "GvvCameraEditor.h"
 #include "GvvEnvironment.h"
@@ -216,13 +213,6 @@ GvvMainWindow::GvvMainWindow( QWidget *parent, Qt::WindowFlags flags )
 	dockWidgetPipelineBrowser->setWidget( _pipelineBrowser );
 	addDockWidget( Qt::LeftDockWidgetArea, dockWidgetPipelineBrowser );
 
-	// Scene Browser
-	_sceneBrowser = new GvvGLSceneBrowser( this );
-	QDockWidget* dockWidgetSceneBrowser = new QDockWidget( tr( "Scene Browser" ), this, flags );
-	dockWidgetSceneBrowser->setAllowedAreas( Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea );
-	dockWidgetSceneBrowser->setWidget( _sceneBrowser );
-	addDockWidget( Qt::LeftDockWidgetArea, dockWidgetSceneBrowser );
-
 	// Editor window
 	_editorWindow = new GvvEditorWindow( this );
 	//_editorWindow->registerEditorFactory( GvvPipelineInterface::cTypeName, &GvvCacheEditor::create );
@@ -272,7 +262,6 @@ GvvMainWindow::GvvMainWindow( QWidget *parent, Qt::WindowFlags flags )
 	
 	// Organize dock widgets
 	//tabifyDockWidget( dockWidgetPipelineBrowser, dockWidgetDeviceBrowser );
-	tabifyDockWidget( dockWidgetPipelineBrowser, dockWidgetSceneBrowser );
 	dockWidgetPipelineBrowser->raise();
 	
 	// new/save/open managenement
@@ -325,11 +314,10 @@ void GvvMainWindow::initialize()
 	action = new GvvOpenTransferFunctionEditor( "" );
 	action = new GvvEditBrowsableAction();
 	action = new GvvRemoveBrowsableAction();
-	action = new GvvAddLightAction( "" );	// enlever le premier paramètre
-	action = new GvvAddPipelineAction();	// enlever le premier paramètre
-	action = new GvvDisplayDataStructureAction( "" );	// enlever le premier paramètre
-	action = new GvvDisplayPerformanceCountersAction( "" );	// enlever le premier paramètre
-	action = new GvvAddSceneAction();	// enlever le premier paramètre
+	action = new GvvAddLightAction( "" );	// enlever le premier paramï¿½tre
+	action = new GvvAddPipelineAction();	// enlever le premier paramï¿½tre
+	action = new GvvDisplayDataStructureAction( "" );	// enlever le premier paramï¿½tre
+	action = new GvvDisplayPerformanceCountersAction( "" );	// enlever le premier paramï¿½tre
 	action = new GvvEditCameraAction( "" );
 	action = new GvvOpenProgrammableShaderEditor( "" );
 	//action = new GvvSnapshotAction( "" );
@@ -380,22 +368,6 @@ void GvvMainWindow::initialize()
 		contextMenu->addAction( GvvActionManager::get().editAction( GvvRemoveBrowsableAction::cName ) );
 	}
 
-	// Scene browser root context menu
-	contextMenu = _sceneBrowser->getContextMenu( "" );
-	if ( contextMenu != NULL )
-	{
-		contextMenu->addAction( GvvActionManager::get().editAction( GvvAddSceneAction::cName ) );
-	}
-
-	// Scene context menu
-	contextMenu = _sceneBrowser->getContextMenu( QString( GvvGLSceneInterface::cTypeName ) );
-	if ( contextMenu != NULL )
-	{
-		contextMenu->addAction( GvvActionManager::get().editAction( GvvRemoveBrowsableAction::cName ) );
-		contextMenu->addSeparator();
-		contextMenu->addAction( GvvActionManager::get().editAction( GvvZoomToAction::cName ) );
-	}
-
 	// Mesh menu
 	contextMenu = _pipelineBrowser->getContextMenu( QString( GvvMeshInterface::cTypeName ) );
 	if ( contextMenu != NULL)
@@ -428,14 +400,26 @@ void GvvMainWindow::initialize()
 void GvvMainWindow::onActionOpenFile()
 {
 	QString defaultDirectory = GvvEnvironment::getDemoPath().c_str();
-	QString fileName = QFileDialog::getOpenFileName( this, "Choose a file", defaultDirectory, tr( "Demo Files (*.gvp)" ) );
-	if ( ! fileName.isEmpty() )
+	QString fileName;
+#ifdef _DEBUG
+	fileName = defaultDirectory + "GvRAWDataLoader.d.gvp";
+#else
+	fileName = defaultDirectory + "GvRAWDataLoader.gvp";
+#endif
+
+	cout << fileName.toStdString() << endl;
+	
+	if (!QFile::exists(fileName)) {
+		fileName = QFileDialog::getOpenFileName(this, "Choose a file", defaultDirectory, tr("Demo Files (*.gvp)"));
+	}
+
+	if (!fileName.isEmpty())
 	{
 		//loadModel( lFileName );
 
 		//const std::string pluginFilename = "DynamicLoad.d.gvp";
 		GvvPluginManager::get().unloadAll();
-		GvvPluginManager::get().loadPlugin( fileName.toStdString() );
+		GvvPluginManager::get().loadPlugin(fileName.toStdString());
 
 		mFilename = fileName;
 
@@ -551,16 +535,6 @@ GvvTransferFunctionEditor* GvvMainWindow::getTransferFunctionEditor()
 GvvEditorWindow* GvvMainWindow::getEditorWindow()
 {
 	return _editorWindow;
-}
-
-/******************************************************************************
- * Get the scene browser
- *
- * return the scene browser
- ******************************************************************************/
-GvvGLSceneBrowser* GvvMainWindow::getSceneBrowser()
-{
-	return _sceneBrowser;
 }
 
 /******************************************************************************

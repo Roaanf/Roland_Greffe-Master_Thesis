@@ -92,7 +92,7 @@ public:
 	/**
 	 * Maximum level of resolution
 	 */
-	const unsigned int _level;
+	const size_t _level;
 
 	/**
 	 * Node grid size of the underlying data structure (i.e. octree, N-Tree, etc...).
@@ -123,7 +123,7 @@ public:
 	const size_t _trueNbOfValues;
 
 	/**
-	* Array that holds the content of the node file (HARDCODED TO USHORT)
+	* Array that holds the content of the node file (HARDCODED TO UINT ?)
 	*/
 
 	unsigned int * _nodeData;
@@ -491,7 +491,7 @@ protected:
 	 *
 	 * @return the node file name in GigaVoxels format.
 	 */
-	static std::string getFileNameNode( const std::string& pName, unsigned int pLevel, unsigned int pBrickWidth );
+	static std::string getFileNameNode( const std::string& pName, size_t pLevel, size_t pBrickWidth );
 
 	/**
 	 * Retrieve the brick file name.
@@ -508,7 +508,7 @@ protected:
 	 *
 	 * @return the brick file name in GigaVoxels format.
 	 */
-	static std::string getFileNameBrick( const std::string& pName, unsigned int pLevel, unsigned int pBrickWidth, unsigned int pDataChannelIndex, const std::string& pDataTypeName );
+	static std::string getFileNameBrick( const std::string& pName, size_t pLevel, size_t pBrickWidth, unsigned int pDataChannelIndex, const std::string& pDataTypeName );
 
 	/**
 	 * Create a brick node info (address + brick index)

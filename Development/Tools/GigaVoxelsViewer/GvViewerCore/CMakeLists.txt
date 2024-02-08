@@ -24,9 +24,6 @@ SET (GV_TARGET_TYPE "GV_SHARED_LIB")
 # Add library dependencies
 #----------------------------------------------------------------
 
-# Add 3D format load library
-INCLUDE (assimp_CMakeImport)
-
 INCLUDE (OpenGL_CMakeImport)
 INCLUDE (GLU_CMakeImport)
 INCLUDE (glew_CMakeImport)

@@ -105,13 +105,13 @@ TType RawFileReader< TType >::getMaxDataValue() const
  * Load/import the scene the scene
  ******************************************************************************/
 template< typename TType >
-bool RawFileReader< TType >::readData()
+bool RawFileReader< TType >::readData(const size_t brickWidth)
 {
 	bool result = false;
 
 	// Read data and create the GigaSpace mip-map pyramid of files
 	//result = bruteForceReadData();
-	result = optimizedReadData();
+	result = optimizedReadData(brickWidth);
 	
 	return result;
 }
@@ -120,7 +120,7 @@ bool RawFileReader< TType >::readData()
  * ...
  ******************************************************************************/
 template< typename TType >
-bool RawFileReader< TType >::optimizedReadData()
+bool RawFileReader< TType >::optimizedReadData(const size_t brickWidth)
 {
 	std::string dataFilename = getFilename() + ".raw";
 
@@ -136,7 +136,7 @@ bool RawFileReader< TType >::optimizedReadData()
 		const size_t nbValues = (size_t)_dataResolution * (size_t)_dataResolution * (size_t)_dataResolution;
 		std::cout << "Nb values : " << nbValues << std::endl;
 		// Hardcoded RN because try to see if it works
-		// TODO : find an elegant solution to the problem
+		// TODO : use the .mhd file that should always be there
 		size_t trueX = 840;
 		size_t trueY = 1103;
 		size_t trueZ = 840;
@@ -168,7 +168,6 @@ bool RawFileReader< TType >::optimizedReadData()
 
 		// Write equivalent GigaSpace voxels file
 		// - create a file/streamer handler to read/write GigaVoxels data
-		const size_t brickWidth = 32;
 		const size_t levelOfResolution = static_cast<size_t>( log( static_cast< float >( getDataResolution() / brickWidth ) ) / log( static_cast< float >( 2 ) ) );
 		std::cout << "Level of resolution : " << levelOfResolution << std::endl;
 		
