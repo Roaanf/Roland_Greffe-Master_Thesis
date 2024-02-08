@@ -462,6 +462,7 @@ uint GsGLCacheManager< TId, ElementRes, AddressType, PageTableArrayType, PageTab
 			//
 			// ...
 
+			// Begin n'existe plus ... je vais devoir aller lire de la docu thrust ducoup
 			//thrust::device_vector< uint >::const_iterator elemAddressListFirst = _d_elemAddressList->begin();
 			//thrust::device_vector< uint >::const_iterator elemAddressListLast = _d_elemAddressList->begin() + nbElemToSort;
 			//thrust::device_vector< uint >::iterator elemAddressListTmpFirst = _d_elemAddressListTmp->begin();

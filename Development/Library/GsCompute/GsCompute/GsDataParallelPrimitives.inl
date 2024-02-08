@@ -45,6 +45,7 @@
 
 // System
 #include <cassert>
+#include <thrust/copy.h>
 
 /******************************************************************************
  ****************************** INLINE DEFINITION *****************************
@@ -66,6 +67,27 @@ inline GsDataParallelPrimitives& GsDataParallelPrimitives::get()
 	}
 	assert( _sInstance != NULL );
 	return *_sInstance;
+}
+
+/******************************************************************************
+ * Get a CUDPP plan given a number of elements to be processed.
+ *
+ * @param pSize The maximum number of elements to be processed
+ *
+ * @return a handle on the plan
+ ******************************************************************************/
+inline bool GsDataParallelPrimitives::compact( void* d_out, const void* d_in_first, const void* d_in_last, const unsigned int* d_isValid )
+{
+	/*
+	thrust::copy_if(
+		d_in_first, // Input first
+		d_in_last, // Input last
+		d_isValid, // Input stencil
+		d_out, // Output result
+		not_equal_to_zero< unsigned int >()); // Predicate
+	// Check for error
+	*/
+	return true;
 }
 
 /******************************************************************************

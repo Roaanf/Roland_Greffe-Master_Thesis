@@ -52,6 +52,10 @@
 // cudpp
 #include <cudpp.h>
 
+// thrust
+#include <thrust/host_vector.h>
+#include <thrust/device_vector.h>
+
 /******************************************************************************
  ************************* DEFINE AND CONSTANT SECTION ************************
  ******************************************************************************/
@@ -72,6 +76,21 @@
 /******************************************************************************
  ****************************** CLASS DEFINITION ******************************
  ******************************************************************************/
+
+template< typename T >
+struct not_equal_to_zero
+{
+
+	/**
+	 * ...
+	 */
+	__host__ __device__
+		inline bool operator()(const T& lhs)
+	{
+		return lhs != T(0);
+	}
+
+};
 
 namespace GsCompute
 {
@@ -132,6 +151,11 @@ public:
 	 * @return a handle on the plan
 	 */
 	bool initializeSortPlan( size_t pSize );
+
+	/**
+	 * Compact
+	 */
+	bool compact( void* d_out, const void* d_in_first, const void* d_in_last, const unsigned int* d_isValid);
 
 	/**
 	 * Compact
