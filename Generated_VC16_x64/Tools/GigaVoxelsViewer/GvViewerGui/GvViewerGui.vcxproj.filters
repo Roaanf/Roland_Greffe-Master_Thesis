@@ -19,9 +19,6 @@
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerGui\Src\GvvAddPipelineAction.cpp">
       <Filter>Src</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerGui\Src\GvvAddSceneAction.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerGui\Src\GvvAnalyzerToolBar.cpp">
       <Filter>Src</Filter>
     </ClCompile>
@@ -95,9 +92,6 @@
       <Filter>Src</Filter>
     </ClCompile>
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerGui\Src\GvvGLSLSyntaxHighlighter.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerGui\Src\GvvGLSceneBrowser.cpp">
       <Filter>Src</Filter>
     </ClCompile>
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerGui\Src\GvvMainWindow.cpp">
@@ -226,9 +220,6 @@
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Tools\GigaVoxelsViewer\GvViewerGui\Src\GvvGLSLSyntaxHighlighter.moc.cpp">
       <Filter>Generated</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Tools\GigaVoxelsViewer\GvViewerGui\Src\GvvGLSceneBrowser.moc.cpp">
-      <Filter>Generated</Filter>
-    </ClCompile>
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Tools\GigaVoxelsViewer\GvViewerGui\Src\GvvMainWindow.moc.cpp">
       <Filter>Generated</Filter>
     </ClCompile>
@@ -340,9 +331,6 @@
       <Filter>Inc</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerGui\Inc\GvvAddPipelineAction.h">
-      <Filter>Inc</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerGui\Inc\GvvAddSceneAction.h">
       <Filter>Inc</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerGui\Inc\GvvBrowsableItem.h">
@@ -519,9 +507,6 @@
       <Filter>Inc</Filter>
     </CustomBuild>
     <CustomBuild Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerGui\Inc\GvvGLSLSyntaxHighlighter.h">
-      <Filter>Inc</Filter>
-    </CustomBuild>
-    <CustomBuild Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerGui\Inc\GvvGLSceneBrowser.h">
       <Filter>Inc</Filter>
     </CustomBuild>
     <CustomBuild Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerGui\Inc\GvvMainWindow.h">

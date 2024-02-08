@@ -350,7 +350,7 @@ GvRAWDataLoader_BINARY_DIR:STATIC=C:/Users/rolan/Desktop/GigaVoxelsDev/Generated
 GvRAWDataLoader_IS_TOP_LEVEL:STATIC=OFF
 
 //Dependencies for the target
-GvRAWDataLoader_LIB_DEPENDS:STATIC=optimized;GsGraphics;debug;GsGraphics.d;optimized;GsCompute;debug;GsCompute.d;optimized;GigaSpace;debug;GigaSpace.d;optimized;GvViewerCore;debug;GvViewerCore.d;optimized;GvViewerScene;debug;GvViewerScene.d;optimized;GvViewerGui;debug;GvViewerGui.d;optimized;opengl32;debug;opengl32;optimized;glu32;debug;glu32;optimized;glew32;debug;glew32;optimized;freeglut;debug;freeglut;optimized;cudpp64;debug;cudpp64d;optimized;tinyxml;debug;tinyxml.d;optimized;QtCore4;debug;QtCored4;optimized;QtGui4;debug;QtGuid4;optimized;QtOpenGL4;debug;QtOpenGLd4;optimized;QtXml4;debug;QtXmld4;optimized;QGLViewer2.lib;debug;QGLViewerd2.lib;general;C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.2/lib/x64/cudart_static.lib;
+GvRAWDataLoader_LIB_DEPENDS:STATIC=optimized;GsGraphics;debug;GsGraphics.d;optimized;GsCompute;debug;GsCompute.d;optimized;GigaSpace;debug;GigaSpace.d;optimized;GvViewerCore;debug;GvViewerCore.d;optimized;GvViewerGui;debug;GvViewerGui.d;optimized;opengl32;debug;opengl32;optimized;glu32;debug;glu32;optimized;glew32;debug;glew32;optimized;freeglut;debug;freeglut;optimized;cudpp64;debug;cudpp64d;optimized;tinyxml;debug;tinyxml.d;optimized;QtCore4;debug;QtCored4;optimized;QtGui4;debug;QtGuid4;optimized;QtOpenGL4;debug;QtOpenGLd4;optimized;QtXml4;debug;QtXmld4;optimized;QGLViewer2.lib;debug;QGLViewerd2.lib;general;C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.2/lib/x64/cudart_static.lib;
 
 //Value Computed by CMake
 GvRAWDataLoader_SOURCE_DIR:STATIC=C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tutorials/ViewerPlugins/GvRAWDataLoader

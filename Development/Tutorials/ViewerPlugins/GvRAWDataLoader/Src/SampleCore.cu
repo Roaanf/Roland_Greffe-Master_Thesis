@@ -1146,6 +1146,8 @@ bool SampleCore::initializeTransferFunction()
 
 	// TODO RESOUDRE LE BUG DE LA TRANSFER FUNCTION (enft pas important mnt que j'y pense)
 	//onTransferfunctionChanged();
+
+	// TODO Switch to texture objects instead
 	
 	return true;
 }

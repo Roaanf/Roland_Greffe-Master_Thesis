@@ -1225,10 +1225,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   <ItemGroup>
     <Object Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Library\GigaSpace\CMakeFiles\GigaSpace.dir\GvCache\$(Configuration)\GigaSpace_generated_GsCacheManagerResources.cu.obj" />
     <Object Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Library\GigaSpace\CMakeFiles\GigaSpace.dir\GvPerfMon\$(Configuration)\GigaSpace_generated_GsPerformanceMonitor.cu.obj" />
-    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\GsCacheManager.cpp" />
-    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\GsDataCacheManager.cpp" />
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\GsICacheManager.cpp" />
-    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\GsNodeCacheManager.cpp" />
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCore\GsCoreConfig.cpp" />
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCore\GsIPipeline.cpp" />
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCore\GsIProvider.cpp" />
@@ -1264,18 +1261,14 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvVoxelizer\GsDataTypeHandler.cpp" />
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvVoxelizer\GsIRAWFileReader.cpp" />
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GsConfig.h" />
-    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\GsBaseCacheManager.h" />
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\GsCacheElementManager.h" />
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\GsCacheHelper.h" />
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\GsCacheHelperKernel.h" />
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\GsCacheManagementKernel.h" />
-    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\GsCacheManager.h" />
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\GsCacheManagerKernel.h" />
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\GsCacheManagerResources.h" />
-    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\GsDataCacheManager.h" />
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\GsGLCacheManager.h" />
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\GsICacheManager.h" />
-    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\GsNodeCacheManager.h" />
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCore\GsArray.h" />
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCore\GsCUDATexHelpers.h" />
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCore\GsCoreConfig.h" />
@@ -1375,15 +1368,11 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvVoxelizer\GsDataStructureMipmapGenerator.h" />
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvVoxelizer\GsDataTypeHandler.h" />
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvVoxelizer\GsIRAWFileReader.h" />
-    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\GsBaseCacheManager.inl" />
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\GsCacheElementManager.inl" />
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\GsCacheHelper.inl" />
-    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\GsCacheManager.inl" />
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\GsCacheManagerKernel.inl" />
-    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\GsDataCacheManager.inl" />
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\GsGLCacheManager.inl" />
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\GsICacheManager.inl" />
-    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\GsNodeCacheManager.inl" />
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCore\GsArray.inl" />
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCore\GsDeviceTexturingMemory.inl" />
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCore\GsDeviceTexturingMemoryKernel.inl" />

@@ -1726,36 +1726,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerGui\Inc\GvvGLSceneBrowser.h">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating Src/GvvGLSceneBrowser.moc.cpp</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
-C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qt\bin\moc -o C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC16_x64/Tools/GigaVoxelsViewer/GvViewerGui/Src/GvvGLSceneBrowser.moc.cpp C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/GigaVoxelsViewer/GvViewerGui/Inc/GvvGLSceneBrowser.h
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Tools\GigaVoxelsViewer\GvViewerGui\Src\GvvGLSceneBrowser.moc.cpp</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating Src/GvvGLSceneBrowser.moc.cpp</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
-C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\..\..\External\Windows\x64\Qt\bin\moc -o C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC16_x64/Tools/GigaVoxelsViewer/GvViewerGui/Src/GvvGLSceneBrowser.moc.cpp C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Tools/GigaVoxelsViewer/GvViewerGui/Inc/GvvGLSceneBrowser.h
-if %errorlevel% neq 0 goto :cmEnd
-:cmEnd
-endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
-:cmErrorLevel
-exit /b %1
-:cmDone
-if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Tools\GigaVoxelsViewer\GvViewerGui\Src\GvvGLSceneBrowser.moc.cpp</Outputs>
-      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
-    </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
     <CustomBuild Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerGui\Inc\GvvMainWindow.h">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating Src/GvvMainWindow.moc.cpp</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
@@ -2243,7 +2213,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerGui\Src\GvvActionManager.cpp" />
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerGui\Src\GvvAddLightAction.cpp" />
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerGui\Src\GvvAddPipelineAction.cpp" />
-    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerGui\Src\GvvAddSceneAction.cpp" />
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerGui\Src\GvvAnalyzerToolBar.cpp" />
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerGui\Src\GvvApplication.cpp" />
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerGui\Src\GvvBrowsableItem.cpp" />
@@ -2269,7 +2238,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerGui\Src\GvvEditorWindow.cpp" />
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerGui\Src\GvvGLSLSourceEditor.cpp" />
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerGui\Src\GvvGLSLSyntaxHighlighter.cpp" />
-    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerGui\Src\GvvGLSceneBrowser.cpp" />
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerGui\Src\GvvMainWindow.cpp" />
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerGui\Src\GvvOpenProgrammableShaderEditor.cpp" />
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerGui\Src\GvvOpenTransferFunctionEditor.cpp" />
@@ -2331,7 +2299,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Tools\GigaVoxelsViewer\GvViewerGui\Src\GvvEditorWindow.moc.cpp" />
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Tools\GigaVoxelsViewer\GvViewerGui\Src\GvvGLSLSourceEditor.moc.cpp" />
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Tools\GigaVoxelsViewer\GvViewerGui\Src\GvvGLSLSyntaxHighlighter.moc.cpp" />
-    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Tools\GigaVoxelsViewer\GvViewerGui\Src\GvvGLSceneBrowser.moc.cpp" />
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Tools\GigaVoxelsViewer\GvViewerGui\Src\GvvMainWindow.moc.cpp" />
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Tools\GigaVoxelsViewer\GvViewerGui\Src\GvvPipelineBrowser.moc.cpp" />
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Tools\GigaVoxelsViewer\GvViewerGui\Src\GvvPipelineInterfaceViewer.moc.cpp" />
@@ -2350,7 +2317,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerGui\Inc\GvvActionManager.h" />
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerGui\Inc\GvvAddLightAction.h" />
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerGui\Inc\GvvAddPipelineAction.h" />
-    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerGui\Inc\GvvAddSceneAction.h" />
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerGui\Inc\GvvBrowsableItem.h" />
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerGui\Inc\GvvBrowserItem.h" />
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerGui\Inc\GvvCaptureVideoAction.h" />

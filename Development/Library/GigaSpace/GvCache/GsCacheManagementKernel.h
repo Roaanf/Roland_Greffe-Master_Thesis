@@ -53,7 +53,7 @@
 #include "GvRendering/GsRendererContext.h"
 
 // Cuda
-#include <host_defines.h>
+//#include <host_defines.h>
 
 /******************************************************************************
  ***************************** KERNEL DEFINITION ******************************

@@ -13,15 +13,6 @@
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Src\GvvEnvironment.cpp">
       <Filter>Src</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Src\GvvGLSceneInterface.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Src\GvvGLSceneManager.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Src\GvvGLSceneManagerListener.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Src\GvvLightInterface.cpp">
       <Filter>Src</Filter>
     </ClCompile>
@@ -67,15 +58,6 @@
       <Filter>Inc</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Inc\GvvEnvironment.h">
-      <Filter>Inc</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Inc\GvvGLSceneInterface.h">
-      <Filter>Inc</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Inc\GvvGLSceneManager.h">
-      <Filter>Inc</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Inc\GvvGLSceneManagerListener.h">
       <Filter>Inc</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Inc\GvvLightInterface.h">

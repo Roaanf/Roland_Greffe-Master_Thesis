@@ -477,9 +477,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Src\GvvDataType.cpp" />
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Src\GvvDeviceInterface.cpp" />
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Src\GvvEnvironment.cpp" />
-    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Src\GvvGLSceneInterface.cpp" />
-    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Src\GvvGLSceneManager.cpp" />
-    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Src\GvvGLSceneManagerListener.cpp" />
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Src\GvvLightInterface.cpp" />
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Src\GvvMeshInterface.cpp" />
     <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Src\GvvPipelineInterface.cpp" />
@@ -495,9 +492,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Inc\GvvDataType.h" />
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Inc\GvvDeviceInterface.h" />
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Inc\GvvEnvironment.h" />
-    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Inc\GvvGLSceneInterface.h" />
-    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Inc\GvvGLSceneManager.h" />
-    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Inc\GvvGLSceneManagerListener.h" />
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Inc\GvvLightInterface.h" />
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Inc\GvvMeshInterface.h" />
     <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Inc\GvvPipelineInterface.h" />

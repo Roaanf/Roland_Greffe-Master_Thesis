@@ -186,7 +186,20 @@ void GsTransferFunction::bindToTextureReference( const void* pTextureReferenceSy
 	//texRefPtr->addressMode[ 0 ] = pAddressMode;  Wrap texture coordinates
 	//texRefPtr->addressMode[ 1 ] = pAddressMode;
 	//texRefPtr->addressMode[ 2 ] = pAddressMode;
-
 	// Bind array to 3D texture
-	GS_CUDA_SAFE_CALL( cudaBindTextureToArray( (const textureReference *)pTextureReferenceSymbol, _dataArray, &_channelFormatDesc ) );
+	cudaTextureObject_t tex;
+	cudaResourceDesc texRes;
+	memset(&texRes, 0, sizeof(cudaResourceDesc));
+	texRes.resType = cudaResourceTypeArray;
+	texRes.res.array.array = _dataArray;
+	cudaTextureDesc texDescr;
+	memset(&texDescr, 0, sizeof(cudaTextureDesc));
+	texDescr.normalizedCoords = pNormalizedAccess; // Access with normalized texture coordinates
+	texDescr.filterMode = pFilterMode; // Linear interpolation
+	texDescr.addressMode[ 0 ] = pAddressMode; // Wrap texture coordinates
+	texDescr.addressMode[ 1 ] = pAddressMode;
+	texDescr.addressMode[ 2 ] = pAddressMode;
+
+	GS_CUDA_SAFE_CALL( cudaCreateTextureObject( &tex, &texRes, &texDescr, NULL));
+
 }
