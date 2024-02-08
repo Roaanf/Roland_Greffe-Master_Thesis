@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tutorials\ViewerPlugins\GvRAWDataLoader\Src\CustomEditor.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tutorials\ViewerPlugins\GvRAWDataLoader\Src\CustomSectionEditor.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tutorials\ViewerPlugins\GvRAWDataLoader\Src\Plugin.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tutorials\ViewerPlugins\GvRAWDataLoader\Src\RawFileReader.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Tutorials\ViewerPlugins\GvRAWDataLoader\Src\CustomSectionEditor.moc.cpp">
+      <Filter>Generated</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Tutorials\ViewerPlugins\GvRAWDataLoader\Inc\UI_GvtQCustomEditor.h">
+      <Filter>Generated</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tutorials\ViewerPlugins\GvRAWDataLoader\Inc\CustomEditor.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tutorials\ViewerPlugins\GvRAWDataLoader\Inc\Plugin.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tutorials\ViewerPlugins\GvRAWDataLoader\Inc\PluginConfig.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tutorials\ViewerPlugins\GvRAWDataLoader\Inc\Producer.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tutorials\ViewerPlugins\GvRAWDataLoader\Inc\ProducerKernel.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tutorials\ViewerPlugins\GvRAWDataLoader\Inc\RawFileReader.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tutorials\ViewerPlugins\GvRAWDataLoader\Inc\SampleCore.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tutorials\ViewerPlugins\GvRAWDataLoader\Inc\ShaderKernel.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tutorials\ViewerPlugins\GvRAWDataLoader\Inc\Version.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tutorials\ViewerPlugins\GvRAWDataLoader\Inc\Producer.inl">
+      <Filter>Inl</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tutorials\ViewerPlugins\GvRAWDataLoader\Inc\ProducerKernel.inl">
+      <Filter>Inl</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tutorials\ViewerPlugins\GvRAWDataLoader\Inc\RawFileReader.inl">
+      <Filter>Inl</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tutorials\ViewerPlugins\GvRAWDataLoader\Inc\ShaderKernel.inl">
+      <Filter>Inl</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tutorials\ViewerPlugins\GvRAWDataLoader\Src\SampleCore.cu">
+      <Filter>Src</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tutorials\ViewerPlugins\GvRAWDataLoader\Ui\GvtQCustomEditor.ui" />
+    <CustomBuild Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tutorials\ViewerPlugins\GvRAWDataLoader\Inc\CustomSectionEditor.h">
+      <Filter>Inc</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tutorials\ViewerPlugins\GvRAWDataLoader\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Tutorials\ViewerPlugins\GvRAWDataLoader\CMakeFiles\GvRAWDataLoader.dir\Src\$(Configuration)\GvRAWDataLoader_generated_SampleCore.cu.obj">
+      <Filter>Object Files</Filter>
+    </Object>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Generated">
+      <UniqueIdentifier>{B254E9D6-627A-3204-91BD-112FB8E31498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Inc">
+      <UniqueIdentifier>{1872A893-3832-30CD-892B-D55A6F28C902}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Inl">
+      <UniqueIdentifier>{CAFE5E10-01E3-387C-A3FF-7B194BEA6AFC}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object Files">
+      <UniqueIdentifier>{BFABBFFE-F720-3CF9-985D-7C95D508419C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src">
+      <UniqueIdentifier>{E32BF4EE-C50C-37F9-B873-4B5A7C5959B8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Src\GvvBrowsable.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Src\GvvDataType.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Src\GvvDeviceInterface.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Src\GvvEnvironment.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Src\GvvGLSceneInterface.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Src\GvvGLSceneManager.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Src\GvvGLSceneManagerListener.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Src\GvvLightInterface.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Src\GvvMeshInterface.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Src\GvvPipelineInterface.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Src\GvvPipelineManager.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Src\GvvPipelineManagerListener.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Src\GvvPluginInterface.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Src\GvvPluginManager.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Src\GvvProgrammableShaderInterface.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Src\GvvResourceManager.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Src\GvvTransferFunctionInterface.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Inc\GvvBrowsable.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Inc\GvvCoreConfig.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Inc\GvvDataType.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Inc\GvvDeviceInterface.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Inc\GvvEnvironment.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Inc\GvvGLSceneInterface.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Inc\GvvGLSceneManager.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Inc\GvvGLSceneManagerListener.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Inc\GvvLightInterface.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Inc\GvvMeshInterface.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Inc\GvvPipelineInterface.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Inc\GvvPipelineManager.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Inc\GvvPipelineManagerListener.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Inc\GvvPluginInterface.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Inc\GvvPluginManager.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Inc\GvvProgrammableShaderInterface.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Inc\GvvResourceManager.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Inc\GvvTransferFunctionInterface.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\Inc\GvvVersion.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Tools\GigaVoxelsViewer\GvViewerCore\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Inc">
+      <UniqueIdentifier>{0B6C0ABD-29D9-362C-B47F-6AEBF0BF36C0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src">
+      <UniqueIdentifier>{0857279D-7E6B-3675-81F4-92A8D1B46980}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

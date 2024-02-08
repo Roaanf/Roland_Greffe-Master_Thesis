@@ -1,0 +1,1164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{45B123A5-7337-3D1F-9480-D240258975F9}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.22621.0</WindowsTargetPlatformVersion>
+    <Platform>x64</Platform>
+    <ProjectName>GsCompute</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Library\GsCompute\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">GsCompute.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">GsCompute.d</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.dll</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Library\GsCompute\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">GsCompute.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">GsCompute</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.dll</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateManifest>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\External\Windows\x64\cudpp\include;C:\ProgramData\NVIDIA Corporation\CUDA Samples\v11.2\common\inc;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;NOMINMAX;WIN32_LEAN_AND_MEAN;GSCOMPUTE_MAKEDLL;CMAKE_INTDIR="Debug";GsCompute_EXPORTS</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;NOMINMAX;WIN32_LEAN_AND_MEAN;GSCOMPUTE_MAKEDLL;CMAKE_INTDIR=\"Debug\";GsCompute_EXPORTS</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\External\Windows\x64\cudpp\include;C:\ProgramData\NVIDIA Corporation\CUDA Samples\v11.2\common\inc;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\External\Windows\x64\cudpp\include;C:\ProgramData\NVIDIA Corporation\CUDA Samples\v11.2\common\inc;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <PostBuildEvent>
+      <Message>																											</Message>
+      <Command>setlocal
+echo Copying files to release directory...
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+IF EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Library\GsCompute\DEBUG\GsCompute.d.dll" copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Library\GsCompute\DEBUG\GsCompute.d.dll" "C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Library/../../Release/Bin/GsCompute.d.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+IF EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Library\GsCompute\DEBUG\GsCompute.pdb" copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Library\GsCompute\DEBUG\GsCompute.pdb" "C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Library/../../Release/Bin/GsCompute.d.pdb"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+IF EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Library\GsCompute\DEBUG\GsCompute.d.pdb" copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Library\GsCompute\DEBUG\GsCompute.d.pdb" "C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Library/../../Release/Bin/GsCompute.d.pdb"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+IF EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Library\GsCompute\RELEASE\GsCompute.dll" copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Library\GsCompute\RELEASE\GsCompute.dll" "C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Library/../../Release/Bin/GsCompute.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+IF EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Library\GsCompute\RELEASE\GsCompute.so" copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Library\GsCompute\RELEASE\GsCompute.dll" "C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Library/../../Release/Bin/GsCompute.so"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+IF EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Library\GsCompute\DEBUG\GsCompute.d.lib" copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Library\GsCompute\DEBUG\GsCompute.d.lib" "C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Library/../../Release/Lib/GsCompute.d.lib"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+IF EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Library\GsCompute\RELEASE\GsCompute.lib" copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Library\GsCompute\RELEASE\GsCompute.lib" "C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Library/../../Release/Lib/GsCompute.lib"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GsConfig.h" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GsConfig.h" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GsConfig.h" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCore\*.h*" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCore\*.h*" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvCore"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCore\*.h*" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvCore"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCore\*.inl" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCore\*.inl" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvCore"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCore\*.inl" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvCore"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\*.h*" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\*.h*" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvCache"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\*.h*" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvCache"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\*.inl" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\*.inl" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvCache"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\*.inl" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvCache"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvStructure\*.h*" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvStructure\*.h*" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvStructure"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvStructure\*.h*" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvStructure"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvStructure\*.inl" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvStructure\*.inl" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvStructure"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvStructure\*.inl" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvStructure"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvRendering\*.h*" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvRendering\*.h*" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvRendering"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvRendering\*.h*" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvRendering"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvRendering\*.inl" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvRendering\*.inl" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvRendering"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvRendering\*.inl" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvRendering"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvUtils\*.h*" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvUtils\*.h*" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvUtils"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvUtils\*.h*" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvUtils"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvUtils\*.inl" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvUtils\*.inl" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvUtils"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvUtils\*.inl" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvUtils"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvPerfMon\*.h*" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvPerfMon\*.h*" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvPerfMon"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvPerfMon\*.h*" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvPerfMon"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvPerfMon\*.inl" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvPerfMon\*.inl" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvPerfMon"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvPerfMon\*.inl" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvPerfMon"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvVoxelizer\*.h*" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvVoxelizer\*.h*" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvVoxelizer"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvVoxelizer\*.h*" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvVoxelizer"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvVoxelizer\*.inl" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvVoxelizer\*.inl" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvVoxelizer"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvVoxelizer\*.inl" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvVoxelizer"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsGraphics\GsGraphics\*.h*" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsGraphics\GsGraphics\*.h*" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GsGraphics"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsGraphics\GsGraphics\*.h*" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GsGraphics"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsGraphics\GsGraphics\*.inl" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsGraphics\GsGraphics\*.inl" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GsGraphics"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsGraphics\GsGraphics\*.inl" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GsGraphics"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute\GsCompute\*.h*" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute\GsCompute\*.h*" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GsCompute"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute\GsCompute\*.h*" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GsCompute"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute\GsCompute\*.inl" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute\GsCompute\*.inl" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GsCompute"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute\GsCompute\*.inl" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GsCompute"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+echo Finish copying files...
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PostBuildEvent>
+    <Link>
+      <AdditionalDependencies>cudpp64d.lib;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.2\lib\x64\cudart_static.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Library/../../External/Windows/x64/cudpp/lib;C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Library/../../External/Windows/x64/cudpp/lib/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC16_x64/Library/GsCompute/Debug/GsCompute.d.lib</ImportLibrary>
+      <ProgramDataBaseFile>C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC16_x64/Library/GsCompute/Debug/GsCompute.d.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\External\Windows\x64\cudpp\include;C:\ProgramData\NVIDIA Corporation\CUDA Samples\v11.2\common\inc;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;NOMINMAX;WIN32_LEAN_AND_MEAN;GSCOMPUTE_MAKEDLL;CMAKE_INTDIR="Release";GsCompute_EXPORTS</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;NOMINMAX;WIN32_LEAN_AND_MEAN;GSCOMPUTE_MAKEDLL;CMAKE_INTDIR=\"Release\";GsCompute_EXPORTS</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\External\Windows\x64\cudpp\include;C:\ProgramData\NVIDIA Corporation\CUDA Samples\v11.2\common\inc;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\External\Windows\x64\cudpp\include;C:\ProgramData\NVIDIA Corporation\CUDA Samples\v11.2\common\inc;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <PostBuildEvent>
+      <Message>																											</Message>
+      <Command>setlocal
+echo Copying files to release directory...
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+IF EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Library\GsCompute\DEBUG\GsCompute.d.dll" copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Library\GsCompute\DEBUG\GsCompute.d.dll" "C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Library/../../Release/Bin/GsCompute.d.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+IF EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Library\GsCompute\DEBUG\GsCompute.pdb" copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Library\GsCompute\DEBUG\GsCompute.pdb" "C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Library/../../Release/Bin/GsCompute.d.pdb"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+IF EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Library\GsCompute\DEBUG\GsCompute.d.pdb" copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Library\GsCompute\DEBUG\GsCompute.d.pdb" "C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Library/../../Release/Bin/GsCompute.d.pdb"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+IF EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Library\GsCompute\RELEASE\GsCompute.dll" copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Library\GsCompute\RELEASE\GsCompute.dll" "C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Library/../../Release/Bin/GsCompute.dll"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+IF EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Library\GsCompute\RELEASE\GsCompute.so" copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Library\GsCompute\RELEASE\GsCompute.dll" "C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Library/../../Release/Bin/GsCompute.so"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+IF EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Library\GsCompute\DEBUG\GsCompute.d.lib" copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Library\GsCompute\DEBUG\GsCompute.d.lib" "C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Library/../../Release/Lib/GsCompute.d.lib"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+IF EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Library\GsCompute\RELEASE\GsCompute.lib" copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Library\GsCompute\RELEASE\GsCompute.lib" "C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Library/../../Release/Lib/GsCompute.lib"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GsConfig.h" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GsConfig.h" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GsConfig.h" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCore\*.h*" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCore\*.h*" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvCore"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCore\*.h*" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvCore"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCore\*.inl" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCore\*.inl" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvCore"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCore\*.inl" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvCore"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\*.h*" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\*.h*" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvCache"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\*.h*" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvCache"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\*.inl" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\*.inl" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvCache"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvCache\*.inl" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvCache"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvStructure\*.h*" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvStructure\*.h*" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvStructure"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvStructure\*.h*" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvStructure"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvStructure\*.inl" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvStructure\*.inl" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvStructure"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvStructure\*.inl" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvStructure"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvRendering\*.h*" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvRendering\*.h*" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvRendering"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvRendering\*.h*" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvRendering"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvRendering\*.inl" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvRendering\*.inl" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvRendering"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvRendering\*.inl" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvRendering"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvUtils\*.h*" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvUtils\*.h*" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvUtils"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvUtils\*.h*" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvUtils"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvUtils\*.inl" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvUtils\*.inl" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvUtils"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvUtils\*.inl" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvUtils"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvPerfMon\*.h*" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvPerfMon\*.h*" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvPerfMon"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvPerfMon\*.h*" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvPerfMon"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvPerfMon\*.inl" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvPerfMon\*.inl" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvPerfMon"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvPerfMon\*.inl" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvPerfMon"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvVoxelizer\*.h*" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvVoxelizer\*.h*" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvVoxelizer"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvVoxelizer\*.h*" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvVoxelizer"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvVoxelizer\*.inl" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvVoxelizer\*.inl" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvVoxelizer"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GigaSpace\GvVoxelizer\*.inl" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GvVoxelizer"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsGraphics\GsGraphics\*.h*" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsGraphics\GsGraphics\*.h*" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GsGraphics"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsGraphics\GsGraphics\*.h*" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GsGraphics"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsGraphics\GsGraphics\*.inl" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsGraphics\GsGraphics\*.inl" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GsGraphics"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsGraphics\GsGraphics\*.inl" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GsGraphics"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute\GsCompute\*.h*" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute\GsCompute\*.h*" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GsCompute"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute\GsCompute\*.h*" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GsCompute"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+if EXIST "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute\GsCompute\*.inl" (
+if %errorlevel% neq 0 goto :cmEnd
+echo F | xcopy /d /y /i "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute\GsCompute\*.inl" "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GsCompute"
+if %errorlevel% neq 0 goto :cmEnd
+if errorlevel 1 (
+if %errorlevel% neq 0 goto :cmEnd
+echo Error can't copy "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute\GsCompute\*.inl" to "C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\..\..\Release\Inc\GsCompute"
+if %errorlevel% neq 0 goto :cmEnd
+exit 1
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+)
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+echo Finish copying files...
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PostBuildEvent>
+    <Link>
+      <AdditionalDependencies>cudpp64.lib;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.2\lib\x64\cudart_static.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Library/../../External/Windows/x64/cudpp/lib;C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Library/../../External/Windows/x64/cudpp/lib/$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC16_x64/Library/GsCompute/Release/GsCompute.lib</ImportLibrary>
+      <ProgramDataBaseFile>C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC16_x64/Library/GsCompute/Release/GsCompute.pdb</ProgramDataBaseFile>
+      <SubSystem>Console</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Library/GsCompute/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/rolan/Desktop/GigaVoxelsDev/Development/Library -BC:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC16_x64/Library --check-stamp-file C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC16_x64/Library/GsCompute/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\rolan\Desktop\GigaVoxelsDev\Development\CMake\CUDPP_CMakeImport.cmake;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\CMake\GPU_COMPUTING_SDK_CMakeImport.cmake;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\CMake\GV_CMakeCommon.cmake;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\CMake\GvSettings_CMakeImport.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Library\GsCompute\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Library/GsCompute/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/rolan/Desktop/GigaVoxelsDev/Development/Library -BC:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC16_x64/Library --check-stamp-file C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC16_x64/Library/GsCompute/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\rolan\Desktop\GigaVoxelsDev\Development\CMake\CUDPP_CMakeImport.cmake;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\CMake\GPU_COMPUTING_SDK_CMakeImport.cmake;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\CMake\GV_CMakeCommon.cmake;C:\Users\rolan\Desktop\GigaVoxelsDev\Development\CMake\GvSettings_CMakeImport.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Library\GsCompute\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute\GsCompute\GsDataParallelPrimitives.cpp" />
+    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute\GsCompute\GsDevice.cpp" />
+    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute\GsCompute\GsDeviceManager.cpp" />
+    <ClCompile Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute\GsCompute\GsDeviceProperties.cpp" />
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute\GsCompute\GsComputeConfig.h" />
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute\GsCompute\GsDataParallelPrimitives.h" />
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute\GsCompute\GsDevice.h" />
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute\GsCompute\GsDeviceManager.h" />
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute\GsCompute\GsDeviceProperties.h" />
+    <ClInclude Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Development\Library\GsCompute\GsCompute\GsDataParallelPrimitives.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="C:\Users\rolan\Desktop\GigaVoxelsDev\Generated_VC16_x64\Library\ZERO_CHECK.vcxproj">
+      <Project>{31355CE6-1487-3715-8252-D0030B9C75A1}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

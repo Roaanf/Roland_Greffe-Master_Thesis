@@ -1,0 +1,64 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ALL_BUILD", "ALL_BUILD.vcxproj", "{14CD8BB9-6736-3210-8154-B324F36F691D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6DDD7586-186C-3606-8043-2271D05FFE53} = {6DDD7586-186C-3606-8043-2271D05FFE53}
+		{D9EF1D0D-4BF8-38FA-B0DB-569778930D2B} = {D9EF1D0D-4BF8-38FA-B0DB-569778930D2B}
+		{97BC6124-0FD3-3E6D-821C-8811AA4C45CF} = {97BC6124-0FD3-3E6D-821C-8811AA4C45CF}
+		{49766E17-21BA-3557-A0AF-CE8483868E0B} = {49766E17-21BA-3557-A0AF-CE8483868E0B}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GvViewer", "GigaVoxelsViewer\GvViewer\GvViewer.vcxproj", "{6DDD7586-186C-3606-8043-2271D05FFE53}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D9EF1D0D-4BF8-38FA-B0DB-569778930D2B} = {D9EF1D0D-4BF8-38FA-B0DB-569778930D2B}
+		{97BC6124-0FD3-3E6D-821C-8811AA4C45CF} = {97BC6124-0FD3-3E6D-821C-8811AA4C45CF}
+		{49766E17-21BA-3557-A0AF-CE8483868E0B} = {49766E17-21BA-3557-A0AF-CE8483868E0B}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GvViewerCore", "GigaVoxelsViewer\GvViewerCore\GvViewerCore.vcxproj", "{D9EF1D0D-4BF8-38FA-B0DB-569778930D2B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{49766E17-21BA-3557-A0AF-CE8483868E0B} = {49766E17-21BA-3557-A0AF-CE8483868E0B}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GvViewerGui", "GigaVoxelsViewer\GvViewerGui\GvViewerGui.vcxproj", "{97BC6124-0FD3-3E6D-821C-8811AA4C45CF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D9EF1D0D-4BF8-38FA-B0DB-569778930D2B} = {D9EF1D0D-4BF8-38FA-B0DB-569778930D2B}
+		{49766E17-21BA-3557-A0AF-CE8483868E0B} = {49766E17-21BA-3557-A0AF-CE8483868E0B}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZERO_CHECK", "ZERO_CHECK.vcxproj", "{49766E17-21BA-3557-A0AF-CE8483868E0B}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{14CD8BB9-6736-3210-8154-B324F36F691D}.Debug|x64.ActiveCfg = Debug|x64
+		{14CD8BB9-6736-3210-8154-B324F36F691D}.Release|x64.ActiveCfg = Release|x64
+		{6DDD7586-186C-3606-8043-2271D05FFE53}.Debug|x64.ActiveCfg = Debug|x64
+		{6DDD7586-186C-3606-8043-2271D05FFE53}.Debug|x64.Build.0 = Debug|x64
+		{6DDD7586-186C-3606-8043-2271D05FFE53}.Release|x64.ActiveCfg = Release|x64
+		{6DDD7586-186C-3606-8043-2271D05FFE53}.Release|x64.Build.0 = Release|x64
+		{D9EF1D0D-4BF8-38FA-B0DB-569778930D2B}.Debug|x64.ActiveCfg = Debug|x64
+		{D9EF1D0D-4BF8-38FA-B0DB-569778930D2B}.Debug|x64.Build.0 = Debug|x64
+		{D9EF1D0D-4BF8-38FA-B0DB-569778930D2B}.Release|x64.ActiveCfg = Release|x64
+		{D9EF1D0D-4BF8-38FA-B0DB-569778930D2B}.Release|x64.Build.0 = Release|x64
+		{97BC6124-0FD3-3E6D-821C-8811AA4C45CF}.Debug|x64.ActiveCfg = Debug|x64
+		{97BC6124-0FD3-3E6D-821C-8811AA4C45CF}.Debug|x64.Build.0 = Debug|x64
+		{97BC6124-0FD3-3E6D-821C-8811AA4C45CF}.Release|x64.ActiveCfg = Release|x64
+		{97BC6124-0FD3-3E6D-821C-8811AA4C45CF}.Release|x64.Build.0 = Release|x64
+		{49766E17-21BA-3557-A0AF-CE8483868E0B}.Debug|x64.ActiveCfg = Debug|x64
+		{49766E17-21BA-3557-A0AF-CE8483868E0B}.Debug|x64.Build.0 = Debug|x64
+		{49766E17-21BA-3557-A0AF-CE8483868E0B}.Release|x64.ActiveCfg = Release|x64
+		{49766E17-21BA-3557-A0AF-CE8483868E0B}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1E140846-C8F8-386E-B702-C9401CFD12AE}
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

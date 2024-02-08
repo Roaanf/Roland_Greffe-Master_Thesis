@@ -1,0 +1,8 @@
+C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC16_x64/Library/CMakeFiles/ALL_BUILD.dir
+C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC16_x64/Library/CMakeFiles/ZERO_CHECK.dir
+C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC16_x64/Library/GigaSpace/CMakeFiles/GigaSpace.dir
+C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC16_x64/Library/GigaSpace/CMakeFiles/ALL_BUILD.dir
+C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC16_x64/Library/GsGraphics/CMakeFiles/GsGraphics.dir
+C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC16_x64/Library/GsGraphics/CMakeFiles/ALL_BUILD.dir
+C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC16_x64/Library/GsCompute/CMakeFiles/GsCompute.dir
+C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC16_x64/Library/GsCompute/CMakeFiles/ALL_BUILD.dir

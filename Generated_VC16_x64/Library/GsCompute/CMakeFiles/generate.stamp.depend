@@ -1,0 +1,6 @@
+# CMake generation dependency list for this directory.
+C:/Users/rolan/Desktop/GigaVoxelsDev/Development/CMake/CUDPP_CMakeImport.cmake
+C:/Users/rolan/Desktop/GigaVoxelsDev/Development/CMake/GPU_COMPUTING_SDK_CMakeImport.cmake
+C:/Users/rolan/Desktop/GigaVoxelsDev/Development/CMake/GV_CMakeCommon.cmake
+C:/Users/rolan/Desktop/GigaVoxelsDev/Development/CMake/GvSettings_CMakeImport.cmake
+C:/Users/rolan/Desktop/GigaVoxelsDev/Development/Library/GsCompute/CMakeLists.txt

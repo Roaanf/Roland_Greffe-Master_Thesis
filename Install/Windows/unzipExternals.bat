@@ -11,23 +11,7 @@ rem **************************************************************************
 rem Unzip Externals
 rem **************************************************************************
 
-if %GV_COMPILER%==Visual_Studio_9_2008 (
-    set GS_EXTERNALS_FILE=windows-VS2008-x32.7z
-) else if %GV_COMPILER%==Visual_Studio_9_2008_Win64 (
-    set GS_EXTERNALS_FILE=windows-VS2008-x64.7z
-) else if %GV_COMPILER%==Visual_Studio_10 (
-    set GS_EXTERNALS_FILE=windows-VS2010-x32.7z
-) else if %GV_COMPILER%==Visual_Studio_10_Win64 (
-    set GS_EXTERNALS_FILE=windows-VS2010-x64.7z
-) else if %GV_COMPILER%==Visual_Studio_11 (
-    set GS_EXTERNALS_FILE=windows-VS2012-x32.7z
-) else if %GV_COMPILER%==Visual_Studio_11_Win64 (
-    set GS_EXTERNALS_FILE=windows-VS2012-x64.7z
-) else if %GV_COMPILER%==Visual_Studio_12 (
-    set GS_EXTERNALS_FILE=windows-VS2013-x32.7z
-) else if %GV_COMPILER%==Visual_Studio_12_Win64 (
-    set GS_EXTERNALS_FILE=windows-VS2013-x64.7z
-)
+set GS_EXTERNALS_FILE=windows-VS2013-x64.7z
 
 set CURRENTSCRIPTPATH=%CD%
 cd ..

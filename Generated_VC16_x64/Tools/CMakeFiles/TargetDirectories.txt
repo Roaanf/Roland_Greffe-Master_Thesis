@@ -1,0 +1,8 @@
+C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC16_x64/Tools/CMakeFiles/ALL_BUILD.dir
+C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC16_x64/Tools/CMakeFiles/ZERO_CHECK.dir
+C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC16_x64/Tools/GigaVoxelsViewer/GvViewer/CMakeFiles/GvViewer.dir
+C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC16_x64/Tools/GigaVoxelsViewer/GvViewer/CMakeFiles/ALL_BUILD.dir
+C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC16_x64/Tools/GigaVoxelsViewer/GvViewerCore/CMakeFiles/GvViewerCore.dir
+C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC16_x64/Tools/GigaVoxelsViewer/GvViewerCore/CMakeFiles/ALL_BUILD.dir
+C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC16_x64/Tools/GigaVoxelsViewer/GvViewerGui/CMakeFiles/GvViewerGui.dir
+C:/Users/rolan/Desktop/GigaVoxelsDev/Generated_VC16_x64/Tools/GigaVoxelsViewer/GvViewerGui/CMakeFiles/ALL_BUILD.dir
