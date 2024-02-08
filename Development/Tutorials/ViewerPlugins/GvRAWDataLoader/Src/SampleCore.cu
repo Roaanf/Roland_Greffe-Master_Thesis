@@ -341,7 +341,8 @@ fileload:
 	_pipeline->initialize( _nodeMemoryPool, _brickMemoryPool, shader ); // Juste donnée à la pipeline
 
 	// Producer initialization
-	_producer = new ProducerType( 64 * 1024 * 1024, nodePoolRes.x * nodePoolRes.y * nodePoolRes.z ); // Hardcoded cache size ?
+	// Here the 64*1024*1024 is the size of the buffer used for transfer. It seems to limit the amount of request that are served per frame.
+	_producer = new ProducerType( 64 * 1024 * 1024, nodePoolRes.x * nodePoolRes.y * nodePoolRes.z ); 
 	assert( _producer != NULL );
 	_producer->attachProducer( dataLoader );
 	_pipeline->addProducer( _producer );
