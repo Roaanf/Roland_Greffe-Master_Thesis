@@ -276,6 +276,7 @@ void SampleCore::init()
 		rawFileReader->setDataType( voxelDataType );
 
 		// Read file and build GigaSpace mip-map pyramid files
+		// BRICK SIZE
 		rawFileReader->read(16, _trueX, _trueY, _trueZ); // Must be changed !!!!!
 		
 		// Update internal info

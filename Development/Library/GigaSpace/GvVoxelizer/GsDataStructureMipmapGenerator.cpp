@@ -100,13 +100,13 @@ GsDataStructureMipmapGenerator::~GsDataStructureMipmapGenerator()
  * @param pFilename 3D model file name
  * @param pDataResolution Data resolution
  ******************************************************************************/
-bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& pFileName, unsigned int pDataResolution, const std::vector< GsDataTypeHandler::VoxelDataType >& pDataTypes, GsDataStructureIOHandler* up)
+bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& pFileName, unsigned int pDataResolution, const std::vector< GsDataTypeHandler::VoxelDataType >& pDataTypes, GsDataStructureIOHandler* up, unsigned int brickSize)
 {
 	bool result = false;
 
 	unsigned int dataResolution = pDataResolution;
-	unsigned int levelOfResolution = static_cast< unsigned int >( log( static_cast< float >( dataResolution / 16 ) ) / log( static_cast< float >( 2 ) ) );
-	unsigned int brickWidth = 16; // TO DO : template different size
+	unsigned int levelOfResolution = static_cast< unsigned int >( log( static_cast< float >( dataResolution / brickSize) ) / log( static_cast< float >( 2 ) ) );
+	unsigned int brickWidth = brickSize; // TO DO : template different size
 	//GsDataTypeHandler::VoxelDataType dataType = GsDataTypeHandler::gvUCHAR4;	// TO DO : template differents type
 	//GsDataTypeHandler::VoxelDataType dataType = GsDataTypeHandler::gvUCHAR;
 	//GsDataTypeHandler::VoxelDataType dataType = GsDataTypeHandler::gvUSHORT;
