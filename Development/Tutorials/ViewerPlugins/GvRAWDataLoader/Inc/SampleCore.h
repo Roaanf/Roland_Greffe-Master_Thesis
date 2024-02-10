@@ -425,6 +425,13 @@ public:
 	void set3DModelResolution( unsigned int pValue );
 
 	/**
+	 * Set the 3D model resolution
+	 *
+	 * @param pValue the 3D model resolution
+	 */
+	void setTrueResolution(unsigned int trueX, unsigned int trueY, unsigned int trueZ);
+
+	/**
 	 * Get the producer's threshold
 	 *
 	 * @return the threshold
@@ -695,6 +702,10 @@ private:
 	size_t _nodeMemoryPool;
 
 	size_t _brickMemoryPool;
+
+	unsigned int _trueX;
+	unsigned int _trueY;
+	unsigned int _trueZ;
 
 	/**
 	 * GigaSpace producer

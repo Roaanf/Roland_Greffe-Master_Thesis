@@ -141,6 +141,9 @@ void GvMyPlugin::initialize()
 	QString modelFilename;
 	unsigned int modelResolution;
 	unsigned int brickSize;
+	unsigned int trueX;
+	unsigned int trueY;
+	unsigned int trueZ;
   
 	if ( dataLoaderDialog != NULL )
 	{
@@ -151,17 +154,18 @@ void GvMyPlugin::initialize()
 			// Retrieve data from loader
 			modelFilename = dataLoaderDialog->get3DModelFilename();
 			
-			if (false) {
-				// TODO parsing of the .mhd
-			}
-			else {
-				modelResolution = dataLoaderDialog->get3DModelResolution();
-				brickSize = dataLoaderDialog->getBrickSize();
+			modelResolution = dataLoaderDialog->get3DModelResolution();
+			brickSize = dataLoaderDialog->getBrickSize();
+			trueX = dataLoaderDialog->getTrueX();
+			trueY = dataLoaderDialog->getTrueY();
+			trueZ = dataLoaderDialog->getTrueZ();
 				
-				std::cout << "Checking the values..." << std::endl;
-				std::cout << "modelResolution: " << modelResolution << std::endl;
-				std::cout << "brickSize: " << brickSize << std::endl;
-			}
+			std::cout << "Checking the values..." << std::endl;
+			std::cout << "modelResolution: " << modelResolution << std::endl;
+			std::cout << "brickSize: " << brickSize << std::endl;
+			std::cout << "trueX: " << trueX << std::endl;
+			std::cout << "trueY: " << trueY << std::endl;
+			std::cout << "trueZ: " << trueZ << std::endl;
 		}
 		
 		if (modelFilename == "") {
@@ -221,6 +225,7 @@ void GvMyPlugin::initialize()
 	{
 		_pipeline->set3DModelFilename( modelFilename.toLatin1().constData() );
 		_pipeline->set3DModelResolution( modelResolution );
+		_pipeline->setTrueResolution(trueX, trueY, trueZ);
 
 		// TO DO
 		// add true resolution too !!!

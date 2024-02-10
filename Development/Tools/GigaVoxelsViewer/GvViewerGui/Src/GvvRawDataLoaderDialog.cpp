@@ -136,7 +136,43 @@ unsigned int GvvRawDataLoaderDialog::getModelDataType() const
  ******************************************************************************/
 unsigned int GvvRawDataLoaderDialog::getBrickSize() const
 {
-	unsigned int brickResolution = _brickSize->currentText().toInt();
+	unsigned int brickResolution = _brickSize->currentText().toUInt();
+
+	return brickResolution;
+}
+
+/******************************************************************************
+ * Get the 3D model resolution
+ *
+ * @return the 3D model resolution
+ ******************************************************************************/
+unsigned int GvvRawDataLoaderDialog::getTrueX() const
+{
+	unsigned int brickResolution = _trueXSpinBox->value();
+
+	return brickResolution;
+}
+
+/******************************************************************************
+ * Get the 3D model resolution
+ *
+ * @return the 3D model resolution
+ ******************************************************************************/
+unsigned int GvvRawDataLoaderDialog::getTrueY() const
+{
+	unsigned int brickResolution = _trueXSpinBox->value();
+
+	return brickResolution;
+}
+
+/******************************************************************************
+ * Get the 3D model resolution
+ *
+ * @return the 3D model resolution
+ ******************************************************************************/
+unsigned int GvvRawDataLoaderDialog::getTrueZ() const
+{
+	unsigned int brickResolution = _trueXSpinBox->value();
 
 	return brickResolution;
 }

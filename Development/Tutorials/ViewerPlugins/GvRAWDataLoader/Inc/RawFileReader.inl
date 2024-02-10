@@ -105,13 +105,13 @@ TType RawFileReader< TType >::getMaxDataValue() const
  * Load/import the scene the scene
  ******************************************************************************/
 template< typename TType >
-bool RawFileReader< TType >::readData(const size_t brickWidth)
+bool RawFileReader< TType >::readData(const size_t brickWidth, const size_t trueX, const size_t trueY, const size_t trueZ)
 {
 	bool result = false;
 
 	// Read data and create the GigaSpace mip-map pyramid of files
 	//result = bruteForceReadData();
-	result = optimizedReadData(brickWidth);
+	result = optimizedReadData(brickWidth, trueX, trueY, trueZ);
 	
 	return result;
 }
@@ -120,7 +120,7 @@ bool RawFileReader< TType >::readData(const size_t brickWidth)
  * ...
  ******************************************************************************/
 template< typename TType >
-bool RawFileReader< TType >::optimizedReadData(const size_t brickWidth)
+bool RawFileReader< TType >::optimizedReadData(const size_t brickWidth, const size_t trueX_in, const size_t trueY_in, const size_t trueZ_in)
 {
 	std::string dataFilename = getFilename() + ".raw";
 
@@ -137,9 +137,10 @@ bool RawFileReader< TType >::optimizedReadData(const size_t brickWidth)
 		std::cout << "Nb values : " << nbValues << std::endl;
 		// Hardcoded RN because try to see if it works
 		// TODO : use the .mhd file that should always be there
-		size_t trueX = 840;
-		size_t trueY = 1103;
-		size_t trueZ = 840;
+		size_t trueX = trueX_in;
+		size_t trueY = trueY_in;
+		size_t trueZ = trueZ_in;
+		std::cout << "True Sizes : " << trueX << " / " << trueY << " / " << trueZ << std::endl;
 		//test 
 
 		const size_t trueNbValues = trueX * trueY * trueZ;

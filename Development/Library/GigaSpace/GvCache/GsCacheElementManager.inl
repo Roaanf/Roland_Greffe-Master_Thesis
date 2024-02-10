@@ -134,14 +134,18 @@ GsCacheElementManager< TId, ElementRes, AddressType, PageTableArrayType, PageTab
 	GvCore::Array3D< uint > tmpelemaddress( make_uint3( _elemsCacheSize.x * _elemsCacheSize.y * _elemsCacheSize.z, 1, 1 ) );
 	uint3 pos;
 	uint index = 0;
-	for ( pos.z = 0; pos.z < _elemsCacheSize.z; pos.z++ )
-	for ( pos.y = 0; pos.y < _elemsCacheSize.y; pos.y++ )
-	for ( pos.x = 0; pos.x < _elemsCacheSize.x; pos.x++ )
+	uint packedAddr;
+	for (pos.z = 0; pos.z < _elemsCacheSize.z; pos.z++)
+	for (pos.y = 0; pos.y < _elemsCacheSize.y; pos.y++)
+	for (pos.x = 0; pos.x < _elemsCacheSize.x; pos.x++)
 	{
-		tmpelemaddress.get( index ) = AddressType::packAddress( pos );
+		packedAddr = AddressType::packAddress(pos);
+		tmpelemaddress.get(index) = packedAddr;
 		index++;
 	}
+
 	// Dont use element zero !
+	// _d_elemAddressList contient une liste de toutes les addresses possible des bricks dans le cache
 	GvCore::memcpyArray( _d_elemAddressList, tmpelemaddress.getPointer() + _cNbLockedElements, this->_numElements );
 
 	GS_CUDA_SAFE_CALL( cudaMalloc( (void**) &_d_numElementsPtr, sizeof( size_t ) ) );
@@ -151,10 +155,12 @@ GsCacheElementManager< TId, ElementRes, AddressType, PageTableArrayType, PageTab
 
 	// LOG info
 	std::cout << "\nCache Manager [ id " << Id::value << " ]" << std::endl;
-	std::cout << "- cache size (Bytes) : " << _cacheSize << std::endl;
+	std::cout << "- cache size (Voxels) : " << _cacheSize << std::endl;
 	std::cout << "- elements cache size (Bricks) : " << _elemsCacheSize << std::endl;
 	std::cout << "- nb elements : " << this->_numElements << std::endl;
 	std::cout << "- page table's linear resolution : " << pageTableResLinear << std::endl;
+	std::cout << "Dernier Pos du cache : " << pos.x << " / " << pos.y << " / " << pos.z << std::endl;
+	std::cout << "Last packed address : " << packedAddr << std::endl;
 }
 
 /******************************************************************************
@@ -315,9 +321,12 @@ void GsCacheElementManager< TId, ElementRes, AddressType, PageTableArrayType, Pa
 	for ( pos.y = 0; pos.y < _elemsCacheSize.y; pos.y++ )
 	for ( pos.x = 0; pos.x < _elemsCacheSize.x; pos.x++ )
 	{
-		tmpelemaddress.get( index ) = AddressType::packAddress( pos );
+		packedAddr = AddressType::packAddress(pos);
+		tmpelemaddress.get(index) = packedAddr;
 		index++;
 	}
+	std::cout << "Pos after cache clear : " << pos << std::endl;
+	
 	// Don't use element zero !
 	GvCore::memcpyArray( _d_elemAddressList, tmpelemaddress.getPointer() + _cNbLockedElements, this->_numElements );
 

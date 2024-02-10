@@ -127,7 +127,7 @@ inline unsigned int cclog2(unsigned int value)
 # define __uimul(a, b)	__umul24(a, b)
 #else
 # define __imul(a, b)	((a) * (b))
-# define __uimul(a, b)	((a) * (b))
+# define __uimul(a, b)	(((size_t)(a)) * ((size_t)(b)))
 #endif
 
 /**

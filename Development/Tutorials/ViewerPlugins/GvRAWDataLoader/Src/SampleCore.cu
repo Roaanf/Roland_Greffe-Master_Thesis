@@ -201,7 +201,7 @@ void SampleCore::init()
 	size_t freeGPUMem, totalGPUMem;
 	cudaMemGetInfo( &freeGPUMem, &totalGPUMem);
   
-	_brickMemoryPool = (size_t)2048 * (size_t)1024 * (size_t)1024;
+	_brickMemoryPool = (size_t)3000 * (size_t)1024 * (size_t)1024;
 	freeGPUMem *= 0.70;
   
 	// Temp fix because we have issue with data pools > 2Go
@@ -276,7 +276,7 @@ void SampleCore::init()
 		rawFileReader->setDataType( voxelDataType );
 
 		// Read file and build GigaSpace mip-map pyramid files
-		rawFileReader->read(16); // Must be changed !!!!!
+		rawFileReader->read(16, _trueX, _trueY, _trueZ); // Must be changed !!!!!
 		
 		// Update internal info
 		_minDataValue = static_cast< float >( rawFileReader->getMinDataValue() );
@@ -886,6 +886,18 @@ unsigned int SampleCore::get3DModelResolution() const
 void SampleCore::set3DModelResolution( unsigned int pValue )
 {
 	_resolution = pValue;
+}
+
+/******************************************************************************
+ * Set the 3D model resolution
+ *
+ * @param pValue the 3D model resolution
+ ******************************************************************************/
+void SampleCore::setTrueResolution(unsigned int trueX, unsigned int trueY, unsigned int trueZ)
+{
+	_trueX = trueX;
+	_trueY = trueY;
+	_trueZ = trueZ;
 }
 
 /******************************************************************************

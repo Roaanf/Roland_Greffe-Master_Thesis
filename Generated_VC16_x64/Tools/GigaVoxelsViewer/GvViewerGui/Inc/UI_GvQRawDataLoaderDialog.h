@@ -22,6 +22,7 @@
 #include <QtGui/QLabel>
 #include <QtGui/QLineEdit>
 #include <QtGui/QSpacerItem>
+#include <QtGui/QSpinBox>
 #include <QtGui/QToolButton>
 #include <QtGui/QVBoxLayout>
 
@@ -43,6 +44,10 @@ public:
     QComboBox *_maxResolutionComboBox;
     QLabel *label_2;
     QComboBox *_brickSize;
+    QLabel *label_21;
+    QSpinBox *_trueXSpinBox;
+    QSpinBox *_trueYSpinBox;
+    QSpinBox *_trueZSpinBox;
     QDialogButtonBox *buttonBox;
 
     void setupUi(QDialog *GvQRawDataLoaderDialog)
@@ -110,6 +115,35 @@ public:
         _brickSize->setLayoutDirection(Qt::RightToLeft);
 
         gridLayout->addWidget(_brickSize, 3, 1, 1, 1);
+
+        label_21 = new QLabel(groupBox);
+        label_21->setObjectName(QString::fromUtf8("label_21"));
+
+        gridLayout->addWidget(label_21, 4, 0, 1, 1);
+
+        _trueXSpinBox = new QSpinBox(groupBox);
+        _trueXSpinBox->setObjectName(QString::fromUtf8("_trueXSpinBox"));
+        _trueXSpinBox->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        _trueXSpinBox->setMinimum(0);
+        _trueXSpinBox->setMaximum(1e+06);
+
+        gridLayout->addWidget(_trueXSpinBox, 4, 1, 1, 1);
+
+        _trueYSpinBox = new QSpinBox(groupBox);
+        _trueYSpinBox->setObjectName(QString::fromUtf8("_trueYSpinBox"));
+        _trueYSpinBox->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        _trueYSpinBox->setMinimum(0);
+        _trueYSpinBox->setMaximum(1e+06);
+
+        gridLayout->addWidget(_trueYSpinBox, 4, 2, 1, 1);
+
+        _trueZSpinBox = new QSpinBox(groupBox);
+        _trueZSpinBox->setObjectName(QString::fromUtf8("_trueZSpinBox"));
+        _trueZSpinBox->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        _trueZSpinBox->setMinimum(0);
+        _trueZSpinBox->setMaximum(1e+06);
+
+        gridLayout->addWidget(_trueZSpinBox, 4, 3, 1, 1);
 
 
         verticalLayout->addWidget(groupBox);
@@ -182,6 +216,22 @@ public:
         );
 #ifndef QT_NO_TOOLTIP
         _brickSize->setToolTip(QApplication::translate("GvQRawDataLoaderDialog", "Size of the brick", 0, QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_TOOLTIP
+        label_21->setToolTip(QApplication::translate("GvQRawDataLoaderDialog", "True res.", 0, QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
+        label_21->setText(QApplication::translate("GvQRawDataLoaderDialog", "X/Y/Z", 0, QApplication::UnicodeUTF8));
+#ifndef QT_NO_TOOLTIP
+        _trueXSpinBox->setToolTip(QApplication::translate("GvQRawDataLoaderDialog", "Scalar value used when streaming data from Host.\n"
+"It can be used to optimize the internal data structure by flagging nodes as empty.", 0, QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_TOOLTIP
+        _trueYSpinBox->setToolTip(QApplication::translate("GvQRawDataLoaderDialog", "Scalar value used when streaming data from Host.\n"
+"It can be used to optimize the internal data structure by flagging nodes as empty.", 0, QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_TOOLTIP
+        _trueZSpinBox->setToolTip(QApplication::translate("GvQRawDataLoaderDialog", "Scalar value used when streaming data from Host.\n"
+"It can be used to optimize the internal data structure by flagging nodes as empty.", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
     } // retranslateUi
 

@@ -215,6 +215,68 @@
 				 </item>
 			 </widget>
 		 </item>
+     <item row="4" column="0">
+			 <widget class="QLabel" name="label_2">
+				 <property name="toolTip">
+					 <string>True res.</string>
+				 </property>
+				 <property name="text">
+					 <string>X/Y/Z</string>
+				 </property>
+			 </widget>
+		 </item>
+	    <item row="4" column="1">
+			 <widget class="QSpinBox" name="_trueXSpinBox">
+        <property name="toolTip">
+         <string>Scalar value used when streaming data from Host.
+It can be used to optimize the internal data structure by flagging nodes as empty.</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="minimum">
+			<double>0</double>
+        </property>
+        <property name="maximum">
+			<double>1000000</double>
+        </property>
+       </widget>
+		 </item>
+     <item row="4" column="2">
+			 <widget class="QSpinBox" name="_trueYSpinBox">
+        <property name="toolTip">
+         <string>Scalar value used when streaming data from Host.
+It can be used to optimize the internal data structure by flagging nodes as empty.</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="minimum">
+         <double>0</double>
+        </property>
+        <property name="maximum">
+			<double>1000000</double>
+        </property>
+       </widget>
+		 </item>
+     <item row="4" column="3">
+			 <widget class="QSpinBox" name="_trueZSpinBox">
+        <property name="toolTip">
+         <string>Scalar value used when streaming data from Host.
+It can be used to optimize the internal data structure by flagging nodes as empty.</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="minimum">
+			<double>0</double>
+        
+ </property>
+        <property name="maximum">
+			<double>1000000</double>
+        </property>
+       </widget>
+		 </item>
      </layout>
     </widget>
    </item>

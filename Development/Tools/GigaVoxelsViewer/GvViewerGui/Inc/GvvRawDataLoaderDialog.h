@@ -105,6 +105,27 @@ public:
 	 */
 	unsigned int getBrickSize() const;
 
+	/**
+	 * Get the 3D model resolution
+	 *
+	 * @return the 3D model resolution
+	 */
+	unsigned int getTrueX() const;
+
+	/**
+	 * Get the 3D model resolution
+	 *
+	 * @return the 3D model resolution
+	 */
+	unsigned int getTrueY() const;
+
+	/**
+	 * Get the 3D model resolution
+	 *
+	 * @return the 3D model resolution
+	 */
+	unsigned int getTrueZ() const;
+
 	/**************************************************************************
 	 **************************** PROTECTED SECTION ***************************
 	 **************************************************************************/

@@ -136,9 +136,9 @@ protected:
 	/**
 	 * Load/import the scene
 	 */
-	virtual bool readData(const size_t brickWidth);
+	virtual bool readData(const size_t brickWidth, const size_t trueX, const size_t trueY, const size_t trueZ);
 
-	bool optimizedReadData(const size_t brickWidth);
+	bool optimizedReadData(const size_t brickWidth, const size_t trueX, const size_t trueY, const size_t trueZ);
 
 	/**************************************************************************
 	 ***************************** PRIVATE SECTION ****************************

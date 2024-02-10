@@ -186,21 +186,10 @@ void GsKernel_CacheManager_retrieveElementUsageMasks( GsCacheManagerKernel< Elem
 	 ******************************************************************************/
 	template< typename AddressType >
 	__global__
-	// __launch_bounds__( maxThreadsPerBlock, minBlocksPerMultiprocessor )
+	// __launch_bounds__( maxThreadsPerBlock, minBlocksPerMultiprocessor ) // UNUSED !!!!
 	void InitElemAddressList( uint* addressList, uint numElems, uint3 elemsCacheRes )
 	{
-		uint lineSize = __uimul( blockDim.x, gridDim.x );
-		uint elem = threadIdx.x + __uimul( blockIdx.x, blockDim.x ) + __uimul( blockIdx.y, lineSize );
-
-		if ( elem < numElems )
-		{
-			uint3 pos;
-			pos.x = elem % elemsCacheRes.x;
-			pos.y = ( elem / elemsCacheRes.x ) % elemsCacheRes.y;
-			pos.z = ( elem / ( elemsCacheRes.x * elemsCacheRes.y ) );
-
-			addressList[ elem - 1 ] = AddressType::packAddress( pos );
-		}
+		return;
 	}
 
 /******************************************************************************
@@ -221,8 +210,8 @@ void CacheManagerFlagInvalidations( GsCacheManagerKernel< ElementRes, AddressTyp
 								   const uint pNbElements, const uint* __restrict__ pSortedElemAddressList )
 {
 	// Retrieve global index
-	const uint lineSize = __uimul( blockDim.x, gridDim.x );
-	const uint elem = threadIdx.x + __uimul( blockIdx.x, blockDim.x ) + __uimul( blockIdx.y, lineSize );
+	const size_t lineSize = __uimul(blockDim.x, gridDim.x);
+	const size_t elem = (size_t)threadIdx.x + __uimul(blockIdx.x, blockDim.x) + __uimul(blockIdx.y, lineSize);
 
 	// Check bounds
 	if ( elem < pNbElements )
@@ -253,8 +242,8 @@ void CacheManagerInvalidatePointers( GsCacheManagerKernel< ElementRes, AddressTy
 									const uint pNbElements, PageTableKernelArrayType pPageTable )
 {
 	// Retrieve global data index
-	const uint lineSize = __uimul( blockDim.x, gridDim.x );
-	const uint elem = threadIdx.x + __uimul( blockIdx.x, blockDim.x ) + __uimul( blockIdx.y, lineSize );
+	const size_t lineSize = __uimul( blockDim.x, gridDim.x );
+	const size_t elem = (size_t)threadIdx.x + __uimul( blockIdx.x, blockDim.x ) + __uimul( blockIdx.y, lineSize );
 
 	// Check bounds
 	if ( elem < pNbElements )
@@ -294,8 +283,8 @@ __global__
 void CacheManagerCreateUpdateMask( const uint pNbElements, const uint* __restrict__ pUpdateList, uint* __restrict__ pResMask, const uint pFlag )
 {
 	// Retrieve global data index
-	const uint lineSize = __uimul( blockDim.x, gridDim.x );
-	const uint elem = threadIdx.x + __uimul( blockIdx.x, blockDim.x ) + __uimul( blockIdx.y, lineSize );
+	const size_t lineSize = __uimul(blockDim.x, gridDim.x);
+	const size_t elem = (size_t)threadIdx.x + __uimul(blockIdx.x, blockDim.x) + __uimul(blockIdx.y, lineSize);
 
 	// Out of bound check
 	if ( elem < pNbElements )
@@ -333,8 +322,8 @@ __global__
 void CacheManagerCreateUpdateMask( const uint pNbElements, const uint* __restrict__ pRequests, uint* __restrict__ pMasks, const uint pFlag, const uint* __restrict__ pObjectIDs, const uint pObjectID )
 {
 	// Retrieve global data index
-	const uint lineSize = __uimul( blockDim.x, gridDim.x );
-	const uint elem = threadIdx.x + __uimul( blockIdx.x, blockDim.x ) + __uimul( blockIdx.y, lineSize );
+	const size_t lineSize = __uimul(blockDim.x, gridDim.x);
+	const size_t elem = (size_t)threadIdx.x + __uimul(blockIdx.x, blockDim.x) + __uimul(blockIdx.y, lineSize);
 
 	// Out of bound check
 	if ( elem < pNbElements )
@@ -369,8 +358,8 @@ void CacheManagerCreateUpdateMask( const uint pNbElements, const uint* __restric
 	// __launch_bounds__( maxThreadsPerBlock, minBlocksPerMultiprocessor )
 	void UpdateBrickUsageFromNodes( uint numElem, uint *nodeTilesAddressList, VolTreeKernel volumeTree, GPUCacheType gpuCache )
 	{
-		uint lineSize = __uimul( blockDim.x, gridDim.x );
-		uint elem = threadIdx.x + __uimul( blockIdx.x, blockDim.x ) + __uimul( blockIdx.y, lineSize );
+		const size_t lineSize = __uimul(blockDim.x, gridDim.x);
+		const size_t elem = (size_t)threadIdx.x + __uimul(blockIdx.x, blockDim.x) + __uimul(blockIdx.y, lineSize);
 
 		if ( elem < numElem )
 		{
@@ -405,14 +394,14 @@ void CacheManagerCreateUpdateMask( const uint pNbElements, const uint* __restric
 	// __launch_bounds__( maxThreadsPerBlock, minBlocksPerMultiprocessor )
 	void SyntheticInfo_Update_DataWrite( uchar4* syntheticBuffer, uint numElems, uint* lruElemAddressList, uint3 elemsCacheSize )
 	{
-		uint lineSize = __uimul( blockDim.x, gridDim.x );
-		uint elem = threadIdx.x + __uimul( blockIdx.x, blockDim.x ) + __uimul( blockIdx.y, lineSize );
+		const size_t lineSize = __uimul(blockDim.x, gridDim.x);
+		const size_t elem = (size_t)threadIdx.x + __uimul(blockIdx.x, blockDim.x) + __uimul(blockIdx.y, lineSize);
 
 		if ( elem < numElems )
 		{
 			uint pageIdxEnc = lruElemAddressList[ elem ];
 			uint3 pageIdx = AddressType::unpackAddress( pageIdxEnc );
-			uint syntheticIdx = pageIdx.x + pageIdx.y * elemsCacheSize.x + pageIdx.z * elemsCacheSize.x * elemsCacheSize.y;
+			size_t syntheticIdx = (size_t)pageIdx.x + (size_t)pageIdx.y * (size_t)elemsCacheSize.x + (size_t)pageIdx.z * (size_t)elemsCacheSize.x * (size_t)elemsCacheSize.y;
 			syntheticBuffer[ syntheticIdx ].w = 1;
 		}
 	}
@@ -430,14 +419,14 @@ void CacheManagerCreateUpdateMask( const uint pNbElements, const uint* __restric
 	// __launch_bounds__( maxThreadsPerBlock, minBlocksPerMultiprocessor )
 	void SyntheticInfo_Update_PageUsed( uchar4* syntheticBuffer, uint numPageUsed, uint* usedPageList, uint3 elemsCacheSize )
 	{
-		uint lineSize = __uimul( blockDim.x, gridDim.x );
-		uint elem = threadIdx.x + __uimul( blockIdx.x, blockDim.x ) + __uimul( blockIdx.y, lineSize );
+		const size_t lineSize = __uimul(blockDim.x, gridDim.x);
+		const size_t elem = (size_t)threadIdx.x + __uimul(blockIdx.x, blockDim.x) + __uimul(blockIdx.y, lineSize);
 
 		if ( elem < numPageUsed )
 		{
 			uint pageIdxEnc = usedPageList[ elem ];
 			uint3 pageIdx = AddressType::unpackAddress( pageIdxEnc );
-			uint syntheticIdx = pageIdx.x + pageIdx.y * elemsCacheSize.x + pageIdx.z * elemsCacheSize.x * elemsCacheSize.y;
+			size_t syntheticIdx = (size_t)pageIdx.x + (size_t)pageIdx.y * (size_t)elemsCacheSize.x + (size_t)pageIdx.z * (size_t)elemsCacheSize.x * (size_t)elemsCacheSize.y;
 			syntheticBuffer[ syntheticIdx ].x = 1;
 		}
 	}

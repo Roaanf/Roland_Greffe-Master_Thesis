@@ -223,7 +223,7 @@ template< typename T >
 __device__
 __forceinline__ void GsLinearMemoryKernel< T >::set( const uint3& pPosition, T pVal )
 {
-	_data[ getOffset( pPosition ) ] = pVal;
+	_data[ (size_t)getOffset( pPosition ) ] = pVal;
 }
 
 /******************************************************************************
