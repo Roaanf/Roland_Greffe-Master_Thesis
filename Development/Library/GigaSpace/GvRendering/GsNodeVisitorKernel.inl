@@ -198,6 +198,7 @@ __forceinline__ void GsNodeVisitorKernel
 	// - given the previously found node, we store its associated brick address in cache to be able to fetch data in the datapool
 	// - we can also store the brick address of the parent node to do linear interpolation of the two level of resolution
 	// - for all of this, we store the bottom left position in cache of the associated bricks (note : brick address is a voxel index in the cache)
+	// VOXEL
 	if ( pNode.isBrick() )
 	{
 		pBrickSampler._nodeSizeTree = pNodeSizeTree;

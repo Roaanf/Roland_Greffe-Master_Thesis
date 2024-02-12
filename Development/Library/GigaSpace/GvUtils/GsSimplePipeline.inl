@@ -110,13 +110,14 @@ inline void GsSimplePipeline< TShaderType, TDataStructureType, TCacheType >
 	_brickPoolMemorySize = pBrickPoolMemorySize;
 
 	// Compute the resolution of the pools
-	// Normalement pas un pb que ce soit des uint bu que c'est les dimensions 
+	// Normalement pas un pb que ce soit des uint vu que c'est les dimensions 
 	uint3 nodePoolResolution;
 	uint3 brickPoolResolution;
 	computePoolResolution( nodePoolResolution, brickPoolResolution ); // Changes the values directly ?
 
-	std::cout << "\nNode pool resolution : " << nodePoolResolution << std::endl;
-	std::cout << "Brick pool resolution : " << brickPoolResolution << std::endl;
+	std::cout << "\nSimplePipeline calulations : " << std::endl;
+	std::cout << "Node pool resolution (Voxels) : " << nodePoolResolution << std::endl;
+	std::cout << "Brick pool resolution (Voxels) : " << brickPoolResolution << std::endl;
 
 	// Retrieve the requested graphics library interoperability mode
 	const unsigned int useGraphicsLibraryInteroperability = pUseGraphicsLibraryInteroperability ? 1 : 0;

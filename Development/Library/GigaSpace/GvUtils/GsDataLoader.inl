@@ -379,7 +379,7 @@ unsigned int GsDataLoader< TDataTypeList >
 		// Compute the index of the node in the buffer of nodes, given its position
 		//
 		// Nodes are stored in increasing order from X axis first, then Y axis, then Z axis.
-		size_t indexPos = pBlockPos.x + pBlockPos.y * blocksInLevel.x + pBlockPos.z * blocksInLevel.x * blocksInLevel.y;
+		size_t indexPos = (size_t)pBlockPos.x + (size_t)pBlockPos.y * (size_t)blocksInLevel.x + (size_t)pBlockPos.z * (size_t)blocksInLevel.x * (size_t)blocksInLevel.y;
 
 		// Get the node address
 		indexValue = _blockIndexCache[ pLevel ][ indexPos ];
@@ -589,11 +589,11 @@ uint GsDataLoader< TDataTypeList >
 	uint3 blockPosition = getBlockCoords( level, pPosition );
 
 	// Retrieve the resolution at given level (i.e. the number of voxels in each dimension)
-	uint3 levelsize = getLevelRes( level );
+	//uint3 levelsize = getLevelRes( level );
 	//uint3 blocksinlevel = levelsize / this->_bricksRes;	// seem to be not used anymore...
 
 	// Compute full brick resolution (with borders)
-	uint3 trueBlocksRes = this->_bricksRes + make_uint3( 2 * this->_borderSize );
+	//uint3 trueBlocksRes = this->_bricksRes + make_uint3( 2 * this->_borderSize );
 
 	// Check mipmap level bounds
 	if ( level >= 0 && level < _numMipMapLevels )

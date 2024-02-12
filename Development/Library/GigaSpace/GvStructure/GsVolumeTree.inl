@@ -554,7 +554,7 @@ struct GvDataPoolSerializer
 
 /******************************************************************************
  * This method is called to serialize an object
- *
+ * Is this even used ???
  * @param pStream the stream where to write
  ******************************************************************************/
 template< class DataTList, class NodeTileRes, class BrickRes, uint BorderSize, typename TDataStructureKernelType >

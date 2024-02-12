@@ -168,6 +168,8 @@ inline uint ProducerKernel< TDataStructureType >
 * @param pNewElemAddress The address at which to write the produced data in the pool
 * @param pParentLocInfo The localization info used to locate an element in the pool
 * @param Loki::Int2Type< 1 > corresponds to the index of the brick pool
+* 
+* This is done VOXEL per VOXEL the issue is very probably here !!!
 *
 * @return A feedback value that the user can return.
 ******************************************************************************/
