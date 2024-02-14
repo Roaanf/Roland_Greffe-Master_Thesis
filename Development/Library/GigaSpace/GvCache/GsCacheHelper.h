@@ -109,7 +109,7 @@ public:
 	template< typename ElementRes, typename GPUPoolType, typename GPUProviderType, typename PageTableType >
 	inline void genericWriteIntoCache( uint pNumElements, uint* pNodesAddressList, uint* pElemAddressList,
 										const GPUPoolType& pGpuPool, const GPUProviderType& pGpuProvider,
-										const PageTableType& pPageTable, const dim3& pBlockSize );
+										const PageTableType& pPageTable, const dim3& pBlockSize, const bool reconvert );
 
 	/**************************************************************************
 	 **************************** PROTECTED SECTION ***************************

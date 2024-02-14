@@ -197,11 +197,11 @@ void SampleCore::init()
 
 	// TO DO :
 	// Define the brick memory pool size according to the available VRAM
-	// cudaMemGetInfo isn't giving me the correct value bruh -> might be correct actually but does swap stuff ?
+	// cudaMemGetInfo isn't giving me the correct value bruh -> might be correct actually but does swap stuff ?f
 	size_t freeGPUMem, totalGPUMem;
 	cudaMemGetInfo( &freeGPUMem, &totalGPUMem);
   
-	_brickMemoryPool = (size_t)3000 * (size_t)1024 * (size_t)1024;
+	_brickMemoryPool = (size_t)2000 * (size_t)1024 * (size_t)1024;
 	freeGPUMem *= 0.70;
   
 	// Temp fix because we have issue with data pools > 2Go

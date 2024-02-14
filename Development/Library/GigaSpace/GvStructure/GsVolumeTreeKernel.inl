@@ -143,6 +143,14 @@ __forceinline__ float4 VolumeTreeKernel< DataTList, NodeTileRes, BrickRes, Borde
 {
 	float4 vox;
 
+	/*
+	if (threadIdx.x == 0) {
+		printf("brickChildPosInPool : %f / %f / %f \n", brickChildPosInPool.x, brickChildPosInPool.y, brickChildPosInPool.z);
+		printf("brickParentPosInPool : %f / %f / %f \n", brickParentPosInPool.x, brickParentPosInPool.y, brickParentPosInPool.z);
+		printf("brickParentPosInPool : %f / %f / %f \n", sampleOffsetInBrick.x, sampleOffsetInBrick.y, sampleOffsetInBrick.z);
+	}
+	*/
+
 	// Sample data in texture
 	if ( mipMapOn && mipMapInterpCoef > 0.0f )
 	{

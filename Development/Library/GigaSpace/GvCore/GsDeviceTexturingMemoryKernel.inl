@@ -60,6 +60,7 @@ namespace GvCore
 	 * @param position position
 	 *
 	 * @return the value at given position
+	 * // UNUSED ? ? ? ? ?
 	 ******************************************************************************/
 	template< typename T >
 	template< uint channel >
@@ -67,6 +68,9 @@ namespace GvCore
 	__forceinline__ T GsDeviceTexturingMemoryKernel< T >::get( const uint3& position ) const
 	{
 		T data;
+
+		printf("position get : %u / %u / %u \n", position.x, position.y, position.z);
+		//printf("destAddress : %u / %u / %u \n", destAddress.x, destAddress.y, destAddress.z);
 
 #if (__CUDA_ARCH__ >= 200)
 		// FIXME : better way to do this ?
@@ -111,6 +115,7 @@ namespace GvCore
 	__device__
 	__forceinline__ void GsDeviceTexturingMemoryKernel< T >::set( const uint3& position, T val )
 	{
+
 #if (__CUDA_ARCH__ >= 200)
 		// FIXME : better way to do this ?
 		switch ( channel )

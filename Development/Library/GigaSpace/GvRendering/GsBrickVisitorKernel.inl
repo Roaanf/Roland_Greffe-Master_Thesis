@@ -79,7 +79,15 @@ float GsBrickVisitorKernel
 		 const float pRayLengthInNodeTree, GsSamplerKernel< TVolumeTreeKernelType >& pBrickSampler, bool& pModifInfoWriten )
 {
 	// Current position in tree space
+	// C'est à dire ?
 	float3 samplePosTree = pRayStartTree + pTTree * pRayDirTree;
+
+	/*
+	if (threadIdx.x == 0) {
+		printf("samplePosTree : %f / %f / %f \n", samplePosTree.x, samplePosTree.y, samplePosTree.z);
+		//printf("destAddress : %u / %u / %u \n", destAddress.x, destAddress.y, destAddress.z);
+	}
+	*/
 
 	// Local distance
 	float dt = 0.0f;

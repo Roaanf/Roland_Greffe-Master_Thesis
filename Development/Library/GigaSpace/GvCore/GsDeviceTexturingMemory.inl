@@ -73,6 +73,8 @@ inline GsDeviceTexturingMemory< T >::GsDeviceTexturingMemory( const uint3& res, 
 {
 	_arrayOptions = options;
 
+	std::cout << "GsDeviceTexturingMemory init mem : " << res.x << " / " << res.y << " / " << res.z << std::endl;
+
 	if ( _arrayOptions & static_cast< uint >( GLInteroperability ) )
 	{
 		_resolution = res;

@@ -137,9 +137,9 @@ __forceinline__ GsLocalizationInfo PageTableKernel< Derived, AddressType, Kernel
 template< typename Derived, typename AddressType, typename KernelArrayType >
 __device__
 __forceinline__ void PageTableKernel< Derived, AddressType, KernelArrayType >
-::setPointer( uint elemAddress, uint3 elemPointer, uint flag )
+::setPointer( uint elemAddress, uint3 elemPointer, uint3 res, uint flag)
 {
-	static_cast< Derived* >( this )->setPointerImpl( elemAddress, elemPointer, flag );
+	static_cast< Derived* >( this )->setPointerImpl( elemAddress, elemPointer, res, flag);
 }
 
 } // namespace GvCore
@@ -193,7 +193,7 @@ __forceinline__ GsLocalizationInfo PageTableNodesKernel< NodeTileRes, ElementRes
 template< typename NodeTileRes, typename ElementRes, typename AddressType, typename KernelArrayType, typename LocCodeArrayType, typename LocDepthArrayType >
 __device__
 __forceinline__ void PageTableNodesKernel< NodeTileRes, ElementRes, AddressType, KernelArrayType, LocCodeArrayType, LocDepthArrayType >
-::setPointerImpl( uint elemAddress, ElemAddressType elemPointer, uint flags )
+::setPointerImpl( uint elemAddress, ElemAddressType elemPointer, uint3 res, uint flags)
 {
 	ElemPackedAddressType packedChildAddress	= childArray.get( elemAddress );
 	ElemPackedAddressType packedAddress			= AddressType::packAddress( elemPointer );
@@ -277,13 +277,13 @@ __forceinline__ GsLocalizationInfo PageTableBricksKernel< NodeTileRes, ChildAddr
 template< typename NodeTileRes, typename ChildAddressType, typename ChildKernelArrayType, typename DataAddressType, typename DataKernelArrayType, typename LocCodeArrayType, typename LocDepthArrayType >
 __device__
 __forceinline__ void PageTableBricksKernel< NodeTileRes, ChildAddressType, ChildKernelArrayType, DataAddressType, DataKernelArrayType, LocCodeArrayType, LocDepthArrayType >
-::setPointerImpl( uint elemAddress, ElemAddressType elemPointer, uint flags )
+::setPointerImpl( uint elemAddress, ElemAddressType elemPointer, uint3 res,uint flags )
 {
 	// XXX: Should be removed
-	ElemAddressType brickPointer = elemPointer + make_uint3( 1 ); // Warning: fixed border size !	=> QUESTION ??
+	ElemAddressType brickPointer = elemPointer + make_uint3( 1 ); // Warning: fixed border size !	faut surement l'enlever je crois
 
 	PackedChildAddressType packedChildAddress	= childArray.get( elemAddress );
-	ElemPackedAddressType packedBrickAddress	= DataAddressType::packAddress( brickPointer );
+	ElemPackedAddressType packedBrickAddress	= DataAddressType::packAddress( brickPointer /* / res */);
 
 	// We store brick
 	packedChildAddress |= 0x40000000;

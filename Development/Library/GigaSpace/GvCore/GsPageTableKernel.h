@@ -120,7 +120,7 @@ struct PageTableKernel
 	 * @param flag ...
 	 */
 	__device__
-	__forceinline__ void setPointer( uint elemAddress, uint3 elemPointer, uint flag = 0 );
+	__forceinline__ void setPointer( uint elemAddress, uint3 elemPointer, uint3 res, uint flag = 0);
 
 	/**************************************************************************
 	 **************************** PROTECTED SECTION ***************************
@@ -213,7 +213,7 @@ struct PageTableNodesKernel : public PageTableKernel< PageTableNodesKernel< Node
 	 * @param flags ...
 	 */
 	__device__
-	__forceinline__ void setPointerImpl( uint elemAddress, ElemAddressType elemPointer, uint flags = 0 );
+	__forceinline__ void setPointerImpl( uint elemAddress, ElemAddressType elemPointer, uint3 res, uint flags = 0);
 
 	/**************************************************************************
 	 **************************** PROTECTED SECTION ***************************
@@ -310,7 +310,7 @@ struct PageTableBricksKernel : public PageTableKernel< PageTableBricksKernel< No
 	 * @param flags this vlaue is retrieves from Producer::produceData< 1 > methods)
 	 */
 	__device__
-	__forceinline__ void setPointerImpl( uint elemAddress, ElemAddressType elemPointer, uint flags = 0 );
+	__forceinline__ void setPointerImpl( uint elemAddress, ElemAddressType elemPointer, uint3 res, uint flags = 0);
 
 	/**************************************************************************
 	 **************************** PROTECTED SECTION ***************************

@@ -75,7 +75,7 @@ namespace GvCache
 template< typename ElementRes, typename GPUPoolType, typename GPUProviderType, typename PageTableType >
 inline void GsCacheHelper::genericWriteIntoCache( const uint pNumElements, uint* pNodesAddressList, uint* pElemAddressList,
 												  const GPUPoolType& pGpuPool, const GPUProviderType& pGpuProvider,
-												  const PageTableType& pPageTable, const dim3& pBlockSize )
+												  const PageTableType& pPageTable, const dim3& pBlockSize, const bool reconvert )
 {
 	// TO DO
 	// - check if pNumElements == 0, then exit
@@ -98,14 +98,14 @@ inline void GsCacheHelper::genericWriteIntoCache( const uint pNumElements, uint*
 		// Call of the device-side producer
 		GvKernel_genericWriteIntoCache_NoSynchronization< ElementRes >
 			<<< gridSize, pBlockSize >>>
-			( pNumElements, pNodesAddressList, pElemAddressList, pGpuPool->getKernelPool(), pGpuProvider, pPageTable->getKernel() );
+			( pNumElements, pNodesAddressList, pElemAddressList, pGpuPool->getKernelPool(), pGpuProvider, pPageTable->getKernel(), reconvert );
 	}
 	else
 	{
 		// Call of the device-side producer
 		GvKernel_genericWriteIntoCache< ElementRes >
 			<<< gridSize, pBlockSize >>>
-			( pNumElements, pNodesAddressList, pElemAddressList, pGpuPool->getKernelPool(), pGpuProvider, pPageTable->getKernel() );
+			( pNumElements, pNodesAddressList, pElemAddressList, pGpuPool->getKernelPool(), pGpuProvider, pPageTable->getKernel(), reconvert);
 	}
 
 #else
@@ -113,7 +113,7 @@ inline void GsCacheHelper::genericWriteIntoCache( const uint pNumElements, uint*
 	// Call of the device-side producer
 	GvKernel_genericWriteIntoCache< ElementRes >
 		<<< gridSize, pBlockSize >>>
-		( pNumElements, pNodesAddressList, pElemAddressList, pGpuPool->getKernelPool(), pGpuProvider, pPageTable->getKernel() );
+		( pNumElements, pNodesAddressList, pElemAddressList, pGpuPool->getKernelPool(), pGpuProvider, pPageTable->getKernel(), reconvert);
 
 #endif
 

@@ -154,7 +154,7 @@ inline void GsSimpleHostProducer< TKernelProducerType, TDataStructureType, TData
 	// - i.e. the associated device-side producer will call its device function "ProducerKernel::produceData< 0 >()"
 	NodePoolType* pool = this->_nodePool;
 	NodePageTableType* pageTable = _nodePageTable;
-	_cacheHelper.template genericWriteIntoCache< NodeTileResLinear >( pNumElems, nodesAddressList, elemAddressList, pool, kernelProvider, pageTable, blockSize );
+	_cacheHelper.template genericWriteIntoCache< NodeTileResLinear >( pNumElems, nodesAddressList, elemAddressList, pool, kernelProvider, pageTable, blockSize, false );
 }
 
 /******************************************************************************
@@ -201,7 +201,7 @@ inline void GsSimpleHostProducer< TKernelProducerType, TDataStructureType, TData
 	// - i.e. the associated device-side producer will call its device function "ProducerKernel::produceData< 1 >()"
 	DataPoolType* pool = this->_dataPool;
 	DataPageTableType* pageTable = _dataPageTable;
-	_cacheHelper.template genericWriteIntoCache< BrickFullRes >( pNumElems, nodesAddressList, elemAddressList, pool, kernelProvider, pageTable, blockSize );
+	_cacheHelper.template genericWriteIntoCache< BrickFullRes >( pNumElems, nodesAddressList, elemAddressList, pool, kernelProvider, pageTable, blockSize, true );
 }
 
 } // namespace GvUtils

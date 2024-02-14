@@ -165,7 +165,7 @@ inline uint ProducerKernel< TDataStructureType >
 * @param pGpuPool The device side pool (nodes or bricks)
 * @param pRequestID The current processed element coming from the data requests list (a node tile or a brick)
 * @param pProcessID Index of one of the elements inside a node tile or a voxel bricks
-* @param pNewElemAddress The address at which to write the produced data in the pool
+* @param pNewElemAddress The address at which to write the produced data in the pool (IN VOXEL)
 * @param pParentLocInfo The localization info used to locate an element in the pool
 * @param Loki::Int2Type< 1 > corresponds to the index of the brick pool
 * 
@@ -197,6 +197,13 @@ inline uint ProducerKernel< TDataStructureType >
 	}
 	// Thread Synchronization
 	__syncthreads();
+
+	/*
+	if (threadIdx.x == 0) {
+		printf("pNewElemAddress : %u / %u / %u \n", pNewElemAddress.x, pNewElemAddress.y, pNewElemAddress.z);
+		//printf("destAddress : %u / %u / %u \n", destAddress.x, destAddress.y, destAddress.z);
+	}
+	*/
 
 	// Iterate through voxels of the current brick
 	const size_t blockStartAddress = (size_t)pRequestID/*brickIndex*/ * (size_t)ProducerKernel< TDataStructureType >::BrickVoxelAlignment;

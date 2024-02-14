@@ -148,9 +148,9 @@ unsigned int GvvRawDataLoaderDialog::getBrickSize() const
  ******************************************************************************/
 unsigned int GvvRawDataLoaderDialog::getTrueX() const
 {
-	unsigned int brickResolution = _trueXSpinBox->value();
+	unsigned int trueX = _trueXSpinBox->value();
 
-	return brickResolution;
+	return trueX;
 }
 
 /******************************************************************************
@@ -160,9 +160,9 @@ unsigned int GvvRawDataLoaderDialog::getTrueX() const
  ******************************************************************************/
 unsigned int GvvRawDataLoaderDialog::getTrueY() const
 {
-	unsigned int brickResolution = _trueXSpinBox->value();
+	unsigned int trueY = _trueYSpinBox->value();
 
-	return brickResolution;
+	return trueY;
 }
 
 /******************************************************************************
@@ -172,7 +172,7 @@ unsigned int GvvRawDataLoaderDialog::getTrueY() const
  ******************************************************************************/
 unsigned int GvvRawDataLoaderDialog::getTrueZ() const
 {
-	unsigned int brickResolution = _trueXSpinBox->value();
+	unsigned int trueZ = _trueZSpinBox->value();
 
-	return brickResolution;
+	return trueZ;
 }

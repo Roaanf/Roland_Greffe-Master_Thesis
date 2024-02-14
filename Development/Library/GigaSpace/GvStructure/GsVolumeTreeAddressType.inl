@@ -102,6 +102,11 @@ namespace GvStructure
 __host__ __device__
 inline VolTreeBrickAddress::PackedAddressType VolTreeBrickAddress::packAddress( const uint3& address )
 {
+	
+	if (address.x >= 1024 || address.y >= 1024 || address.z >= 1024) {
+		printf("address overflow : %u / %u / %u \n", address.x, address.y, address.z);
+	}
+	
 	return (address.x << 20 | address.y << 10 | address.z);
 }
 
@@ -117,6 +122,8 @@ inline uint3 VolTreeBrickAddress::unpackAddress( VolTreeBrickAddress::PackedAddr
 	res.y = (address & 0x000FFC00) >> 10;
 	res.z = (address & 0x000003FF);
 
+	//printf("res : %u / %u / %u\n", res.x, res.y, res.z);
+	//printf("res * 18 : %u / %u / %u\n", (res * 18).x, (res * 18).y, (res * 18).z);
 	return res;
 }
 

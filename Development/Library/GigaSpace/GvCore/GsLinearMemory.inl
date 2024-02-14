@@ -281,7 +281,7 @@ inline void GsLinearMemory< T >::fillAsync( int v )
 {
 	//assert(0);	//This should not be used
 	//std::cout<<"Warning: GsLinearMemory< T >::fill is VERY slow \n";
-
+	//printf("v : %d\n", v);
 	GS_CUDA_SAFE_CALL( cudaMemsetAsync( _data, v, getMemorySize() ) );
 }
 

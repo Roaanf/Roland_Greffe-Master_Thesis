@@ -228,7 +228,7 @@ inline void Producer< TDataStructureType, TDataProductionManager >
 		//
 		// This will then call the associated DEVICE-side producer
 		// whose goal is to update the cache
-		this->_cacheHelper.template genericWriteIntoCache< NodeTileResLinear >( numRequests, nodesAddressList, elemAddressList, this->_nodePool, kernelProvider, this->_nodePageTable, blockSize );
+		this->_cacheHelper.template genericWriteIntoCache< NodeTileResLinear >( numRequests, nodesAddressList, elemAddressList, this->_nodePool, kernelProvider, this->_nodePageTable, blockSize, false );
 
 		// Update loop variables
 		pNumElems			-= numRequests;
@@ -259,7 +259,6 @@ inline void Producer< TDataStructureType, TDataProductionManager >
 	this->_kernelProducer.init( _maxDepth, _h_nodesBuffer->getDeviceArray(), _channelsCachesPool->getKernelPool() );
 	GvCore::GsIProviderKernel< 1, KernelProducerType > kernelProvider( this->_kernelProducer );
 	
-	// TODO C'EST QUOI UN KERNEL BLOCK ?
 	// Define kernel block size
 	dim3 blockSize( 16, 8, 1 );
 
@@ -287,7 +286,7 @@ inline void Producer< TDataStructureType, TDataProductionManager >
 		preLoadManagementData( numRequests, locDepthList, locCodeList );
 
 		// Call cache helper to write into cache
-		this->_cacheHelper.template genericWriteIntoCache< BrickFullRes >( numRequests, nodesAddressList, elemAddressList, this->_dataPool, kernelProvider, this->_dataPageTable, blockSize );
+		this->_cacheHelper.template genericWriteIntoCache< BrickFullRes >( numRequests, nodesAddressList, elemAddressList, this->_dataPool, kernelProvider, this->_dataPageTable, blockSize, true );
 
 		// Update loop variables
 		pNumElems			-= numRequests;

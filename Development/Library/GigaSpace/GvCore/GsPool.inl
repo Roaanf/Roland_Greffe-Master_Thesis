@@ -56,8 +56,8 @@ namespace GvCore
 /////////////// GPU Pool Kernel ////////////////
 
 /******************************************************************************
- * Set the value at a given position in the pool.
- *
+ * Set the value at a given position in the pool. (IN VOXEL)
+ * IS USED
  * @param pos position the pool
  * @param val value
  ******************************************************************************/
@@ -79,7 +79,7 @@ __forceinline__ void GPUPoolKernel< KernelArray, TList >
 
 /******************************************************************************
  * Get the value at a given position in the pool.
- *
+ * NOT USED ?????????
  * @param pos position the pool
  * @param val value
  ******************************************************************************/
@@ -95,6 +95,8 @@ __forceinline__ ST GPUPoolKernel< KernelArray, TList >
 	typename GPUPool_TypeAtChannel< KernelArray, TList, GPUPoolChannelUnitValue, i >::Result& channel = getChannel( Loki::Int2Type< i >() );
 
 	// Write data in the channel (i.e. its associated surface)
+	printf("pos : %u / %u / %u \n", pos.x, pos.y, pos.z);
+
 	res = channel.get< i >( pos );
 
 	ST val;

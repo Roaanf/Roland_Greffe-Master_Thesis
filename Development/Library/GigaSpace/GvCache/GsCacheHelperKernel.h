@@ -60,7 +60,7 @@ namespace GvCache
 
 /******************************************************************************
  * KERNEL GvKernel_genericWriteIntoCache
- *
+ * ICI
  * This method is a helper for writing into the cache.
  *
  * @param pNumElems The number of elements we need to produce and write.
@@ -76,7 +76,7 @@ __global__
 // - use "Launch Bounds" feature to profile / optimize code
 // __launch_bounds__( maxThreadsPerBlock, minBlocksPerMultiprocessor )
 void GvKernel_genericWriteIntoCache( const uint pNumElems, uint* pNodesAddressList, uint* pElemAddressList,
-						    TGPUPoolType pGpuPool, TGPUProviderType pGpuProvider, TPageTableType pPageTable )
+						    TGPUPoolType pGpuPool, TGPUProviderType pGpuProvider, TPageTableType pPageTable, bool reconvert )
 {
 	// Retrieve global indexes
 	const uint elemNum = blockIdx.x;
@@ -106,7 +106,22 @@ void GvKernel_genericWriteIntoCache( const uint pNumElems, uint* pNodesAddressLi
 			const uint elemIndexEnc = pElemAddressList[ elemNum ];
 			const ElemAddressType elemIndex = TPageTableType::ElemType::unpackAddress( elemIndexEnc );
 			elemAddress = elemIndex * TElementRes::get(); // convert into node address             ===> NOTE : for bricks, the resolution holds the border !!!
-
+			/*
+			VOXEL -> pb surement � la lecture et pas � l'�criture (sinon pb avec les addresses en elle m�me)
+			int test = 0;
+			// Vient de me print un bon gros elemIndex � 4750 ce qui est ma foi super ETRANGE
+			// Surement les 2 types de requetes qui sont m�lang�s enft il y a moyen que c'est logique
+			if (threadIdx.x == 0) {
+				//printf("elemIndexEnc : %u\n", elemIndexEnc);
+				if (elemIndex.x > 100) {
+					printf("elemIndex : %u / %u / %u\n", elemIndex.x, elemIndex.y, elemIndex.z);
+					printf("elemIndexEnc : %u \n", elemIndexEnc);
+					printf("elemAddress : %u / %u / %u\n", elemAddress.x, elemAddress.y, elemAddress.z);
+				}
+				
+				//
+			}
+			*/
 			// Get the localization of the current element
 			//parentLocInfo = pPageTable.getLocalizationInfo( elemNum );
 			parentLocInfo = pPageTable.getLocalizationInfo( nodeAddress );
@@ -136,7 +151,7 @@ void GvKernel_genericWriteIntoCache( const uint pNumElems, uint* pNodesAddressLi
 		// Done by only one thread of the kernel
 		if ( processID == 0 )
 		{
-			pPageTable.setPointer( nodeAddress, elemAddress, producerFeedback );
+			pPageTable.setPointer( nodeAddress, elemAddress, TElementRes::get(), producerFeedback);
 		}
 	}
 }
@@ -159,7 +174,7 @@ __global__
 // - use "Launch Bounds" feature to profile / optimize code
 // __launch_bounds__( maxThreadsPerBlock, minBlocksPerMultiprocessor )
 void GvKernel_genericWriteIntoCache_NoSynchronization( const uint pNumElems, uint* pNodesAddressList, uint* pElemAddressList,
-						    TGPUPoolType pGpuPool, TGPUProviderType pGpuProvider, TPageTableType pPageTable )
+						    TGPUPoolType pGpuPool, TGPUProviderType pGpuProvider, TPageTableType pPageTable, bool reconvert)
 {
 	// Retrieve global indexes
 	const uint elemNum = blockIdx.x;
@@ -203,7 +218,10 @@ void GvKernel_genericWriteIntoCache_NoSynchronization( const uint pNumElems, uin
 		// Done by only one thread of the kernel
 		if ( processID == 0 )
 		{
-			pPageTable.setPointer( nodeAddress, elemAddress, producerFeedback );
+			if (reconvert) {
+				elemAddress = elemAddress / TElementRes::get();
+			}
+			pPageTable.setPointer( nodeAddress, elemAddress, producerFeedback);
 		}
 	}
 }

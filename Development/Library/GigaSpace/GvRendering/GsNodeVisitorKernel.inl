@@ -126,6 +126,7 @@ __forceinline__ void GsNodeVisitorKernel
 			brickChildNormalizedScale  *= 1.0f / static_cast< float >( TVolTreeKernelType::NodeResolution::maxRes );	// 0.5f;
 			brickChildNormalizedOffset += brickChildNormalizedScale * make_float3( nodeChildCoordinates );
 		}
+
 		brickChildAddressEnc = pNode.hasBrick() ? pNode.getBrickAddressEncoded() : 0;
 
 		// Update descent condition
@@ -198,24 +199,26 @@ __forceinline__ void GsNodeVisitorKernel
 	// - given the previously found node, we store its associated brick address in cache to be able to fetch data in the datapool
 	// - we can also store the brick address of the parent node to do linear interpolation of the two level of resolution
 	// - for all of this, we store the bottom left position in cache of the associated bricks (note : brick address is a voxel index in the cache)
+	// semble des fois avoir des float qui oerlow aka pas entre 0 et 1 ? (mais pas lié au pb des 2gb)
 	// VOXEL
+	
 	if ( pNode.isBrick() )
 	{
 		pBrickSampler._nodeSizeTree = pNodeSizeTree;
 		pBrickSampler._sampleOffsetInNodeTree = pSampleOffsetInNodeTree;
 		pBrickSampler._scaleTree2BrickPool = pVolumeTree.brickSizeInCacheNormalized.x / pBrickSampler._nodeSizeTree;
 
-		pBrickSampler._brickParentPosInPool = pVolumeTree.brickCacheResINV * make_float3( GvStructure::GsNode::unpackBrickAddress( brickParentAddressEnc ) )
+		pBrickSampler._brickParentPosInPool = pVolumeTree.brickCacheResINV * make_float3( GvStructure::GsNode::unpackBrickAddress( brickParentAddressEnc ) /* * make_uint3(18, 18, 18)) */ )
 			+ brickChildNormalizedOffset * pVolumeTree.brickSizeInCacheNormalized.x;
 
 		if ( brickChildAddressEnc )
 		{
-			// Should be mipmapping here, betwwen level with the parent
+			// Should be mipmapping here, between level with the parent
 
 			//pBrickSampler.mipMapOn = true; // "true" is not sufficient :  when no parent, program is very slow
 			pBrickSampler._mipMapOn = ( brickParentAddressEnc == 0 ) ? false : true;
 
-			pBrickSampler._brickChildPosInPool = make_float3( GvStructure::GsNode::unpackBrickAddress( brickChildAddressEnc ) ) * pVolumeTree.brickCacheResINV;
+			pBrickSampler._brickChildPosInPool = make_float3( GvStructure::GsNode::unpackBrickAddress(brickChildAddressEnc) /* * make_uint3(18, 18, 18)*/) * pVolumeTree.brickCacheResINV;
 		}
 		else
 		{
