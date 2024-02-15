@@ -217,6 +217,8 @@ void SampleCore::init()
 	QString dataFilename;
 	GvCore::GvDataTypeInspector< DataType > dataTypeInspector; // Seems to be just a vector of DataTypes
 
+	unsigned int brickSize = BrickRes::get().x;
+
 	// Fill the data type list used to store voxels in the data structure
 	GvViewerCore::GvvDataType& dataTypes = editDataTypes();
 	GvCore::StaticLoop< GvCore::GvDataTypeInspector< DataType >, GvCore::DataNumChannels< DataType >::value - 1 >::go( dataTypeInspector ); // See GsDataTypeList.h in GsCore
@@ -277,7 +279,7 @@ void SampleCore::init()
 
 		// Read file and build GigaSpace mip-map pyramid files
 		// BRICK SIZE
-		rawFileReader->read(16, _trueX, _trueY, _trueZ); // Must be changed !!!!!
+		rawFileReader->read(brickSize, _trueX, _trueY, _trueZ); // Must be changed !!!!!
 		
 		// Update internal info
 		_minDataValue = static_cast< float >( rawFileReader->getMinDataValue() );
@@ -297,7 +299,7 @@ void SampleCore::init()
 	gigaSpaceWriter->setModelDirectory( dataFileInfo.absolutePath().toLatin1().constData() );
 	gigaSpaceWriter->setModelName( dataFileInfo.completeBaseName().toLatin1().constData() );
 	std::cout << "get3DModelResolution : " << get3DModelResolution() << std::endl;
-	const unsigned int modelMaxResolution = static_cast< unsigned int >( log( static_cast< float >( get3DModelResolution() / 32/*<== if 32 voxels by bricks*/ ) ) / log( static_cast< float >( 2 ) ) );
+	const unsigned int modelMaxResolution = static_cast< unsigned int >( log( static_cast< float >( get3DModelResolution() / brickSize ) ) / log( static_cast< float >( 2 ) ) );
 	std::cout << "\nModel max resolution : "<< modelMaxResolution << std::endl;
 	gigaSpaceWriter->setModelMaxResolution( modelMaxResolution );
 	const unsigned int brickWidth = PipelineType::BrickTileResolution::get().x;	/*BEWARE : bricks are uniforms*/

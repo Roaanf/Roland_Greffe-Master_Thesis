@@ -158,14 +158,12 @@ bool RawFileReader< TType >::optimizedReadData(const size_t brickWidth, const si
 			return false;
 		}
 		// Potential fix for large files not beeing fully read ?
-		file.seekg(0, std::ios_base::end);
-		size_t size = file.tellg();
-		TType* _data = new TType[ size ];
-		file.seekg(0);
-		// - read all data
-		file.read( reinterpret_cast< char* >( _data ), size );
-		// - close the file
-		file.close();
+		size_t bufferSize = trueX * trueY * brickWidth;
+		TType* bufferBrick = new TType[bufferSize];
+
+		/*
+		
+		*/
 
 		// Write equivalent GigaSpace voxels file
 		// - create a file/streamer handler to read/write GigaVoxels data
@@ -242,9 +240,62 @@ bool RawFileReader< TType >::optimizedReadData(const size_t brickWidth, const si
 			It goes faster than just iterating over the voxels, because we don't have to change the current noce/brick buffer as often in the GsDataStructureIOHandler
 			But we might have read order issues since the raw file in encoded in the order slice, row, column
 		*/
+		for (size_t node_z = 0; node_z < nodeSize; node_z++) {
+			file.read((char*)bufferBrick, bufferSize * sizeof(TType));
+			for (size_t node_y = 0; node_y < nodeSize; node_y++) {
+				for (size_t node_x = 0; node_x < nodeSize; node_x++) {	
+					for (size_t z_brick = 0; z_brick < brickWidth; z_brick++) {
+						for (size_t y_brick = 0; y_brick < brickWidth; y_brick++) {
+							for (size_t x_brick = 0; x_brick < brickWidth; x_brick++) {
+								size_t true_x = node_x * brickWidth + x_brick;
+								if (true_x >= trueX) {
+									break;
+								}
+								size_t true_y = node_y * brickWidth + y_brick;
+								if (true_y >= trueY) {
+									break;
+								}
+								size_t true_z = node_z * brickWidth + z_brick;
+								if (true_z >= trueZ) {
+									break;
+								}
+
+								size_t index = true_x + true_y * trueX + z_brick * trueX * trueY;
+
+								voxelData = bufferBrick[index];
+
+								// Update min/max values
+								if (voxelData < _minDataValue)
+								{
+									_minDataValue = voxelData;
+								}
+								if (voxelData > _maxDataValue)
+								{
+									_maxDataValue = voxelData;
+								}
+
+								if (voxelData == 0) {
+									continue;
+								}
+
+								voxelPosition[0] = true_x;
+								voxelPosition[1] = true_y;
+								voxelPosition[2] = true_z;
+
+								_dataStructureIOHandler->setVoxel_buffered(voxelPosition, &voxelData, 0);
+
+							}
+						}
+					}
+				}
+			}
+		}
+
+		/*
 		for ( size_t node_z = 0; node_z < nodeSize ; node_z++ ){
 			for (size_t node_y = 0; node_y < nodeSize; node_y++) {
 				for (size_t node_x = 0; node_x < nodeSize; node_x++) {
+					file.read((char*)bufferBrick, bufferSize * sizeof(TType));
 					for (size_t z_brick = 0; z_brick < brickWidth; z_brick++) {
 						for (size_t y_brick = 0; y_brick < brickWidth; y_brick++) {
 							for (size_t x_brick = 0; x_brick < brickWidth; x_brick++) {
@@ -261,9 +312,9 @@ bool RawFileReader< TType >::optimizedReadData(const size_t brickWidth, const si
 									continue;
 								}
 
-								size_t index = true_x + true_y * trueX + true_z * trueX * trueY;
+								size_t index = x_brick + y_brick * brickWidth + z_brick * brickWidth * brickWidth;
 								
-								voxelData = _data[index];
+								voxelData = bufferBrick[index];
 					
 								// Update min/max values
 								if ( voxelData < _minDataValue )
@@ -291,28 +342,12 @@ bool RawFileReader< TType >::optimizedReadData(const size_t brickWidth, const si
 				}
 			}
 		}
+		*/
 
 		// Free resources
-		delete[] _data;
+		delete[] bufferBrick;
+		file.close();
 
-	}
-	else if ( _mode == eASCII )
-	{
-		// LOG
-		std::cout << "ASCII files are not yet handled... : " << dataFilename << std::endl;
-
-		// TO DO
-		// Add ASCII mode
-		// ...
-
-		/*FILE* file = fopen( filename.c_str(), "r" );
-		if ( file != NULL )
-		{
-		}
-		else
-		{*/
-			assert( false );
-		//}
 	}
 	else
 	{

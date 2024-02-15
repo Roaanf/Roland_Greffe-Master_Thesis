@@ -40,8 +40,6 @@ public:
     QLabel *label_5;
     QComboBox *_3DModelDataTypeComboBox;
     QSpacerItem *horizontalSpacer;
-    QLabel *label_4;
-    QComboBox *_maxResolutionComboBox;
     QLabel *label_2;
     QComboBox *_brickSize;
     QLabel *label_21;
@@ -94,32 +92,21 @@ public:
 
         gridLayout->addItem(horizontalSpacer, 1, 2, 1, 3);
 
-        label_4 = new QLabel(groupBox);
-        label_4->setObjectName(QString::fromUtf8("label_4"));
-
-        gridLayout->addWidget(label_4, 2, 0, 1, 1);
-
-        _maxResolutionComboBox = new QComboBox(groupBox);
-        _maxResolutionComboBox->setObjectName(QString::fromUtf8("_maxResolutionComboBox"));
-        _maxResolutionComboBox->setLayoutDirection(Qt::RightToLeft);
-
-        gridLayout->addWidget(_maxResolutionComboBox, 2, 1, 1, 1);
-
         label_2 = new QLabel(groupBox);
         label_2->setObjectName(QString::fromUtf8("label_2"));
 
-        gridLayout->addWidget(label_2, 3, 0, 1, 1);
+        gridLayout->addWidget(label_2, 2, 0, 1, 1);
 
         _brickSize = new QComboBox(groupBox);
         _brickSize->setObjectName(QString::fromUtf8("_brickSize"));
         _brickSize->setLayoutDirection(Qt::RightToLeft);
 
-        gridLayout->addWidget(_brickSize, 3, 1, 1, 1);
+        gridLayout->addWidget(_brickSize, 2, 1, 1, 1);
 
         label_21 = new QLabel(groupBox);
         label_21->setObjectName(QString::fromUtf8("label_21"));
 
-        gridLayout->addWidget(label_21, 4, 0, 1, 1);
+        gridLayout->addWidget(label_21, 3, 0, 1, 1);
 
         _trueXSpinBox = new QSpinBox(groupBox);
         _trueXSpinBox->setObjectName(QString::fromUtf8("_trueXSpinBox"));
@@ -127,7 +114,7 @@ public:
         _trueXSpinBox->setMinimum(0);
         _trueXSpinBox->setMaximum(1e+06);
 
-        gridLayout->addWidget(_trueXSpinBox, 4, 1, 1, 1);
+        gridLayout->addWidget(_trueXSpinBox, 3, 1, 1, 1);
 
         _trueYSpinBox = new QSpinBox(groupBox);
         _trueYSpinBox->setObjectName(QString::fromUtf8("_trueYSpinBox"));
@@ -135,7 +122,7 @@ public:
         _trueYSpinBox->setMinimum(0);
         _trueYSpinBox->setMaximum(1e+06);
 
-        gridLayout->addWidget(_trueYSpinBox, 4, 2, 1, 1);
+        gridLayout->addWidget(_trueYSpinBox, 3, 2, 1, 1);
 
         _trueZSpinBox = new QSpinBox(groupBox);
         _trueZSpinBox->setObjectName(QString::fromUtf8("_trueZSpinBox"));
@@ -143,7 +130,7 @@ public:
         _trueZSpinBox->setMinimum(0);
         _trueZSpinBox->setMaximum(1e+06);
 
-        gridLayout->addWidget(_trueZSpinBox, 4, 3, 1, 1);
+        gridLayout->addWidget(_trueZSpinBox, 3, 3, 1, 1);
 
 
         verticalLayout->addWidget(groupBox);
@@ -160,7 +147,6 @@ public:
         QObject::connect(buttonBox, SIGNAL(accepted()), GvQRawDataLoaderDialog, SLOT(accept()));
         QObject::connect(buttonBox, SIGNAL(rejected()), GvQRawDataLoaderDialog, SLOT(reject()));
 
-        _maxResolutionComboBox->setCurrentIndex(0);
         _brickSize->setCurrentIndex(2);
 
 
@@ -178,28 +164,6 @@ public:
         _3DModelDataTypeComboBox->insertItems(0, QStringList()
          << QApplication::translate("GvQRawDataLoaderDialog", "USHORT", 0, QApplication::UnicodeUTF8)
         );
-#ifndef QT_NO_TOOLTIP
-        label_4->setToolTip(QApplication::translate("GvQRawDataLoaderDialog", "Number of levels of resolution of the generated data strucutre.", 0, QApplication::UnicodeUTF8));
-#endif // QT_NO_TOOLTIP
-        label_4->setText(QApplication::translate("GvQRawDataLoaderDialog", "Model Resolution", 0, QApplication::UnicodeUTF8));
-        _maxResolutionComboBox->clear();
-        _maxResolutionComboBox->insertItems(0, QStringList()
-         << QApplication::translate("GvQRawDataLoaderDialog", "8", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("GvQRawDataLoaderDialog", "16", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("GvQRawDataLoaderDialog", "32", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("GvQRawDataLoaderDialog", "64", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("GvQRawDataLoaderDialog", "128", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("GvQRawDataLoaderDialog", "256", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("GvQRawDataLoaderDialog", "512", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("GvQRawDataLoaderDialog", "1024", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("GvQRawDataLoaderDialog", "2048", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("GvQRawDataLoaderDialog", "4096", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("GvQRawDataLoaderDialog", "8192", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("GvQRawDataLoaderDialog", "16384", 0, QApplication::UnicodeUTF8)
-        );
-#ifndef QT_NO_TOOLTIP
-        _maxResolutionComboBox->setToolTip(QApplication::translate("GvQRawDataLoaderDialog", "Number of levels of resolution of the generated data strucutre.", 0, QApplication::UnicodeUTF8));
-#endif // QT_NO_TOOLTIP
 #ifndef QT_NO_TOOLTIP
         label_2->setToolTip(QApplication::translate("GvQRawDataLoaderDialog", "Number of levels of resolution of the generated data strucutre.", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP

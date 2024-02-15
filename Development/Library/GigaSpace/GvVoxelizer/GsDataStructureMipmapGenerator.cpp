@@ -138,7 +138,7 @@ bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& p
 		// The coarser data handler was allocated dynamically due to memory consumption considerations.
 		// here i pre allocate it to make it way faster
 		size_t nbOfvalues = (1 << level);
-		dataStructureIOHandlerDOWN = new GsDataStructureIOHandler( pFileName, level, brickWidth, dataTypes[0], true, (nbOfvalues* nbOfvalues* nbOfvalues * brickWidth*brickWidth*brickWidth)/1.5);
+		dataStructureIOHandlerDOWN = new GsDataStructureIOHandler( pFileName, level, brickWidth, dataTypes[0], true, dataStructureIOHandlerUP->getBufferSize()/2);
 
 		// Iterate through nodes of the structure
 		size_t nodePos[ 3 ];

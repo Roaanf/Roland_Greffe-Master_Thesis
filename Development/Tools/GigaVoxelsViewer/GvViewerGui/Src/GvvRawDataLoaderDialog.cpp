@@ -97,18 +97,6 @@ QString GvvRawDataLoaderDialog::get3DModelFilename() const
 }
 
 /******************************************************************************
- * Get the 3D model resolution
- *
- * @return the 3D model resolution
- ******************************************************************************/
-unsigned int GvvRawDataLoaderDialog::get3DModelResolution() const
-{
-	unsigned int maxResolution =  ( 1 << _maxResolutionComboBox->currentIndex() ) * 8;
-
-	return maxResolution;
-}
-
-/******************************************************************************
  * Get the file mode
  *
  * @return the file mode

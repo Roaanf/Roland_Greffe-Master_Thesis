@@ -154,11 +154,23 @@ void GvMyPlugin::initialize()
 			// Retrieve data from loader
 			modelFilename = dataLoaderDialog->get3DModelFilename();
 			
-			modelResolution = dataLoaderDialog->get3DModelResolution();
+			//modelResolution = dataLoaderDialog->get3DModelResolution();
 			brickSize = dataLoaderDialog->getBrickSize();
 			trueX = dataLoaderDialog->getTrueX();
 			trueY = dataLoaderDialog->getTrueY();
 			trueZ = dataLoaderDialog->getTrueZ();
+			unsigned int maxRes = max(trueX, trueY);
+			maxRes = max(maxRes, trueZ);
+			std::cout << "maxRes : " << maxRes << std::endl;
+			// Bit thinghy hack to get the next power of 2 of maxres (https://graphics.stanford.edu/%7Eseander/bithacks.html#RoundUpPowerOf2)
+			maxRes--;
+			maxRes |= maxRes >> 1;
+			maxRes |= maxRes >> 2;
+			maxRes |= maxRes >> 4;
+			maxRes |= maxRes >> 8;
+			maxRes |= maxRes >> 16;
+			maxRes++;
+			modelResolution = maxRes;
 				
 			std::cout << "Checking the values..." << std::endl;
 			std::cout << "modelResolution: " << modelResolution << std::endl;

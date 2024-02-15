@@ -78,13 +78,6 @@ public:
 	QString get3DModelFilename() const;
 
 	/**
-	 * Get the 3D model resolution
-	 *
-	 * @return the 3D model resolution
-	 */
-	unsigned int get3DModelResolution() const;
-
-	/**
 	 * Get the file mode
 	 *
 	 * @return the file mode

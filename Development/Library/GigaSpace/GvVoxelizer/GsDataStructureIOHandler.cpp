@@ -130,10 +130,14 @@ GsDataStructureIOHandler::GsDataStructureIOHandler( const std::string& pName,
 	_brickData = (unsigned short *) calloc( sizeBufferCalloc, sizeof( unsigned short ) );
 	
 	if (_brickData == NULL) {
-		std::cout << 'OOF' << std::endl;
+		std::cout << "Couldn't allocate the brickdata buffer" << std::endl;
 	}
 
 	_nodeData = (unsigned int *) calloc( (size_t)_nodeGridSize * (size_t)_nodeGridSize * (size_t)_nodeGridSize, sizeof( unsigned int ) );
+
+	if (_nodeData == NULL) {
+		std::cout << "Couldn't allocate the nodedata buffer" << std::endl;
+	}
 }
 
 /******************************************************************************
@@ -1055,4 +1059,8 @@ void GsDataStructureIOHandler::writeFiles(){
 		fwrite( _brickData + i * _brickSize, sizeof( unsigned short ), _brickSize, _brickFiles[ 0 ] );
 	}
 	fflush( _brickFiles[ 0 ] );
+}
+
+size_t GsDataStructureIOHandler::getBufferSize() {
+	return (this->_trueNbOfValues * 1.5);
 }
