@@ -171,8 +171,8 @@ bool GsReader::read( const char* pFilename )
 					printf( "Nb levels %s\n", attribute->Value() );
 #endif
 					
-					nbLevels = atoi( attribute->Value() );
-					_modelResolution *= static_cast< unsigned int >( powf( 2.0f, static_cast< float >( nbLevels - 1 ) ) );	// Check if it's alwas true for something else than octrees
+					_nbOfLevels = atoi( attribute->Value() );
+					_modelResolution *= static_cast< unsigned int >( powf( 2.0f, static_cast< float >( _nbOfLevels - 1 ) ) );	// Check if it's alwas true for something else than octrees
 					
 #ifdef _DEBUG
 					// LOG
@@ -472,7 +472,7 @@ bool GsReader::read( const char* pFilename )
 	//printf( "%d %d\n", nbLevels, nbChannels );
 	
 	// Iterate through level of details
-	for ( int k = 0; k < nbLevels ; k++ )
+	for ( int k = 0; k < _nbOfLevels ; k++ )
 	{
 		_filenames.push_back( nodeFilenames[ k ] );
 		
@@ -482,7 +482,7 @@ bool GsReader::read( const char* pFilename )
 		// Iterate through brick data channels
 		for ( int p = 0; p < nbChannels ; p++ )
 		{
-			_filenames.push_back( brickFilenames[ k + p * nbLevels ] );
+			_filenames.push_back( brickFilenames[ k + p * _nbOfLevels ] );
 
 			// LOG
 			//printf( "%s\n", brickFilenames[ k + p * nbLevels ].c_str() );
@@ -510,4 +510,9 @@ unsigned int GsReader::getModelResolution() const
 /*const*/ vector< string >/*&*/ GsReader::getFilenames() const
 {
 	return _filenames;
+}
+
+unsigned int GsReader::getLevelOfRes() const
+{
+	return _nbOfLevels;
 }

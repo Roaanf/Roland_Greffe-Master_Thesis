@@ -73,7 +73,8 @@ GsDataLoader< TDataTypeList >
 {
 	// First, read Meta Data file to retrieve all mandatory information
 	uint resolution = 0;
-	int parse = this->parseXMLFile( pName.c_str(), resolution );
+	uint levelOfRes = 0;
+	int parse = this->parseXMLFile( pName.c_str(), resolution, levelOfRes );
 	assert( parse == 0 );
 	// TODO : handle error
 	// ...
@@ -85,20 +86,25 @@ GsDataLoader< TDataTypeList >
 	this->_numChannels = Loki::TL::Length< TDataTypeList >::value;
 	this->_volumeRes = make_uint3( resolution );//TO CHANGE
 	// LOG
-	printf( "%d\n", _volumeRes.x );
+	std::cout << "Dataloader Volume : " << _volumeRes.x << " / " << _volumeRes.y << " / " << _volumeRes.z << std::endl;
 	this->_borderSize = pBordersize;
 	this->_mipMapOrder = 2;
 	this->_useCache = pUseCache;
+	this->_numMipMapLevels = levelOfRes;
 
 	// Compute number of mipmaps levels
-	int dataResMin = mincc( this->_volumeRes.x, mincc( this->_volumeRes.y, this->_volumeRes.z ) );
+	// Isn't dataRes min useless ? It's clearely 3 times the same value ...
+	/*int dataResMin = mincc(this->_volumeRes.x, mincc(this->_volumeRes.y, this->_volumeRes.z));
 	int blocksNumLevels		= static_cast< int >( log( static_cast< float >( this->_bricksRes.x ) ) / log( static_cast< float >( this->_mipMapOrder ) ) );
-	this->_numMipMapLevels	= static_cast< int >( log( static_cast< float >( dataResMin ) ) / log( static_cast< float >( this->_mipMapOrder ) ) ) + 1 ;
+	this->_numMipMapLevels	= static_cast< int >( log( static_cast< float >( _volumeRes.x ) ) / log( static_cast< float >( this->_mipMapOrder ) ) ) + 1 ;
 	this->_numMipMapLevels	= this->_numMipMapLevels - blocksNumLevels;
 	if ( this->_numMipMapLevels < 1 )
 	{
 		this->_numMipMapLevels = 1;
 	}
+	*/
+
+	std::cout << "NumMipMapLevels : " << _numMipMapLevels << std::endl;
 
 	// Compute full brick resolution (with borders)
 	uint3 true_bricksRes = this->_bricksRes + make_uint3( 2 * this->_borderSize );
@@ -328,7 +334,7 @@ void GsDataLoader< TDataTypeList >
  ******************************************************************************/
 template< typename TDataTypeList >
 int GsDataLoader< TDataTypeList >
-::parseXMLFile( const char* pFilename, uint& pResolution )
+::parseXMLFile( const char* pFilename, uint& pResolution, uint& nbOfLevels )
 {
 	// Reset internal state
 	pResolution = 1;
@@ -340,6 +346,7 @@ int GsDataLoader< TDataTypeList >
 	bool statusOK = gigaSpaceReader.read( pFilename );
 	pResolution = gigaSpaceReader.getModelResolution();
 	_filesNames = gigaSpaceReader.getFilenames();
+	nbOfLevels = gigaSpaceReader.getLevelOfRes();
 	// Handle error(s)
 	assert( statusOK );
 	if ( ! statusOK )

@@ -329,7 +329,7 @@ protected:
 	 *
 	 * @param pFilename the filename of the XML file
 	 */
-	int parseXMLFile( const char* pFilename , uint & resolution);
+	int parseXMLFile( const char* pFilename , uint & resolution, uint& nbOfLevels);
 
 
 	/**

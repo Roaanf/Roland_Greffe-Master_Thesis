@@ -338,7 +338,7 @@ fileload:
 														dataFilename.toStdString(),
 														PipelineType::BrickTileResolution::get(), PipelineType::BrickTileBorderSize, true );
 	unsigned int dataResolution = dataLoader->getDataResolution().x;
-	std::cout << "DataResolution : " << dataResolution << std::endl;
+	//std::cout << "DataResolution : " << dataResolution << std::endl;
 	// Shader creation
 	ShaderType* shader = new ShaderType();
 

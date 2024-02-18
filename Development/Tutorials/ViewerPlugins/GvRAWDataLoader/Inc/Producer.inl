@@ -163,6 +163,7 @@ void Producer< TDataStructureType, TDataProductionManager >
 	}
 	else
 	{
+		// HEIN
 		_maxDepth = 9;	// Limitation from nodes hashes
 	}
 
@@ -267,8 +268,8 @@ inline void Producer< TDataStructureType, TDataProductionManager >
 	GvCore::GsLocalizationInfo::DepthType* locDepthList = thrust::raw_pointer_cast( &(*d_TempLocalizationDepthList)[ 0 ] );
 
 	// Retrieve elements address lists
-	uint* nodesAddressList = pNodesAddressCompactList->getPointer( 0 );
-	uint* elemAddressList = pElemAddressCompactList->getPointer( 0 );
+	uint* nodesAddressList = pNodesAddressCompactList->getPointer( 0 ); // Request for nodes subdivision
+	uint* elemAddressList = pElemAddressCompactList->getPointer( 0 ); // Requests for brick data
 
 	// Iterate through elements
 	while ( pNumElems > 0 )

@@ -121,6 +121,8 @@ public:
 	 */
 	unsigned int getModelResolution() const;
 
+	unsigned int getLevelOfRes() const;
+
 	/**
 	 * Get the list of all filenames that producer will have to load (nodes and bricks)
 	 *
@@ -142,6 +144,8 @@ protected:
 	 * Model resolution (i.e. number of voxels in each dimension)
 	 */
 	unsigned int _modelResolution;
+
+	unsigned int _nbOfLevels;
 
 	/**
 	 * List of all filenames that producer will have to load (nodes and bricks)
