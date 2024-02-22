@@ -130,6 +130,13 @@ public:
 	 */
 	/*const*/ std::vector< std::string >/*&*/ getFilenames() const;
 
+	/**
+	 * Get the list of all filenames that producer will have to load (nodes and bricks)
+	 *
+	 * @return list of all filenames
+	 */
+	/*const*/ std::vector< std::string >/*&*/ getRangeFilenames() const;
+
 	/**************************************************************************
 	 **************************** PROTECTED SECTION ***************************
 	 **************************************************************************/
@@ -155,6 +162,7 @@ protected:
 #pragma warning( disable:4251 )
 #endif
 	std::vector< std::string > _filenames;
+	std::vector< std::string > _rangeFileNames;
 #if defined _MSC_VER
 #pragma warning( pop )
 #endif

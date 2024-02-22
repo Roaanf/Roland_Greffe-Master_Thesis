@@ -220,6 +220,10 @@ public:
 	 */
 	void attachProducer( GvUtils::GsIDataLoader< DataTList >* srcProducer );
 
+	void setLowThreshold(float low);
+
+	void setHighThreshold(float high);
+
 	/**************************************************************************
 	 **************************** PROTECTED SECTION ***************************
 	 **************************************************************************/
@@ -243,6 +247,10 @@ protected:
 	 */
 	uint _maxDepth;
 
+	float _producerThresholdLow;
+
+	float _producerThresholdHigh;
+
 	/**
 	 * Localization depth's list of nodes that producer has to produce
 	 *
@@ -265,6 +273,8 @@ protected:
 	 * It corresponds to the childAddress of an GvStructure::GsNode.
 	 */
 	GvCore::Array3D< uint >* _h_nodesBuffer;
+
+	GvCore::Array3D< unsigned short >* _h_rangeBuffer;
 
 	/**
 	 * Channels caches pool

@@ -138,7 +138,7 @@ public:
 	 *
 	 * @return the type of the region (.i.e returns constantness information for that region)
 	 */
-	virtual VPRegionInfo getRegion( const float3& pPosition, const float3& pSize, GvCore::GPUPoolHost< GvCore::Array3D, TDataTypeList >* pBrickPool, size_t pOffsetInPool );
+	virtual VPRegionInfo getRegion( const float3& pPosition, const float3& pSize, GvCore::GPUPoolHost< GvCore::Array3D, TDataTypeList >* pBrickPool, size_t pOffsetInPool, float thLow, float thHigh, GvCore::Array3D< unsigned short >* rangeBuffer, size_t nbOfTheReq);
 	/**
 	 * Provides constantness information about a region.
 	 *
@@ -271,10 +271,17 @@ protected:
 	 */
 	std::vector< unsigned char* > _blockCache;
 
+	std::vector< unsigned short* > _rangeCache;
+
 	/**
 	 * List of all filenames that producer will have to load (nodes and bricks).
 	 */
 	std::vector< std::string > _filesNames;
+
+	/**
+	 * List of all filenames that producer will have to load (nodes and bricks).
+	 */
+	std::vector< std::string > _rangeFilesNames;
 
 	/**
 	 * Number of channel in the data structure (color, normal, density, etc...)
@@ -353,7 +360,7 @@ protected:
 	 *
 	 * @return a flag telling wheter or not the brick has been loaded (some brick can contain no data).
 	 */
-	bool loadBrick( int pLevel, const uint3& pBlockPos, GvCore::GPUPoolHost< GvCore::Array3D, TDataTypeList >* pDataPool, size_t pOffsetInPool );
+	bool loadBrick( int pLevel, const uint3& pBlockPos, GvCore::GPUPoolHost< GvCore::Array3D, TDataTypeList >* pDataPool, size_t pOffsetInPool, float thLow, float thHigh, GvCore::Array3D< unsigned short >* rangeBuffer, size_t nbOfRequest);
 
 	/**************************************************************************
 	 ***************************** PRIVATE SECTION ****************************

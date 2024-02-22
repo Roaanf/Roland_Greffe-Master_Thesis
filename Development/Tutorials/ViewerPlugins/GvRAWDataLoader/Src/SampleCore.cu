@@ -197,13 +197,13 @@ void SampleCore::init()
 
 	// TO DO :
 	// Define the brick memory pool size according to the available VRAM
-	// cudaMemGetInfo isn't giving me the correct value bruh -> might be correct actually but does swap stuff ?f
+	// cudaMemGetInfo isn't giving me the correct svalue bruh -> might be correct actually but does swap stuff ?f
 	size_t freeGPUMem, totalGPUMem;
 	cudaMemGetInfo( &freeGPUMem, &totalGPUMem);
   
-	_brickMemoryPool = (size_t)2000 * (size_t)1024 * (size_t)1024;
+	_brickMemoryPool = (size_t)5000 * (size_t)1024 * (size_t)1024;
 	freeGPUMem *= 0.70;
-  
+
 	// Temp fix because we have issue with data pools > 2Go
 	if (freeGPUMem <= _brickMemoryPool){
 		_brickMemoryPool = freeGPUMem;
@@ -1013,6 +1013,8 @@ void SampleCore::setProducerThresholdLow( float pValue )
 {
 	_producerThresholdLow = pValue;
 
+	_producer->setLowThreshold(pValue);
+
 	// Update device memory
 	GS_CUDA_SAFE_CALL( cudaMemcpyToSymbol( cProducerThresholdLow, &_producerThresholdLow, sizeof( _producerThresholdLow ), 0, cudaMemcpyHostToDevice ) );
 
@@ -1023,11 +1025,13 @@ void SampleCore::setProducerThresholdLow( float pValue )
 /******************************************************************************
  * Set the producer's threshold
  *
- * @param pValue the threshold
+ * @param pValue the thresholdsss
  ******************************************************************************/
 void SampleCore::setProducerThresholdHigh( float pValue )
 {
 	_producerThresholdHigh = pValue;
+
+	_producer->setHighThreshold(pValue);
 
 	// Update device memory
 	GS_CUDA_SAFE_CALL( cudaMemcpyToSymbol( cProducerThresholdHigh, &_producerThresholdHigh, sizeof( _producerThresholdHigh ), 0, cudaMemcpyHostToDevice ) );

@@ -143,7 +143,7 @@ __forceinline__ void GsNodeVisitorKernel
 		// Set current brick as "used"
 		if ( pNode.hasBrick() )
 		{
-			pGpuCache._brickCacheManager.setElementUsage( pNode.getBrickAddress() );
+			pGpuCache._brickCacheManager.setElementUsage( pNode.getBrickAddress() * (TVolTreeKernelType::BrickResolution::get().x + 2) + 1);
 		}
 
 		// ---- Emit requests if needed (node subdivision or brick loading/producing) ----
@@ -208,7 +208,7 @@ __forceinline__ void GsNodeVisitorKernel
 		pBrickSampler._sampleOffsetInNodeTree = pSampleOffsetInNodeTree;
 		pBrickSampler._scaleTree2BrickPool = pVolumeTree.brickSizeInCacheNormalized.x / pBrickSampler._nodeSizeTree;
 
-		pBrickSampler._brickParentPosInPool = pVolumeTree.brickCacheResINV * make_float3( GvStructure::GsNode::unpackBrickAddress( brickParentAddressEnc ) /* * make_uint3(18, 18, 18)) */ )
+		pBrickSampler._brickParentPosInPool = pVolumeTree.brickCacheResINV * make_float3( GvStructure::GsNode::unpackBrickAddress( brickParentAddressEnc ) * (TVolTreeKernelType::BrickResolution::get().x + 2) + 1 )
 			+ brickChildNormalizedOffset * pVolumeTree.brickSizeInCacheNormalized.x;
 
 		if ( brickChildAddressEnc )
@@ -218,7 +218,7 @@ __forceinline__ void GsNodeVisitorKernel
 			//pBrickSampler.mipMapOn = true; // "true" is not sufficient :  when no parent, program is very slow
 			pBrickSampler._mipMapOn = ( brickParentAddressEnc == 0 ) ? false : true;
 
-			pBrickSampler._brickChildPosInPool = make_float3( GvStructure::GsNode::unpackBrickAddress(brickChildAddressEnc) /* * make_uint3(18, 18, 18)*/) * pVolumeTree.brickCacheResINV;
+			pBrickSampler._brickChildPosInPool = make_float3( GvStructure::GsNode::unpackBrickAddress(brickChildAddressEnc) * (TVolTreeKernelType::BrickResolution::get().x + 2) + 1) * pVolumeTree.brickCacheResINV;
 		}
 		else
 		{

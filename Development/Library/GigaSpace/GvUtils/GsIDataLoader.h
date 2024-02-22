@@ -126,7 +126,7 @@ public:
 	 *
 	 * @return the type of the region (.i.e returns constantness information for that region)
 	 */
-	inline virtual VPRegionInfo getRegion( const float3& pPosition, const float3& pSize, GvCore::GPUPoolHost< GvCore::Array3D, TDataTypeList >* pBrickPool, size_t pOffsetInPool );
+	inline virtual VPRegionInfo getRegion( const float3& pPosition, const float3& pSize, GvCore::GPUPoolHost< GvCore::Array3D, TDataTypeList >* pBrickPool, size_t pOffsetInPool, float thLow, float thHigh, GvCore::Array3D< unsigned short >* rangeBuffer, size_t nbRequest);
 
 	/**
 	 * Provides constantness information about a region. Resolution is here for compatibility. TODO:Remove resolution.

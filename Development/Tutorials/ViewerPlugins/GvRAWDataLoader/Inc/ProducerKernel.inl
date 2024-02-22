@@ -77,11 +77,12 @@ inline void ProducerKernel< TDataStructureType >
  ******************************************************************************/
 template< typename TDataStructureType >
 inline void ProducerKernel< TDataStructureType >
-::init( uint maxdepth, const GvCore::GsLinearMemoryKernel< uint >& nodescache, const DataCachePoolKernelType& datacachepool )
+::init( uint maxdepth, const GvCore::GsLinearMemoryKernel< uint >& nodescache, const DataCachePoolKernelType& datacachepool, const GvCore::GsLinearMemoryKernel< unsigned short >& requestscache)
 {
 	_maxDepth = maxdepth;
 	_hostNodeCache = nodescache;
 	_hostDataCache = datacachepool;
+	_hostRangeCache = requestscache;
 }
 
 /******************************************************************************
@@ -193,11 +194,17 @@ inline uint ProducerKernel< TDataStructureType >
 	__shared__ bool smIsEmptyNode;
 	if ( pProcessID == 0 )
 	{
-		smIsEmptyNode = true;
+		smIsEmptyNode = false;
 	}
 	// Thread Synchronization
 	__syncthreads();
 
+	unsigned short min = _hostRangeCache.get(pRequestID * 2);
+	unsigned short max = _hostRangeCache.get(pRequestID * 2 + 1);
+	if (((min <= cProducerThresholdLow) && (max <= cProducerThresholdLow)) || ((min >= cProducerThresholdHigh) && (max >= cProducerThresholdHigh))) {
+		// The brick is not in the Producer's range
+		return 2;
+	}
 	/*
 	if (threadIdx.x == 0) {
 		printf("pNewElemAddress : %u / %u / %u \n", pNewElemAddress.x, pNewElemAddress.y, pNewElemAddress.z);
@@ -213,12 +220,14 @@ inline uint ProducerKernel< TDataStructureType >
 		// Retrieve Host data
 		voxelData = _hostDataCache.getChannel( Loki::Int2Type< 0/*data channel index*/ >() ).get( blockStartAddress + index );
 
+		/*
 		// Threshold management
 		// => modify the return value to flag the node as empty if required
 		if ( (voxelData >= cProducerThresholdLow) && (voxelData <= cProducerThresholdHigh) )
 		{
 			smIsEmptyNode = false;
 		}
+		*/
 
 		// Compute offset in memory where to write data
 		voxelOffset.x = index % BrickFullRes::x;

@@ -255,7 +255,13 @@ void CacheManagerInvalidatePointers( GsCacheManagerKernel< ElementRes, AddressTy
 		if ( ! AddressType::isNull( elementPointer ) )
 		{
 			const uint3 elemAddress = AddressType::unpackAddress( elementPointer );
-			const uint3 elemCacheSlot = ( elemAddress / ElementRes::get() );
+			uint3 elemCacheSlot = elemAddress;
+			//Awful hardoded TODO not do that
+			if (ElementRes::get().x == 8) {
+				if (ElementRes::get().y == 1) {
+					elemCacheSlot = (elemAddress / ElementRes::get());
+				}
+			}
 
 			if ( pCacheManager._timeStampArray.get( elemCacheSlot ) == 1 )
 			{
@@ -358,6 +364,8 @@ void CacheManagerCreateUpdateMask( const uint pNbElements, const uint* __restric
 	// __launch_bounds__( maxThreadsPerBlock, minBlocksPerMultiprocessor )
 	void UpdateBrickUsageFromNodes( uint numElem, uint *nodeTilesAddressList, VolTreeKernel volumeTree, GPUCacheType gpuCache )
 	{
+		/*
+		UNUSED
 		const size_t lineSize = __uimul(blockDim.x, gridDim.x);
 		const size_t elem = (size_t)threadIdx.x + __uimul(blockIdx.x, blockDim.x) + __uimul(blockIdx.y, lineSize);
 
@@ -373,11 +381,12 @@ void CacheManagerCreateUpdateMask( const uint pNbElements, const uint* __restric
 
 				if ( node.hasBrick() )
 				{
-					gpuCache._brickCacheManager.setElementUsage( node.getBrickAddress() );
+					gpuCache._brickCacheManager.setElementUsage( node.getBrickAddress() * 18 + 1 );
 					//setBrickUsage<VolTreeKernel>(node.getBrickAddress());
 				}
 			}
 		}
+		*/
 	}
 
 	// FIXME: Move this to another place!

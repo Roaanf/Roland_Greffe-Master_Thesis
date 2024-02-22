@@ -84,7 +84,7 @@ GsIDataLoader< TDataTypeList >
  ******************************************************************************/
 template< typename TDataTypeList >
 inline GsIDataLoader< TDataTypeList >::VPRegionInfo GsIDataLoader< TDataTypeList >
-::getRegion( const float3& pPosition, const float3& pSize, GvCore::GPUPoolHost< GvCore::Array3D, TDataTypeList >* pBrickPool, size_t pOffsetInPool )
+::getRegion( const float3& pPosition, const float3& pSize, GvCore::GPUPoolHost< GvCore::Array3D, TDataTypeList >* pBrickPool, size_t pOffsetInPool, float thLow, float thHigh, GvCore::Array3D< unsigned short >* rangeBuffer, size_t nbRequest)
 {
 	return VP_UNKNOWN_REGION;
 }

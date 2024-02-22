@@ -134,13 +134,14 @@ bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& p
 		unsigned int * nodeData = dataStructureIOHandlerUP->_nodeData;
 		unsigned short * brickData = dataStructureIOHandlerUP->_brickData;
 		size_t _nodeGridSize = dataStructureIOHandlerUP->_nodeGridSize;
+		unsigned short* upRangeData = dataStructureIOHandlerUP->_rangeData;
 
 		// The coarser data handler was allocated dynamically due to memory consumption considerations.
 		// here i pre allocate it to make it way faster
 		size_t nbOfvalues = (1 << level);
 		dataStructureIOHandlerDOWN = new GsDataStructureIOHandler( pFileName, level, brickWidth, dataTypes[0], true, dataStructureIOHandlerUP->getBufferSize()/2);
 
-		// Iterate through nodes of the structure
+		// Iterate through nodes of the structure (UP structure ???)
 		size_t nodePos[ 3 ];
 		for ( nodePos[2] = 0; nodePos[2] < dataStructureIOHandlerUP->_nodeGridSize; nodePos[2]++ )
 		for ( nodePos[1] = 0; nodePos[1] < dataStructureIOHandlerUP->_nodeGridSize; nodePos[1]++ )
@@ -157,7 +158,8 @@ bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& p
 			}
 
 			unsigned int brickoffset = ( node & 0x3fffffff );
-
+			unsigned short min = upRangeData[brickoffset * 2];
+			unsigned short max = upRangeData[brickoffset * 2 + 1];
 			// Iterate through voxels of the current node
 			size_t voxelPos[ 3 ];
 			// Le += 2 c'est pcq on fait un mipmap au niveau sup donc on a 8 fois moins de voxels (/2 par chaque dimension)
@@ -203,7 +205,7 @@ bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& p
 #endif
 				}
 
-				// Coarser voxel is scaled from current UP voxel (2 times smaller for octree)
+				// Coarser voxel is scaled from current UP voxel (2 times smaller for octree)ssssssssssssssssss
 				size_t voxelPosDOWN[3];
 				voxelPosDOWN[ 0 ] = voxelPos[ 0 ] / 2;
 				voxelPosDOWN[ 1 ] = voxelPos[ 1 ] / 2;
@@ -215,6 +217,17 @@ bool GsDataStructureMipmapGenerator::generateMipmapPyramid( const std::string& p
 				//unsigned short vd[ 1 ];		// "vd" stands for "voxel data"
 				vd = static_cast< unsigned short >( voxelDataDOWNf / 8.0 );
 				dataStructureIOHandlerDOWN->setVoxel_buffered( voxelPosDOWN, &vd, 0 );
+				
+				/*
+				Not needed since setVoxelBuffered already min max on vd !
+				if (vd < min) {
+					min = vd;qqqqqssssssssssssssss
+				}
+				if (vd > max) {
+					max = vd;
+				}
+				*/
+				dataStructureIOHandlerDOWN->updateRange( voxelPosDOWN, min, max);
 
 #ifdef NORMALS
 				// Set normal in coarser voxel

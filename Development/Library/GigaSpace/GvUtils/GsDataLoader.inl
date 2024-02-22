@@ -49,6 +49,7 @@
 #include "GvUtils/GsBrickLoaderChannelInitializer.h"
 #include "GvCore/GsError.h"
 #include "GvStructure/GsReader.h"
+#include "GsDataLoader.h"
 
 /******************************************************************************
  ****************************** INLINE DEFINITION *****************************
@@ -126,6 +127,7 @@ GsDataLoader< TDataTypeList >
 			// Files are stored by mipmap level in the list :
 			// - first : node file
 			// - then : brick file for each channel
+			// - finaly : range file
 			std::string fileNameIndex = _filesNames[ ( _numChannels + 1 ) * level ];
 			
 			// Open node file
@@ -256,6 +258,54 @@ GsDataLoader< TDataTypeList >
 					this->_useCache = false;
 				}
 			}
+
+			// Open .range files
+			fileNameIndex = _rangeFilesNames[level];
+			FILE* rangeFile = fopen(fileNameIndex.c_str(), "rb");
+			
+			if (rangeFile) {
+#ifdef WIN32
+				_fseeki64(rangeFile, 0, SEEK_END);
+
+				__int64 size = _ftelli64(rangeFile);
+#else
+				fseeko(rangeFile, 0, SEEK_END);
+
+				off_t size = ftello(rangeFile);
+#endif
+
+				unsigned short* tmpCache = new unsigned short[size / 2];
+#ifdef WIN32
+				_fseeki64(rangeFile, 0, SEEK_SET);
+#else
+				fseeko(rangeFile, 0, SEEK_SET);
+#endif
+
+				// Read range file and store data in the tmpCache buffer
+				if (fread(tmpCache, 1, static_cast<size_t>(size), rangeFile) != size)
+				{
+					// Handle error if reading node file has failed
+					std::cout << "GsDataLoader::GsDataLoader: Unable to open file " << _rangeFilesNames[level] << std::endl;
+
+					this->_useCache = false;
+				}
+
+				// Close range file
+				fclose(rangeFile);
+
+				_rangeCache.push_back(tmpCache);
+
+			}
+			else
+			{
+				// Handle error if opening brick file has failed
+				std::cout << "GsDataLoader::GsDataLoader: Unable to open file " << _rangeFilesNames[level] << std::endl;
+
+				this->_useCache = false;
+			}
+			
+
+
 		}
 	}
 
@@ -339,6 +389,7 @@ int GsDataLoader< TDataTypeList >
 	// Reset internal state
 	pResolution = 1;
 	_filesNames.clear();
+	_rangeFilesNames.clear();
 
 	// Use GigaSpace Meta Data file reader
 	GvStructure::GsReader gigaSpaceReader;
@@ -346,6 +397,7 @@ int GsDataLoader< TDataTypeList >
 	bool statusOK = gigaSpaceReader.read( pFilename );
 	pResolution = gigaSpaceReader.getModelResolution();
 	_filesNames = gigaSpaceReader.getFilenames();
+	_rangeFilesNames = gigaSpaceReader.getRangeFilenames();
 	nbOfLevels = gigaSpaceReader.getLevelOfRes();
 	// Handle error(s)
 	assert( statusOK );
@@ -449,7 +501,7 @@ unsigned int GsDataLoader< TDataTypeList >
  ******************************************************************************/
 template< typename TDataTypeList >
 bool GsDataLoader< TDataTypeList >
-::loadBrick( int pLevel, const uint3& pBlockPos, GvCore::GPUPoolHost< GvCore::Array3D, TDataTypeList >* pDataPool, size_t pOffsetInPool )
+::loadBrick( int pLevel, const uint3& pBlockPos, GvCore::GPUPoolHost< GvCore::Array3D, TDataTypeList >* pDataPool, size_t pOffsetInPool, float thLow, float thHigh, GvCore::Array3D< unsigned short >* rangeBuffer, size_t nbOfRequest)
 {
 	// Retrieve the resolution at given level (i.e. the number of voxels in each dimension)
 	uint3 levelSize = getLevelRes( pLevel );
@@ -464,6 +516,22 @@ bool GsDataLoader< TDataTypeList >
 
 	// Retrieve the node encoded address given a mipmap level and a 3D node indexed position
 	unsigned int indexVal = getBlockIndex( pLevel, pBlockPos );
+
+	// Test if brick is in threshold
+	// FUCKKCKKCKQDHGKQDHGKQg
+	/*
+	size_t offset = indexVal & 0x3FFFFFFFU;
+	unsigned short min = _rangeCache[pLevel][offset * 2];
+	unsigned short max = _rangeCache[pLevel][offset * 2 + 1];
+	
+	if (((min <= thLow) && (max <= thLow)) || ((min >= thHigh) && (max >= thHigh))) {
+		// The brick is not in the Producer's range
+		return false;
+	}
+	*/
+	size_t offset = indexVal & 0x3FFFFFFFU;
+	rangeBuffer->get(nbOfRequest * 2) = _rangeCache[pLevel][offset * 2];
+	rangeBuffer->get(nbOfRequest * 2) = _rangeCache[pLevel][offset * 2 + 1];
 
 	// Test if node contains a brick
 	if ( indexVal & GV_VTBA_BRICK_FLAG )
@@ -494,7 +562,7 @@ bool GsDataLoader< TDataTypeList >
  ******************************************************************************/
 template< typename TDataTypeList >
 GsDataLoader< TDataTypeList >::VPRegionInfo GsDataLoader< TDataTypeList >
-::getRegion( const float3& pPosition, const float3& pSize, GvCore::GPUPoolHost< GvCore::Array3D, TDataTypeList >* pBrickPool, size_t pOffsetInPool )
+::getRegion( const float3& pPosition, const float3& pSize, GvCore::GPUPoolHost< GvCore::Array3D, TDataTypeList >* pBrickPool, size_t pOffsetInPool, float thLow, float thHigh, GvCore::Array3D< unsigned short >* rangeBuffer, size_t nbOfTheReq)
 {
 	// Retrieve the level of resolution associated to a given size of a region of space.
 	int level =	getDataLevel( pSize, _bricksRes );
@@ -508,7 +576,7 @@ GsDataLoader< TDataTypeList >::VPRegionInfo GsDataLoader< TDataTypeList >
 	if ( level >= 0 && level < _numMipMapLevels )
 	{
 		// Try to load brick given localization parameters
-		if ( loadBrick( level, blockCoords, pBrickPool, pOffsetInPool ) )
+		if ( loadBrick( level, blockCoords, pBrickPool, pOffsetInPool, thLow, thHigh, rangeBuffer, nbOfTheReq) )
 		{
 			return GsDataLoader< TDataTypeList >::VP_UNKNOWN_REGION;
 		}

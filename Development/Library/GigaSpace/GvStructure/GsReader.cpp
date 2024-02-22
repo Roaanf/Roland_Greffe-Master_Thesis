@@ -484,6 +484,10 @@ bool GsReader::read( const char* pFilename )
 		{
 			_filenames.push_back( brickFilenames[ k + p * _nbOfLevels ] );
 
+			std::string str = brickFilenames[k + p * _nbOfLevels];
+
+			_rangeFileNames.push_back(str.replace(str.end() - 6, str.end(), "range"));
+
 			// LOG
 			//printf( "%s\n", brickFilenames[ k + p * nbLevels ].c_str() );
 		}
@@ -510,6 +514,11 @@ unsigned int GsReader::getModelResolution() const
 /*const*/ vector< string >/*&*/ GsReader::getFilenames() const
 {
 	return _filenames;
+}
+
+std::vector<std::string> GvStructure::GsReader::getRangeFilenames() const
+{
+	return _rangeFileNames;
 }
 
 unsigned int GsReader::getLevelOfRes() const

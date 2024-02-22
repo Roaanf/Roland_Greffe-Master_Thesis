@@ -133,6 +133,14 @@ public:
 	*/
 
 	unsigned short * _brickData;
+
+	/**
+	 * Array that holds the range of values in each brick (HARDCODED TO USHORT)
+	*/
+
+	unsigned short* _rangeData;
+
+	bool* _rangeSet;
 	
 	/******************************** METHODS *********************************/
 
@@ -317,6 +325,9 @@ public:
 	void writeFiles();
 
 	size_t GsDataStructureIOHandler::getBufferSize();
+
+	void updateRange( size_t pNodePos[3], unsigned short min, unsigned short max);
+
 	/**************************************************************************
 	 **************************** PROTECTED SECTION ***************************
 	 **************************************************************************/
@@ -338,6 +349,11 @@ protected:
 	FILE* _nodeFile;
 
 	/**
+	 * Node file
+	 */
+	FILE* _rangeFile;
+
+	/**
 	 * List of brick files
 	 */
 #if defined _MSC_VER
@@ -357,6 +373,7 @@ protected:
 #pragma warning( disable:4251 )
 #endif
 	std::string _fileNameNode;
+	std::string _fileNameRange;
 #if defined _MSC_VER
 #pragma warning( pop )
 #endif
@@ -480,6 +497,7 @@ protected:
 	 */
 	void openFiles( const std::string& name, bool newFiles );
 
+
 	/**
 	 * Retrieve the node file name.
 	 * An example of GigaVoxels node file could be : "fux_BR8_B1_L0.nodes"
@@ -510,6 +528,8 @@ protected:
 	 * @return the brick file name in GigaVoxels format.
 	 */
 	static std::string getFileNameBrick( const std::string& pName, size_t pLevel, size_t pBrickWidth, unsigned int pDataChannelIndex, const std::string& pDataTypeName );
+
+	static std::string getFileNameRange(const std::string& pName, size_t pLevel, size_t pBrickWidth, unsigned int pDataChannelIndex, const std::string& pDataTypeName);
 
 	/**
 	 * Create a brick node info (address + brick index)

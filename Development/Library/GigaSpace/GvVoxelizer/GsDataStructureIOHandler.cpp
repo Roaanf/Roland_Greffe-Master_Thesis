@@ -99,6 +99,7 @@ GsDataStructureIOHandler::GsDataStructureIOHandler( const std::string& pName,
 // TO DO
 // attention � l'ordre des initializations...
 :	_nodeFile( NULL )
+,	_rangeFile(NULL)
 ,	_level( pLevel )
 ,	_brickWidth( pBrickWidth )
 //,	_brickSize( ( pBrickWidth) * ( pBrickWidth) * ( pBrickWidth) )
@@ -138,6 +139,18 @@ GsDataStructureIOHandler::GsDataStructureIOHandler( const std::string& pName,
 	if (_nodeData == NULL) {
 		std::cout << "Couldn't allocate the nodedata buffer" << std::endl;
 	}
+	
+	_rangeData = (unsigned short*)calloc(2 * (size_t)_nodeGridSize * (size_t)_nodeGridSize * (size_t)_nodeGridSize, sizeof(unsigned short));
+
+	if (_rangeData == NULL) {
+		std::cout << "Couldn't allocate the rangedata buffer" << std::endl;
+	}
+
+	_rangeSet = (bool*)calloc((size_t)_nodeGridSize * (size_t)_nodeGridSize * (size_t)_nodeGridSize, sizeof(bool));
+
+	if (_rangeSet == NULL) {
+		std::cout << "Couldn't allocate the rangedata buffer" << std::endl;
+	}
 }
 
 /******************************************************************************
@@ -147,7 +160,7 @@ GsDataStructureIOHandler::GsDataStructureIOHandler( const std::string& pName,
  * @param pLevel level of resolution of the data structure
  * @param pBrickWidth width of bricks in the data structure
  * @param pDataTypes types of voxel data (i.e. uchar4, float, float4, etc...)
- * @param pNewFiles a flag telling whether or not "new files" are used
+ * @param pNewFiles a flags telling whether or not "new files" are used
  ******************************************************************************/
 GsDataStructureIOHandler::GsDataStructureIOHandler( const std::string& pName, 
 							size_t pLevel,
@@ -157,6 +170,7 @@ GsDataStructureIOHandler::GsDataStructureIOHandler( const std::string& pName,
 // TO DO
 // attention � l'ordre des initializations...
 :	_nodeFile( NULL )
+,	_rangeFile(NULL)
 ,	_level( pLevel )
 ,	_brickWidth( pBrickWidth )
 //,	_brickSize( (pBrickWidth) * ( pBrickWidth) * (pBrickWidth) )
@@ -193,9 +207,11 @@ GsDataStructureIOHandler::~GsDataStructureIOHandler()
 	}
 
 	fclose( _nodeFile );
+	fclose(_rangeFile);
 
 	free(_nodeData);
 	free(_brickData);
+	free(_rangeData);
 
 	for ( unsigned int c = 0; c < _dataTypes.size(); ++c )
 	{
@@ -231,9 +247,9 @@ float GsDataStructureIOHandler::getVoxelSize() const
  *
  * @param pVoxelPos voxel position
  * @param pVoxelData voxel data
- * @param pDataChannel data channel index
+ * @param pDataChannel data channel indexs
  * @param pInputDataSize size of the input data (in bytes), it may be smaller 
- * than the type of the channel. If 0, use sizeof( channel ) instead.
+ * than the type of the channel. If 0, use sizeof( channel ) instead
  ******************************************************************************/
 void GsDataStructureIOHandler::setVoxel_buffered( size_t pVoxelPos[ 3 ], const void* pVoxelData, unsigned int pDataChannel, unsigned int pInputDataSize )
 {
@@ -281,6 +297,54 @@ void GsDataStructureIOHandler::setVoxel_buffered( size_t pVoxelPos[ 3 ], const v
 	// Write voxel data
 	unsigned short* voxelData = (unsigned short *) pVoxelData;
 	_brickData[offset * _brickSize + voxelPosInBrick[0] + (_brickWidth + 2) * (voxelPosInBrick[1] + (_brickWidth + 2) * voxelPosInBrick[2])] = *voxelData;
+	
+	//minMax check
+	unsigned short min = _rangeData[offset * 2];
+	unsigned short max = _rangeData[offset * 2 + 1];
+	if (_rangeSet[offset]) {
+		if (*voxelData < min) {
+			_rangeData[offset * 2] = *voxelData;
+		}
+
+		if (*voxelData > max) {
+			_rangeData[offset * 2 + 1] = *voxelData;
+		}
+	}
+	else {
+		_rangeData[offset * 2] = *voxelData;
+		_rangeData[offset * 2 + 1] = *voxelData;
+		_rangeSet[offset] = true;
+	}
+	
+}
+
+void GsDataStructureIOHandler::updateRange(size_t pVoxelPos[3], unsigned short minIn, unsigned short maxIn) {
+	
+	size_t nodePos[3];
+	nodePos[0] = pVoxelPos[0] / _brickWidth;
+	nodePos[1] = pVoxelPos[1] / _brickWidth;
+	nodePos[2] = pVoxelPos[2] / _brickWidth;
+
+	unsigned int node = _nodeData[nodePos[0] + _nodeGridSize * (nodePos[1] + _nodeGridSize * nodePos[2])];
+
+	// If node is empty, as we set a voxel data, the node information needs to be updated
+	if (node == _cEmptyNodeFlag)
+	{
+		return;
+	}
+
+	unsigned int offset = getBrickOffset(node);
+
+	unsigned short min = _rangeData[offset * 2];
+	unsigned short max = _rangeData[offset * 2 + 1];
+	// Should already be rangeSet because we setVoxel before !sssss
+	if (minIn < min) {
+		_rangeData[offset * 2] = minIn;
+	}
+
+	if (maxIn > max) {
+		_rangeData[offset * 2 + 1] = maxIn;
+	}
 }
 
 /******************************************************************************
@@ -577,7 +641,7 @@ void GsDataStructureIOHandler::computeBorders()
 
 						// C'est effectivement plus compliqué que ce que je pensais
 						// Je vais faire des gros IF pour chaques cas possible 
-						// C'est horible mais je jure je repasse dessus un jour
+						// C'est horible mais je jure je repasse dessus un jour (sale blague)
 
 						if ((i2 == -1) && (j2 == -1) && (k2 == -1)) {
 							size_t x = 1;
@@ -884,6 +948,8 @@ void GsDataStructureIOHandler::openFiles( const string& pName, bool pNewFiles )
 	// Retrieve the node file name
 	_fileNameNode = getFileNameNode( pName, _level, _brickWidth );
 
+	_fileNameRange = getFileNameRange(pName, _level, _brickWidth, 0, GsDataTypeHandler::getTypeName(_dataTypes[0]));
+
 	// Handle case where no "new files" are requested
 	if ( ! pNewFiles )
 	{
@@ -923,6 +989,8 @@ void GsDataStructureIOHandler::openFiles( const string& pName, bool pNewFiles )
 		//}
 		//fflush( _nodeFile );
 	}
+
+	_rangeFile = fopen(_fileNameRange.data(), "wb+");
 
 	// [ 2 ] - Handle brick file(s) - [ 2 ]
 
@@ -1012,6 +1080,15 @@ string GsDataStructureIOHandler::getFileNameBrick( const string& pName, size_t p
 	return oss.str();
 }
 
+string GsDataStructureIOHandler::getFileNameRange(const string& pName, size_t pLevel, size_t pBrickWidth, unsigned int pDataChannelIndex, const string& pDataTypeName) {
+	
+	std::ostringstream oss;
+	
+	oss << pName << "_BR" << pBrickWidth << "_B1_L" << pLevel << "_C" << pDataChannelIndex << "_" << pDataTypeName << ".range";
+	
+	return oss.str();
+}
+
 /******************************************************************************
  * Tell whether or not a node is empty given its node info.
  *
@@ -1057,10 +1134,14 @@ void GsDataStructureIOHandler::writeFiles(){
 	//Write brick file in chunks ?
 	for ( size_t i = 0; i < _brickNumber; ++i ) {
 		fwrite( _brickData + i * _brickSize, sizeof( unsigned short ), _brickSize, _brickFiles[ 0 ] );
+		fwrite(_rangeData + i * 2, sizeof(unsigned short), 2, _rangeFile);
 	}
 	fflush( _brickFiles[ 0 ] );
+	fflush(_rangeFile);
+
 }
 
 size_t GsDataStructureIOHandler::getBufferSize() {
 	return (this->_trueNbOfValues * 1.5);
 }
+

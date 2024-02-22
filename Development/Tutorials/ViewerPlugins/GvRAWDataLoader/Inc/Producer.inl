@@ -46,6 +46,7 @@
 // GigaVoxels
 #include <GvCore/GsIProviderKernel.h>
 #include <GvCore/GsError.h>
+#include "Producer.h"
 
 /******************************************************************************
  ****************************** INLINE DEFINITION *****************************
@@ -80,6 +81,8 @@ Producer< TDataStructureType, TDataProductionManager >
 
 	// Allocate caches in mappable pinned memory
 	_channelsCachesPool	= new DataCachePool( make_uint3( this->_bufferNbVoxels, 1, 1 ), 2 );
+
+	_h_rangeBuffer = new GvCore::Array3D< unsigned short >(dim3(_nbMaxRequests * 16, 1, 1), 2); // Allocated mappable pinned memory // TODO : check this size limit
 
 	// Localization info initialization (code and depth)
 	// This is the ones that producer will have to produce
@@ -137,6 +140,7 @@ inline void Producer< TDataStructureType, TDataProductionManager >
 	delete _requestListLoc;
 	delete d_TempLocalizationCodeList;
 	delete d_TempLocalizationDepthList;
+	delete _h_rangeBuffer;
 }
 
 /******************************************************************************
@@ -171,6 +175,20 @@ void Producer< TDataStructureType, TDataProductionManager >
 	_dataLoader = srcProducer;
 }
 
+template<typename TDataStructureType, typename TDataProductionManager>
+inline void Producer<TDataStructureType, TDataProductionManager>::setLowThreshold(float low)
+{
+	_producerThresholdLow = low;
+	return;
+}
+
+template<typename TDataStructureType, typename TDataProductionManager>
+inline void Producer<TDataStructureType, TDataProductionManager>::setHighThreshold(float high)
+{
+	_producerThresholdHigh = high;
+	return;
+}
+
 /******************************************************************************
  * This method is called by the cache manager when you have to produce data for a given pool.
  * Implement the produceData method for the channel 0 (nodes)
@@ -190,7 +208,7 @@ inline void Producer< TDataStructureType, TDataProductionManager >
 				Loki::Int2Type< 0 > )
 {
 	// Initialize the device-side producer (with the node pool and the brick pool)
-	this->_kernelProducer.init( _maxDepth, _h_nodesBuffer->getDeviceArray(), _channelsCachesPool->getKernelPool() );
+	this->_kernelProducer.init( _maxDepth, _h_nodesBuffer->getDeviceArray(), _channelsCachesPool->getKernelPool(), _h_rangeBuffer->getDeviceArray());
 	GvCore::GsIProviderKernel< 0, KernelProducerType > kernelProvider( this->_kernelProducer );
 		
 	// Define kernel block size
@@ -257,7 +275,7 @@ inline void Producer< TDataStructureType, TDataProductionManager >
 				Loki::Int2Type< 1 > )
 {
 	// Initialize the device-side producer (with the node pool and the brick pool)
-	this->_kernelProducer.init( _maxDepth, _h_nodesBuffer->getDeviceArray(), _channelsCachesPool->getKernelPool() );
+	this->_kernelProducer.init( _maxDepth, _h_nodesBuffer->getDeviceArray(), _channelsCachesPool->getKernelPool(), _h_rangeBuffer->getDeviceArray() );
 	GvCore::GsIProviderKernel< 1, KernelProducerType > kernelProvider( this->_kernelProducer );
 	
 	// Define kernel block size
@@ -436,7 +454,7 @@ inline void Producer< TDataStructureType, TDataProductionManager >
 			
 			// Retrieve the node and associated brick located in this region of space,
 			// and depending of its type, if it contains data, load it.
-			loader->getRegion( regionPos, regionSize, _channelsCachesPool, brickOffset * i );
+			loader->getRegion( regionPos, regionSize, _channelsCachesPool, brickOffset * i, _producerThresholdLow, _producerThresholdLow, _h_rangeBuffer, i);
 		}
 
 		CUDAPM_STOP_EVENT( gpuProdDynamic_preLoadMgtData_dataLoad_elemLoop )

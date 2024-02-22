@@ -97,7 +97,13 @@ __forceinline__ uint3 GsNode::unpackBrickAddress( const uint pAddress )
 	res.x = ( pAddress & 0x3FF00000 ) >> 20;
 	res.y = ( pAddress & 0x000FFC00 ) >> 10;
 	res.z = ( pAddress & 0x000003FF );
-
+	
+	/*
+	// Fix to the issue with the limit of nb of voxels in cache to 2^10
+	res.x = res.x * 18 + 1;
+	res.y = res.y * 18 + 1;
+	res.z = res.z * 18 + 1;
+	*/
 	return res;
 }
 

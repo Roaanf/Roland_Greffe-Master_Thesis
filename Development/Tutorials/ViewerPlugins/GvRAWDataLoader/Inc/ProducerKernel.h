@@ -189,6 +189,11 @@ public:
 	GvCore::GsLinearMemoryKernel< uint >	_hostNodeCache;
 
 	/**
+	 * DEVICE-side associated HOST nodes cache
+	 */
+	GvCore::GsLinearMemoryKernel< unsigned short >	_hostRangeCache;
+
+	/**
 	 * DEVICE-side associated HOST data cache pool
 	 */
 	DataCachePoolKernelType _hostDataCache;
@@ -209,7 +214,7 @@ public:
 	 * @param nodescache nodes cache
 	 * @param datacachepool data cache pool
 	 */
-	inline void init( uint maxdepth, const GvCore::GsLinearMemoryKernel< uint >& nodescache, const DataCachePoolKernelType& datacachepool );
+	inline void init( uint maxdepth, const GvCore::GsLinearMemoryKernel< uint >& nodescache, const DataCachePoolKernelType& datacachepool, const GvCore::GsLinearMemoryKernel< unsigned short >& rangecache);
 
 	/**
 	 * Produce data on device.
