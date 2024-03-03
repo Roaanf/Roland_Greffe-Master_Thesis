@@ -175,6 +175,8 @@ void Producer< TDataStructureType, TDataProductionManager >
 	_dataLoader = srcProducer;
 }
 
+// TODO : These are unused should clean
+
 template<typename TDataStructureType, typename TDataProductionManager>
 inline void Producer<TDataStructureType, TDataProductionManager>::setLowThreshold(float low)
 {
@@ -186,6 +188,13 @@ template<typename TDataStructureType, typename TDataProductionManager>
 inline void Producer<TDataStructureType, TDataProductionManager>::setHighThreshold(float high)
 {
 	_producerThresholdHigh = high;
+	return;
+}
+
+template<typename TDataStructureType, typename TDataProductionManager>
+inline void Producer<TDataStructureType, TDataProductionManager>::setGradientRendering(bool pValue)
+{
+	_gradientRenderingBool = pValue;
 	return;
 }
 

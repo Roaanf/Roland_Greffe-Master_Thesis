@@ -192,6 +192,7 @@ inline uint ProducerKernel< TDataStructureType >
 	
 	// Shared Memory initialization
 	__shared__ bool smIsEmptyNode;
+
 	if ( pProcessID == 0 )
 	{
 		smIsEmptyNode = false;
@@ -199,12 +200,17 @@ inline uint ProducerKernel< TDataStructureType >
 	// Thread Synchronization
 	__syncthreads();
 
+
 	unsigned short min = _hostRangeCache.get(pRequestID * 2);
 	unsigned short max = _hostRangeCache.get(pRequestID * 2 + 1);
-	if (((min <= cProducerThresholdLow) && (max <= cProducerThresholdLow)) || ((min >= cProducerThresholdHigh) && (max >= cProducerThresholdHigh))) {
-		// The brick is not in the Producer's range
-		return 2;
+	// If we are in gradient rendering, the range value are not correct anymore ! -> Fallback to the old solution ?
+	if (!cGradientRendering) {
+		if (((min <= cProducerThresholdLow) && (max <= cProducerThresholdLow)) || ((min >= cProducerThresholdHigh) && (max >= cProducerThresholdHigh))) {
+			// The brick is not in the Producer's range
+			return 2;
+		}
 	}
+	
 	/*
 	if (threadIdx.x == 0) {
 		printf("pNewElemAddress : %u / %u / %u \n", pNewElemAddress.x, pNewElemAddress.y, pNewElemAddress.z);
@@ -215,29 +221,138 @@ inline uint ProducerKernel< TDataStructureType >
 	// Iterate through voxels of the current brick
 	const size_t blockStartAddress = (size_t)pRequestID/*brickIndex*/ * (size_t)ProducerKernel< TDataStructureType >::BrickVoxelAlignment;
 	const size_t nbThreads = (size_t)blockDim.x * (size_t)blockDim.y * (size_t)blockDim.z;
-	for ( size_t index = pProcessID; index < BrickFullRes::numElements/*nbVoxels*/; index += nbThreads )
-	{
-		// Retrieve Host data
-		voxelData = _hostDataCache.getChannel( Loki::Int2Type< 0/*data channel index*/ >() ).get( blockStartAddress + index );
-
-		/*
-		// Threshold management
-		// => modify the return value to flag the node as empty if required
-		if ( (voxelData >= cProducerThresholdLow) && (voxelData <= cProducerThresholdHigh) )
+	if (!cGradientRendering) {
+		for (size_t index = pProcessID; index < BrickFullRes::numElements/*nbVoxels*/; index += nbThreads)
 		{
-			smIsEmptyNode = false;
+			// Retrieve Host data
+			voxelData = _hostDataCache.getChannel(Loki::Int2Type< 0/*data channel index*/ >()).get(blockStartAddress + index);
+
+			// Threshold management
+			// => modify the return value to flag the node as empty if required
+			// Only used when gradientRendering is on
+			/*
+			if (cGradientRendering) {
+				if ((voxelData >= cProducerThresholdLow) && (voxelData <= cProducerThresholdHigh))
+				{
+					smIsEmptyNode = true;
+				}
+			}
+			*/
+
+			// Compute offset in memory where to write data
+			voxelOffset.x = index % BrickFullRes::x;
+			voxelOffset.y = (index / BrickFullRes::x) % BrickFullRes::y;
+			voxelOffset.z = index / (BrickFullRes::x * BrickFullRes::y);
+			destAddress = pNewElemAddress + make_uint3(voxelOffset);
+
+			// Write the voxel's data for the specified channel index
+			pDataPool.setValue< 0/*data channel index*/ >(destAddress, voxelData);
 		}
-		*/
-
-		// Compute offset in memory where to write data
-		voxelOffset.x = index % BrickFullRes::x;
-		voxelOffset.y = ( index / BrickFullRes::x ) % BrickFullRes::y;
-		voxelOffset.z = index / ( BrickFullRes::x * BrickFullRes::y );
-		destAddress = pNewElemAddress + make_uint3( voxelOffset );
-
-		// Write the voxel's data for the specified channel index
-		pDataPool.setValue< 0/*data channel index*/ >( destAddress, voxelData );
 	}
+	else {
+		for (size_t index = pProcessID; index < BrickFullRes::numElements/*nbVoxels*/; index += nbThreads)
+		{
+			// Retrieve Host data
+			// checkBorderData
+			// NEED TO CHECK THE BORDERS !!!
+			// Convert 1D index to a 3D index
+
+			VoxelType tmpComp1;
+			VoxelType tmpComp2;
+			VoxelType xDirGrad;
+			VoxelType yDirGrad;
+			VoxelType zDirGrad;
+
+			voxelOffset.x = index % BrickFullRes::x;
+			voxelOffset.y = (index / BrickFullRes::x) % BrickFullRes::y;
+			voxelOffset.z = index / (BrickFullRes::x * BrickFullRes::y);
+
+			// We are on the border ! -> Can't compute the gradient
+			if (voxelOffset.x == 0 ) {
+				tmpComp1 = _hostDataCache.getChannel(Loki::Int2Type< 0 >()).get(blockStartAddress + (voxelOffset.z * BrickFullRes::x * BrickFullRes::y) + (voxelOffset.y * BrickFullRes::x) + voxelOffset.x);
+				tmpComp2 = _hostDataCache.getChannel(Loki::Int2Type< 0 >()).get(blockStartAddress + (voxelOffset.z * BrickFullRes::x * BrickFullRes::y) + (voxelOffset.y * BrickFullRes::x) + voxelOffset.x + 1);
+			}
+			else if (voxelOffset.x == BrickFullRes::x - 1) {
+				tmpComp1 = _hostDataCache.getChannel(Loki::Int2Type< 0 >()).get(blockStartAddress + (voxelOffset.z * BrickFullRes::x * BrickFullRes::y) + (voxelOffset.y * BrickFullRes::x) + voxelOffset.x - 1);
+				tmpComp2 = _hostDataCache.getChannel(Loki::Int2Type< 0 >()).get(blockStartAddress + (voxelOffset.z * BrickFullRes::x * BrickFullRes::y) + (voxelOffset.y * BrickFullRes::x) + voxelOffset.x);
+			}
+			else {
+				tmpComp1 = _hostDataCache.getChannel(Loki::Int2Type< 0 >()).get(blockStartAddress + (voxelOffset.z * BrickFullRes::x * BrickFullRes::y) + (voxelOffset.y * BrickFullRes::x) + voxelOffset.x - 1);
+				tmpComp2 = _hostDataCache.getChannel(Loki::Int2Type< 0 >()).get(blockStartAddress + (voxelOffset.z * BrickFullRes::x * BrickFullRes::y) + (voxelOffset.y * BrickFullRes::x) + voxelOffset.x + 1);
+			}
+
+			if (tmpComp1 < tmpComp2) {
+				xDirGrad = tmpComp2 - tmpComp1;
+			}
+			else {
+				xDirGrad = tmpComp1 - tmpComp2;
+			}
+
+			//yDirGradient
+			if (voxelOffset.y == 0) {
+				tmpComp1 = _hostDataCache.getChannel(Loki::Int2Type< 0/*data channel index*/ >()).get(blockStartAddress + (voxelOffset.z * BrickFullRes::x * BrickFullRes::y) + ((voxelOffset.y) * BrickFullRes::x) + voxelOffset.x);
+				tmpComp2 = _hostDataCache.getChannel(Loki::Int2Type< 0/*data channel index*/ >()).get(blockStartAddress + (voxelOffset.z * BrickFullRes::x * BrickFullRes::y) + ((voxelOffset.y + 1) * BrickFullRes::x) + voxelOffset.x);
+			}
+			else if (voxelOffset.y == BrickFullRes::y - 1) {
+				tmpComp1 = _hostDataCache.getChannel(Loki::Int2Type< 0/*data channel index*/ >()).get(blockStartAddress + (voxelOffset.z * BrickFullRes::x * BrickFullRes::y) + ((voxelOffset.y - 1) * BrickFullRes::x) + voxelOffset.x);
+				tmpComp2 = _hostDataCache.getChannel(Loki::Int2Type< 0/*data channel index*/ >()).get(blockStartAddress + (voxelOffset.z * BrickFullRes::x * BrickFullRes::y) + ((voxelOffset.y) * BrickFullRes::x) + voxelOffset.x);
+			}
+			else {
+				tmpComp1 = _hostDataCache.getChannel(Loki::Int2Type< 0/*data channel index*/ >()).get(blockStartAddress + (voxelOffset.z * BrickFullRes::x * BrickFullRes::y) + ((voxelOffset.y - 1) * BrickFullRes::x) + voxelOffset.x);
+				tmpComp2 = _hostDataCache.getChannel(Loki::Int2Type< 0/*data channel index*/ >()).get(blockStartAddress + (voxelOffset.z * BrickFullRes::x * BrickFullRes::y) + ((voxelOffset.y + 1) * BrickFullRes::x) + voxelOffset.x);
+			}
+
+			if (tmpComp1 < tmpComp2) {
+				yDirGrad = tmpComp2 - tmpComp1;
+			}
+			else {
+				yDirGrad = tmpComp1 - tmpComp2;
+			}
+			//zDirGradient
+			if (voxelOffset.z == 0) {
+				tmpComp1 = _hostDataCache.getChannel(Loki::Int2Type< 0 >()).get(blockStartAddress + ((voxelOffset.z) * BrickFullRes::x * BrickFullRes::y) + (voxelOffset.y * BrickFullRes::x) + voxelOffset.x);
+				tmpComp2 = _hostDataCache.getChannel(Loki::Int2Type< 0 >()).get(blockStartAddress + ((voxelOffset.z + 1) * BrickFullRes::x * BrickFullRes::y) + (voxelOffset.y * BrickFullRes::x) + voxelOffset.x);
+			}
+			else if (voxelOffset.z == BrickFullRes::z - 1) {
+				tmpComp1 = _hostDataCache.getChannel(Loki::Int2Type< 0 >()).get(blockStartAddress + ((voxelOffset.z - 1) * BrickFullRes::x * BrickFullRes::y) + (voxelOffset.y * BrickFullRes::x) + voxelOffset.x);
+				tmpComp2 = _hostDataCache.getChannel(Loki::Int2Type< 0 >()).get(blockStartAddress + ((voxelOffset.z) * BrickFullRes::x * BrickFullRes::y) + (voxelOffset.y * BrickFullRes::x) + voxelOffset.x);
+			}
+			else {
+				tmpComp1 = _hostDataCache.getChannel(Loki::Int2Type< 0 >()).get(blockStartAddress + ((voxelOffset.z - 1) * BrickFullRes::x * BrickFullRes::y) + (voxelOffset.y * BrickFullRes::x) + voxelOffset.x);
+				tmpComp2 = _hostDataCache.getChannel(Loki::Int2Type< 0 >()).get(blockStartAddress + ((voxelOffset.z + 1) * BrickFullRes::x * BrickFullRes::y) + (voxelOffset.y * BrickFullRes::x) + voxelOffset.x);
+			}
+			
+			if (tmpComp1 < tmpComp2) {
+				zDirGrad = tmpComp2 - tmpComp1;
+			}
+			else {
+				zDirGrad = tmpComp1 - tmpComp2;
+			}
+
+			voxelData = (unsigned short)ceil(norm3d(xDirGrad, yDirGrad, zDirGrad));
+
+			
+			// Threshold management
+			// => modify the return value to flag the node as empty if required
+			// Only used when gradientRendering is on
+			/*
+			if (cGradientRendering) {
+				if ((voxelData >= cProducerThresholdLow) && (voxelData <= cProducerThresholdHigh))
+				{
+					smIsEmptyNode = true;
+				}
+			}
+			*/
+
+			// Compute offset in memory where to write data
+			destAddress = pNewElemAddress + make_uint3(voxelOffset);
+
+			// Write the voxel's data for the specified channel index
+			pDataPool.setValue< 0/*data channel index*/ >(destAddress, voxelData);
+		}
+
+	}
+	
 
 	// Thread Synchronization
 	__syncthreads();

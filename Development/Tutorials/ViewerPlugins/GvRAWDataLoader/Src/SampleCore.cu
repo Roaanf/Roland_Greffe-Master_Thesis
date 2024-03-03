@@ -123,7 +123,7 @@ SampleCore::SampleCore()
 ,	_filename()
 ,	_resolution( 0 )
 ,	_producerThresholdLow( 0.f )
-,	_producerThresholdHigh( 65025.f )
+,	_producerThresholdHigh( 65535.f )
 ,	_shaderThresholdLow( 0.f )
 ,	_shaderThresholdHigh( 1000.f )
 ,	_fullOpacityDistance( 300.f )
@@ -131,6 +131,7 @@ SampleCore::SampleCore()
 ,	_transferFunction( NULL )
 ,	_minDataValue( 0.f )
 ,	_maxDataValue( 0.f )
+,	_gradientRendering(false)
 {
 	// Translation used to position the GigaVoxels data structure
 	_translation[ 0 ] = -0.5f;
@@ -203,11 +204,14 @@ void SampleCore::init()
   
 	_brickMemoryPool = (size_t)5000 * (size_t)1024 * (size_t)1024;
 	freeGPUMem *= 0.70;
+	_brickMemoryPool = freeGPUMem;
 
 	// Temp fix because we have issue with data pools > 2Go
+	/*
 	if (freeGPUMem <= _brickMemoryPool){
 		_brickMemoryPool = freeGPUMem;
 	}
+	*/
 	
 	std::cout << "Free mem: " << freeGPUMem << " Total mem: " << totalGPUMem << " The one I set myself " << _brickMemoryPool << std::endl;
 
@@ -385,11 +389,12 @@ fileload:
 	getLightPosition( x, y, z );
 	setLightPosition( x, y, z );
 	setProducerThresholdLow( 0.f );	// no threshold by default
-	setProducerThresholdHigh( 65025.f);	// no threshold by default
+	setProducerThresholdHigh( 65535.f );	// no threshold by default
 	setShaderThresholdLow( 0.f );	// no threshold by default
-	setShaderThresholdHigh( 1000.f );	// no threshold by default
+	setShaderThresholdHigh(65535.f);	// no threshold by default
 	setFullOpacityDistance( dataResolution ); // the distance ( 1 / FullOpacityDistance ) is the distance after which opacity is full.
 	setGradientStep( 0.25f );
+	setGradientRenderingBool(false);
 	_transferFunction->updateDeviceMemory();
 }
 
@@ -1025,7 +1030,7 @@ void SampleCore::setProducerThresholdLow( float pValue )
 /******************************************************************************
  * Set the producer's threshold
  *
- * @param pValue the thresholdsss
+ * @param pValue the threshold
  ******************************************************************************/
 void SampleCore::setProducerThresholdHigh( float pValue )
 {
@@ -1243,6 +1248,24 @@ float SampleCore::getMinDataValue() const
 float SampleCore::getMaxDataValue() const
 {
 	return _maxDataValue;
+}
+
+bool SampleCore::getGradientRenderingBool() const
+{
+	return _gradientRendering;
+}
+
+void SampleCore::setGradientRenderingBool(bool pValue)
+{
+	_gradientRendering = pValue;
+
+	_producer->setGradientRendering(pValue);
+
+	// Update device memory
+	GS_CUDA_SAFE_CALL(cudaMemcpyToSymbol(cGradientRendering, &_gradientRendering, sizeof(_gradientRendering), 0, cudaMemcpyHostToDevice));
+
+	// Clear cache
+	clearCache();
 }
 
 /******************************************************************************

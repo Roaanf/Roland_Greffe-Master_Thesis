@@ -529,6 +529,16 @@ public:
 	 */
 	float getMaxDataValue() const;
 
+	/*
+	* Get the value of the boolean gradient rendering
+	*/
+	bool getGradientRenderingBool() const;
+
+	/*
+	* Set the value of the boolean gradient rendering
+	*/
+	void setGradientRenderingBool(bool pValue);
+
 	/**
 	 * Get the nodes cache usage
 	 *
@@ -669,6 +679,11 @@ protected:
 	 * Maximum data value
 	 */
 	float _maxDataValue;
+
+	/**
+	 * Gradient Rendering boolean
+	 */
+	bool _gradientRendering;
 
 	/******************************** METHODS *********************************/
 

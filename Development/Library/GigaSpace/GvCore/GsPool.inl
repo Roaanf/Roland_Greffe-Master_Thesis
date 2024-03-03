@@ -86,7 +86,7 @@ __forceinline__ void GPUPoolKernel< KernelArray, TList >
 template< template< typename > class KernelArray, class TList >
 template< uint i, typename ST >
 __device__
-__forceinline__ ST GPUPoolKernel< KernelArray, TList >
+__forceinline__ unsigned short GPUPoolKernel< KernelArray, TList >
 ::getValue( const uint3& pos )
 {
 	typename Loki::TL::TypeAt< TList, i >::Result res;

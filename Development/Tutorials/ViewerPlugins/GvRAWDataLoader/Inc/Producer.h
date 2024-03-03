@@ -224,6 +224,8 @@ public:
 
 	void setHighThreshold(float high);
 
+	void setGradientRendering(bool pValue);
+
 	/**************************************************************************
 	 **************************** PROTECTED SECTION ***************************
 	 **************************************************************************/
@@ -250,6 +252,8 @@ protected:
 	float _producerThresholdLow;
 
 	float _producerThresholdHigh;
+
+	bool _gradientRenderingBool;
 
 	/**
 	 * Localization depth's list of nodes that producer has to produce

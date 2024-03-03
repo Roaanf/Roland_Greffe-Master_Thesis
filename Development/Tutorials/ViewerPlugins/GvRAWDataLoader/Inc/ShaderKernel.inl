@@ -104,7 +104,8 @@ inline void ShaderKernel::runImpl( const BrickSamplerType& brickSampler, const f
 	if ( col.w > 0.0f )
 	{
 		// Use transfer function to color density
-		col = densityToColor( col.w );
+		float conv = ((col.w - cShaderThresholdLow) * (0.85f-0.15f)) / (cShaderThresholdHigh - cShaderThresholdLow)+ 0.15f;
+		col = densityToColor(conv);
 
 		// Due to alpha pre-multiplication
 		//

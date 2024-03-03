@@ -133,6 +133,11 @@ private slots:
 	 */
 	void on__shaderFullOpacityDistanceDoubleSpinBox_valueChanged( double value );
 
+	/**
+	 * Slot called when shader's full opacity distance value has changed
+	 */
+	void on__gradientRenderingCheckBox_stateChanged(int value);
+
 };
 
 #endif

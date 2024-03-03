@@ -477,7 +477,7 @@ public:
 	 */
 	template< uint i, typename ST >
 	__device__
-	__forceinline__ ST getValue( const uint3& pos );
+	__forceinline__ unsigned short getValue( const uint3& pos );
 
 	/**************************************************************************
 	 **************************** PROTECTED SECTION ***************************

@@ -161,10 +161,6 @@ bool RawFileReader< TType >::optimizedReadData(const size_t brickWidth, const si
 		size_t bufferSize = trueX * trueY * brickWidth;
 		TType* bufferBrick = new TType[bufferSize];
 
-		/*
-		
-		*/
-
 		// Write equivalent GigaSpace voxels file
 		// - create a file/streamer handler to read/write GigaVoxels data
 		const size_t levelOfResolution = static_cast<size_t>( log( static_cast< float >( getDataResolution() / brickWidth ) ) / log( static_cast< float >( 2 ) ) );

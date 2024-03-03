@@ -71,6 +71,11 @@ __constant__ float cProducerThresholdLow;
  */
 __constant__ float cProducerThresholdHigh;
 
+/**
+ * Gradient Rendering
+ */
+__constant__ bool cGradientRendering;
+
 /******************************************************************************
  ***************************** TYPE DEFINITION ********************************
  ******************************************************************************/
@@ -195,6 +200,7 @@ public:
 
 	/**
 	 * DEVICE-side associated HOST data cache pool
+	 * Small buffer used to store bricks beeing transferred from the CPU to GPU
 	 */
 	DataCachePoolKernelType _hostDataCache;
 

@@ -194,7 +194,7 @@ It can be used to optimize the internal data structure by flagging nodes as empt
 It ranges from 0 to 1.</string>
         </property>
         <property name="text">
-         <string>Threshold</string>
+         <string>Threshold Low</string>
         </property>
        </widget>
       </item>
@@ -211,7 +211,7 @@ It ranges from 0 to 1.</string>
          <double>0.0</double>
         </property>
         <property name="maximum">
-         <double>1000.0</double>
+         <double>65535.0</double>
         </property>
         <property name="singleStep">
          <double>1.0</double>
@@ -225,7 +225,7 @@ It ranges from 0 to 1.</string>
 It ranges from 0 to 1.</string>
         </property>
         <property name="text">
-         <string>Threshold</string>
+         <string>Threshold High</string>
         </property>
        </widget>
       </item>
@@ -242,7 +242,7 @@ It ranges from 0 to 1.</string>
          <double>0.0</double>
         </property>
         <property name="maximum">
-         <double>1000.0</double>
+         <double>65535.0</double>
         </property>
         <property name="singleStep">
          <double>1.0</double>
@@ -275,6 +275,17 @@ It ranges from 0 to 1.</string>
         </property>
        </widget>
       </item>
+       <item row="4" column="0">
+         <widget class="QLabel" name="label_82">
+           <property name="text">
+             <string>Gradient rendering</string>
+           </property>
+         </widget>
+       </item>
+       <item row="4" column="1">
+         <widget class="QCheckBox" name="_gradientRenderingCheckBox">
+         </widget>
+       </item>
      </layout>
     </widget>
    </item>
