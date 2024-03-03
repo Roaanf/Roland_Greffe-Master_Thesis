@@ -13,6 +13,7 @@
 #include <QtGui/QAction>
 #include <QtGui/QApplication>
 #include <QtGui/QButtonGroup>
+#include <QtGui/QCheckBox>
 #include <QtGui/QDoubleSpinBox>
 #include <QtGui/QGridLayout>
 #include <QtGui/QGroupBox>
@@ -53,6 +54,8 @@ public:
     QDoubleSpinBox *_shaderThresholdDoubleSpinBoxHigh;
     QDoubleSpinBox *_shaderFullOpacityDistanceDoubleSpinBox;
     QLabel *label_81;
+    QLabel *label_82;
+    QCheckBox *_gradientRenderingCheckBox;
     QSpacerItem *verticalSpacer;
 
     void setupUi(QWidget *GvtQCustomEditor)
@@ -164,7 +167,7 @@ public:
         _shaderThresholdDoubleSpinBoxLow->setObjectName(QString::fromUtf8("_shaderThresholdDoubleSpinBoxLow"));
         _shaderThresholdDoubleSpinBoxLow->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
         _shaderThresholdDoubleSpinBoxLow->setMinimum(0);
-        _shaderThresholdDoubleSpinBoxLow->setMaximum(1000);
+        _shaderThresholdDoubleSpinBoxLow->setMaximum(65535);
         _shaderThresholdDoubleSpinBoxLow->setSingleStep(1);
 
         gridLayout_1->addWidget(_shaderThresholdDoubleSpinBoxLow, 1, 1, 1, 1);
@@ -178,7 +181,7 @@ public:
         _shaderThresholdDoubleSpinBoxHigh->setObjectName(QString::fromUtf8("_shaderThresholdDoubleSpinBoxHigh"));
         _shaderThresholdDoubleSpinBoxHigh->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
         _shaderThresholdDoubleSpinBoxHigh->setMinimum(0);
-        _shaderThresholdDoubleSpinBoxHigh->setMaximum(1000);
+        _shaderThresholdDoubleSpinBoxHigh->setMaximum(65535);
         _shaderThresholdDoubleSpinBoxHigh->setSingleStep(1);
 
         gridLayout_1->addWidget(_shaderThresholdDoubleSpinBoxHigh, 2, 1, 1, 1);
@@ -197,6 +200,16 @@ public:
         label_81->setObjectName(QString::fromUtf8("label_81"));
 
         gridLayout_1->addWidget(label_81, 3, 0, 1, 1);
+
+        label_82 = new QLabel(groupBox_3);
+        label_82->setObjectName(QString::fromUtf8("label_82"));
+
+        gridLayout_1->addWidget(label_82, 4, 0, 1, 1);
+
+        _gradientRenderingCheckBox = new QCheckBox(groupBox_3);
+        _gradientRenderingCheckBox->setObjectName(QString::fromUtf8("_gradientRenderingCheckBox"));
+
+        gridLayout_1->addWidget(_gradientRenderingCheckBox, 4, 1, 1, 1);
 
 
         verticalLayout->addWidget(groupBox_3);
@@ -263,7 +276,7 @@ public:
         label_91->setToolTip(QApplication::translate("GvtQCustomEditor", "Scalar value used when rendering bricks of voxels.\n"
 "It ranges from 0 to 1.", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
-        label_91->setText(QApplication::translate("GvtQCustomEditor", "Threshold", 0, QApplication::UnicodeUTF8));
+        label_91->setText(QApplication::translate("GvtQCustomEditor", "Threshold Low", 0, QApplication::UnicodeUTF8));
 #ifndef QT_NO_TOOLTIP
         _shaderThresholdDoubleSpinBoxLow->setToolTip(QApplication::translate("GvtQCustomEditor", "Scalar value used when rendering bricks of voxels.\n"
 "It ranges from 0 to 1.", 0, QApplication::UnicodeUTF8));
@@ -272,12 +285,13 @@ public:
         label_92->setToolTip(QApplication::translate("GvtQCustomEditor", "Scalar value used when rendering bricks of voxels.\n"
 "It ranges from 0 to 1.", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
-        label_92->setText(QApplication::translate("GvtQCustomEditor", "Threshold", 0, QApplication::UnicodeUTF8));
+        label_92->setText(QApplication::translate("GvtQCustomEditor", "Threshold High", 0, QApplication::UnicodeUTF8));
 #ifndef QT_NO_TOOLTIP
         _shaderThresholdDoubleSpinBoxHigh->setToolTip(QApplication::translate("GvtQCustomEditor", "Scalar value used when rendering bricks of voxels.\n"
 "It ranges from 0 to 1.", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
         label_81->setText(QApplication::translate("GvtQCustomEditor", "Opacity Distance", 0, QApplication::UnicodeUTF8));
+        label_82->setText(QApplication::translate("GvtQCustomEditor", "Gradient rendering", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

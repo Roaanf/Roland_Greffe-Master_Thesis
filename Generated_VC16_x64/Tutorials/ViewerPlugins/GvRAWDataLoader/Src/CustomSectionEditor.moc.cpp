@@ -22,7 +22,7 @@ static const uint qt_meta_data_CustomSectionEditor[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       5,   14, // methods
+       6,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -35,6 +35,7 @@ static const uint qt_meta_data_CustomSectionEditor[] = {
      146,   21,   20,   20, 0x08,
      203,   21,   20,   20, 0x08,
      261,   21,   20,   20, 0x08,
+     325,   21,   20,   20, 0x08,
 
        0        // eod
 };
@@ -46,6 +47,7 @@ static const char qt_meta_stringdata_CustomSectionEditor[] = {
     "on__shaderThresholdDoubleSpinBoxLow_valueChanged(double)\0"
     "on__shaderThresholdDoubleSpinBoxHigh_valueChanged(double)\0"
     "on__shaderFullOpacityDistanceDoubleSpinBox_valueChanged(double)\0"
+    "on__gradientRenderingCheckBox_stateChanged(int)\0"
 };
 
 void CustomSectionEditor::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -59,6 +61,7 @@ void CustomSectionEditor::qt_static_metacall(QObject *_o, QMetaObject::Call _c, 
         case 2: _t->on__shaderThresholdDoubleSpinBoxLow_valueChanged((*reinterpret_cast< double(*)>(_a[1]))); break;
         case 3: _t->on__shaderThresholdDoubleSpinBoxHigh_valueChanged((*reinterpret_cast< double(*)>(_a[1]))); break;
         case 4: _t->on__shaderFullOpacityDistanceDoubleSpinBox_valueChanged((*reinterpret_cast< double(*)>(_a[1]))); break;
+        case 5: _t->on__gradientRenderingCheckBox_stateChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
         default: ;
         }
     }
@@ -100,9 +103,9 @@ int CustomSectionEditor::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 5)
+        if (_id < 6)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 5;
+        _id -= 6;
     }
     return _id;
 }
