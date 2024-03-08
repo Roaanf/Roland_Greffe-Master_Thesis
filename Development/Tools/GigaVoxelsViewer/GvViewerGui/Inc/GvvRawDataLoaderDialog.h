@@ -96,7 +96,7 @@ public:
 	 *
 	 * @return the 3D model resolution
 	 */
-	unsigned int getBrickSize() const;
+	unsigned int getRadius() const;
 
 	/**
 	 * Get the 3D model resolution

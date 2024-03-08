@@ -140,7 +140,7 @@ void GvMyPlugin::initialize()
 	GvvRawDataLoaderDialog* dataLoaderDialog = new GvvRawDataLoaderDialog( NULL );
 	QString modelFilename;
 	unsigned int modelResolution;
-	unsigned int brickSize;
+	unsigned int radius;
 	unsigned int trueX;
 	unsigned int trueY;
 	unsigned int trueZ;
@@ -155,7 +155,7 @@ void GvMyPlugin::initialize()
 			modelFilename = dataLoaderDialog->get3DModelFilename();
 			
 			//modelResolution = dataLoaderDialog->get3DModelResolution();
-			brickSize = dataLoaderDialog->getBrickSize();
+			radius = dataLoaderDialog->getRadius();
 			trueX = dataLoaderDialog->getTrueX();
 			trueY = dataLoaderDialog->getTrueY();
 			trueZ = dataLoaderDialog->getTrueZ();
@@ -174,7 +174,7 @@ void GvMyPlugin::initialize()
 				
 			std::cout << "Checking the values..." << std::endl;
 			std::cout << "modelResolution: " << modelResolution << std::endl;
-			std::cout << "brickSize: " << brickSize << std::endl;
+			std::cout << "radius: " << radius << std::endl;
 			std::cout << "trueX: " << trueX << std::endl;
 			std::cout << "trueY: " << trueY << std::endl;
 			std::cout << "trueZ: " << trueZ << std::endl;
@@ -238,9 +238,7 @@ void GvMyPlugin::initialize()
 		_pipeline->set3DModelFilename( modelFilename.toLatin1().constData() );
 		_pipeline->set3DModelResolution( modelResolution );
 		_pipeline->setTrueResolution(trueX, trueY, trueZ);
-
-		// TO DO
-		// add true resolution too !!!
+		_pipeline->setRadius( radius );
 	}
 	
 	// Pipeline BEGIN

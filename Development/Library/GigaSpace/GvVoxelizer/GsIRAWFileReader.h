@@ -121,7 +121,7 @@ public:
 	/**
 	 * Load/import the scene
 	 */
-	virtual bool read(const size_t brickWidth, const size_t trueX, const size_t trueY, const size_t trueZ);
+	virtual bool read(const size_t brickWidth, const size_t trueX, const size_t trueY, const size_t trueZ, const unsigned int radius);
 
 	/**
 	 * 3D model file name
@@ -213,7 +213,7 @@ protected:
 	/**
 	 * Load/import the scene
 	 */
-	virtual bool readData(const size_t brickWidth, const size_t trueX, const size_t trueY, const size_t trueZ) = 0;
+	virtual bool readData(const size_t brickWidth, const size_t trueX, const size_t trueY, const size_t trueZ, const unsigned int radius) = 0;
 
 	/**
 	 * Apply the mip-mapping algorithmn.

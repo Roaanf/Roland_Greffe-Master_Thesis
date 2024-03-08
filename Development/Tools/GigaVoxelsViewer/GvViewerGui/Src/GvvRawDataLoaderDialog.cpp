@@ -122,11 +122,11 @@ unsigned int GvvRawDataLoaderDialog::getModelDataType() const
  *
  * @return the 3D model resolution
  ******************************************************************************/
-unsigned int GvvRawDataLoaderDialog::getBrickSize() const
+unsigned int GvvRawDataLoaderDialog::getRadius() const
 {
-	unsigned int brickResolution = _brickSize->currentText().toUInt();
+	unsigned int radius = (unsigned int)_radius->value();
 
-	return brickResolution;
+	return radius;
 }
 
 /******************************************************************************

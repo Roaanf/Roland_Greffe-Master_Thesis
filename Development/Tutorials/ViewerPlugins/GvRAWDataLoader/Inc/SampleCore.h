@@ -80,7 +80,7 @@ typedef Loki::TL::MakeTypelist< ushort >::Result DataType;
 typedef GvCore::GsVec1D< 2 > NodeRes; // The GsVec1D represent a 3D resolution where each dimension has the same value s
 
 // Defines the size of a brick
-typedef GvCore::GsVec1D< 32 > BrickRes;
+typedef GvCore::GsVec1D< 64 > BrickRes;
 
 // Defines the type of structure we want to use
 //typedef GvStructure::GsVolumeTree< DataType, NodeRes, BrickRes, 0 > DataStructureType;
@@ -431,6 +431,8 @@ public:
 	 */
 	void setTrueResolution(unsigned int trueX, unsigned int trueY, unsigned int trueZ);
 
+	void setRadius(unsigned int radius);
+
 	/**
 	 * Get the producer's threshold
 	 *
@@ -515,6 +517,10 @@ public:
 	 */
 	void setGradientStep( float pValue );
 
+	float getXRayConst() const;
+
+	void setXRayConst(float pValue);
+
 	/**
 	 * Get the min data value
 	 *
@@ -538,6 +544,8 @@ public:
 	* Set the value of the boolean gradient rendering
 	*/
 	void setGradientRenderingBool(bool pValue);
+
+	void setRenderMode(int index);
 
 	/**
 	 * Get the nodes cache usage
@@ -684,6 +692,12 @@ protected:
 	 * Gradient Rendering boolean
 	 */
 	bool _gradientRendering;
+
+	int _renderMode;
+
+	uint _radius;
+
+	float _xRayConst;
 
 	/******************************** METHODS *********************************/
 

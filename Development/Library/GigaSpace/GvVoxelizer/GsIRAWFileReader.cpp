@@ -97,17 +97,17 @@ GsIRAWFileReader::~GsIRAWFileReader()
 /******************************************************************************
  * Load/import the scene the scene
  ******************************************************************************/
-bool GsIRAWFileReader::read(const size_t brickWidth, const size_t trueX, const size_t trueY, const size_t trueZ)
+bool GsIRAWFileReader::read(const size_t brickWidth, const size_t trueX, const size_t trueY, const size_t trueZ, const unsigned int radius)
 {
 	bool result = false;
 
 	std::cout << "- [step 1 / 3] - Read data and write voxels..." << std::endl;
 	// For the RAWReader plugin this calls the readData function of RawFileReader.inl and not the one just below
-	result = readData(brickWidth, trueX, trueY, trueZ);	// TO DO : add a boolean return value
+	result = readData(brickWidth, trueX, trueY, trueZ, radius);	
 
 	std::cout << "- [step 2 / 3] - Update borders..." << std::endl;
 
-	_dataStructureIOHandler->computeBorders();	// TO DO : add a boolean return value
+	_dataStructureIOHandler->computeBorders();
 
 	std::cout << "- [step 2.5 / 3] - Writing Files..." << std::endl;
 	_dataStructureIOHandler->writeFiles();
@@ -121,7 +121,7 @@ bool GsIRAWFileReader::read(const size_t brickWidth, const size_t trueX, const s
 /******************************************************************************
  * Load/import the scene the scene
  ******************************************************************************/
-bool GsIRAWFileReader::readData(const size_t brickWidth, const size_t trueX, const size_t trueY, const size_t trueZ) // NOT USED 
+bool GsIRAWFileReader::readData(const size_t brickWidth, const size_t trueX, const size_t trueY, const size_t trueZ, const unsigned int radius) // NOT USED 
 {
 	return false;
 }

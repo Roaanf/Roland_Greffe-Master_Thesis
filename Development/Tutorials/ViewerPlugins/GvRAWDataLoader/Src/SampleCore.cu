@@ -52,6 +52,7 @@
 // STL
 #include <vector>
 #include <string>
+#include <chrono>
 
 /******************************************************************************
  ****************************** NAMESPACE SECTION *****************************
@@ -125,7 +126,8 @@ SampleCore::SampleCore()
 ,	_producerThresholdLow( 0.f )
 ,	_producerThresholdHigh( 65535.f )
 ,	_shaderThresholdLow( 0.f )
-,	_shaderThresholdHigh( 1000.f )
+,	_shaderThresholdHigh(65535.f)
+,	_xRayConst(40.f)
 ,	_fullOpacityDistance( 300.f )
 ,	_gradientStep( 0.f )
 ,	_transferFunction( NULL )
@@ -283,8 +285,11 @@ void SampleCore::init()
 
 		// Read file and build GigaSpace mip-map pyramid files
 		// BRICK SIZE
-		rawFileReader->read(brickSize, _trueX, _trueY, _trueZ); // Must be changed !!!!!
-		
+		auto start = std::chrono::high_resolution_clock::now();
+		rawFileReader->read(brickSize, _trueX, _trueY, _trueZ, _radius);
+		auto stop = std::chrono::high_resolution_clock::now();
+		auto duration = std::chrono::duration_cast<std::chrono::seconds>(stop - start);
+		std::cout << "\nConversion time : " << duration.count() << std::endl;
 		// Update internal info
 		_minDataValue = static_cast< float >( rawFileReader->getMinDataValue() );
 		_maxDataValue = static_cast< float >( rawFileReader->getMaxDataValue() );
@@ -342,9 +347,10 @@ fileload:
 														dataFilename.toStdString(),
 														PipelineType::BrickTileResolution::get(), PipelineType::BrickTileBorderSize, true );
 	unsigned int dataResolution = dataLoader->getDataResolution().x;
-	//std::cout << "DataResolution : " << dataResolution << std::endl;
+	std::cout << "DataResolution : " << dataResolution << std::endl;
 	// Shader creation
 	ShaderType* shader = new ShaderType();
+	GS_CUDA_SAFE_CALL(cudaMemcpyToSymbol(cDataResolution, &dataResolution, sizeof(dataResolution), 0, cudaMemcpyHostToDevice));
 
 	// Pipeline initialization
 	_pipeline = new PipelineType();
@@ -395,6 +401,7 @@ fileload:
 	setFullOpacityDistance( dataResolution ); // the distance ( 1 / FullOpacityDistance ) is the distance after which opacity is full.
 	setGradientStep( 0.25f );
 	setGradientRenderingBool(false);
+	setXRayConst(40.f);
 	_transferFunction->updateDeviceMemory();
 }
 
@@ -909,6 +916,11 @@ void SampleCore::setTrueResolution(unsigned int trueX, unsigned int trueY, unsig
 	_trueZ = trueZ;
 }
 
+void SampleCore::setRadius(unsigned int radius)
+{
+	_radius = radius;
+}
+
 /******************************************************************************
  * Get the translation
  *
@@ -1137,6 +1149,24 @@ void SampleCore::setGradientStep( float pValue )
 	GS_CUDA_SAFE_CALL( cudaMemcpyToSymbol( cGradientStep, &_gradientStep, sizeof( _gradientStep ), 0, cudaMemcpyHostToDevice ) );
 }
 
+float SampleCore::getXRayConst() const
+{
+	return _xRayConst;
+}
+
+/******************************************************************************
+ * Set the XRay constant
+ *
+ * @param pValue the full opacity distance
+ ******************************************************************************/
+void SampleCore::setXRayConst(float pValue)
+{
+	_xRayConst = pValue;
+
+	// Update device memory
+	GS_CUDA_SAFE_CALL(cudaMemcpyToSymbol(cXRayConst, &_xRayConst, sizeof(cXRayConst), 0, cudaMemcpyHostToDevice));
+}
+
 /******************************************************************************
  * Initialize the transfer function
  *
@@ -1266,6 +1296,16 @@ void SampleCore::setGradientRenderingBool(bool pValue)
 
 	// Clear cache
 	clearCache();
+}
+
+void SampleCore::setRenderMode(int index)
+{
+	_renderMode = index;
+
+	std::cout << "Switched to mode : " << _renderMode << std::endl;
+
+	// Update device memory
+	GS_CUDA_SAFE_CALL(cudaMemcpyToSymbol(cRenderMode, &_renderMode, sizeof(_renderMode), 0, cudaMemcpyHostToDevice));
 }
 
 /******************************************************************************
