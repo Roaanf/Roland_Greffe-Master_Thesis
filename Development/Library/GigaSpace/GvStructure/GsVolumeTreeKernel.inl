@@ -97,6 +97,7 @@ __forceinline__ float4 VolumeTreeKernel< DataTList, NodeTileRes, BrickRes, Borde
  * @return the sampled value
  ******************************************************************************/
 // QUESTION : le paramètre "coneAperture" ne semble pas utilisé ? A quoi sert-il (servait ou servira) ?
+// SAMPLE
 template< class DataTList, class NodeTileRes, class BrickRes, uint BorderSize >
 template< int TChannel >
 __device__
@@ -142,14 +143,6 @@ __forceinline__ float4 VolumeTreeKernel< DataTList, NodeTileRes, BrickRes, Borde
 ::getSampleValue( float3 brickChildPosInPool, float3 brickParentPosInPool, float3 sampleOffsetInBrick, float coneAperture, bool mipMapOn, float mipMapInterpCoef ) const
 {
 	float4 vox;
-
-	/*
-	if (threadIdx.x == 0) {
-		printf("brickChildPosInPool : %f / %f / %f \n", brickChildPosInPool.x, brickChildPosInPool.y, brickChildPosInPool.z);
-		printf("brickParentPosInPool : %f / %f / %f \n", brickParentPosInPool.x, brickParentPosInPool.y, brickParentPosInPool.z);
-		printf("brickParentPosInPool : %f / %f / %f \n", sampleOffsetInBrick.x, sampleOffsetInBrick.y, sampleOffsetInBrick.z);
-	}
-	*/
 
 	// Sample data in texture
 	if ( mipMapOn && mipMapInterpCoef > 0.0f )

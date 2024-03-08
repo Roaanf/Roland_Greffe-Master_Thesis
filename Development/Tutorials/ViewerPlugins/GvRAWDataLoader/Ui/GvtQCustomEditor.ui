@@ -275,20 +275,110 @@ It ranges from 0 to 1.</string>
         </property>
        </widget>
       </item>
-       <item row="4" column="0">
-         <widget class="QLabel" name="label_82">
-           <property name="text">
-             <string>Gradient rendering</string>
-           </property>
-         </widget>
-       </item>
-       <item row="4" column="1">
-         <widget class="QCheckBox" name="_gradientRenderingCheckBox">
-         </widget>
-       </item>
      </layout>
     </widget>
    </item>
+    <item>
+      <widget class="QGroupBox" name="groupBox_5">
+        <property name="title">
+          <string>Filtering</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_1">
+          <item row="1" column="0">
+            <widget class="QLabel" name="label_82">
+              <property name="text">
+                <string>Gradient rendering</string>
+              </property>
+            </widget>
+          </item>
+          <item row="1" column="1">
+            <widget class="QCheckBox" name="_gradientRenderingCheckBox">
+            </widget>
+          </item>
+          <item row="2" column="0">
+            <widget class="QLabel" name="label_42">
+              <property name="text">
+                <string>Rendering mode</string>
+              </property>
+            </widget>
+          </item>
+          <item row="2" column="1">
+            <widget class="QComboBox" name="_renderModeComboBox">
+              <property name="toolTip">
+                <string>Render mode</string>
+              </property>
+              <property name="layoutDirection">
+                <enum>Qt::RightToLeft</enum>
+              </property>
+              <property name="currentIndex">
+                <number>0</number>
+              </property>
+              <item>
+                <property name="text">
+                  <string>Default</string>
+                </property>
+              </item>
+              <item>
+                <property name="text">
+                  <string>Isosurface</string>
+                </property>
+              </item>
+              <item>
+                <property name="text">
+                  <string>Max intensity</string>
+                </property>
+              </item>
+              <item>
+                <property name="text">
+                  <string>Mean Intensity</string>
+                </property>
+              </item>
+              <item>
+                <property name="text">
+                  <string>XRay</string>
+                </property>
+              </item>
+              <item>
+                <property name="text">
+                  <string>XRay Gradient</string>
+                </property>
+              </item>
+              <item>
+                <property name="text">
+                  <string>XRay Color</string>
+                </property>
+              </item>
+            </widget>
+          </item>
+          <item row="3" column="0">
+            <widget class="QLabel" name="label_43">
+              <property name="text">
+                <string>XRay Constant</string>
+              </property>
+            </widget>
+          </item>
+          <item row="3" column="1">
+            <widget class="QDoubleSpinBox" name="_xRayConst">
+              <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="decimals">
+                <number>1</number>
+              </property>
+              <property name="minimum">
+                <double>0.000000000000000</double>
+              </property>
+              <property name="maximum">
+                <double>400.000000000000000</double>
+              </property>
+              <property name="singleStep">
+                <double>1.000000000000000</double>
+              </property>
+            </widget>
+          </item>
+        </layout>
+      </widget>
+    </item>
    <item>
     <spacer name="verticalSpacer">
      <property name="orientation">

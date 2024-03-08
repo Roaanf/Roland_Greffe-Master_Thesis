@@ -83,6 +83,21 @@ __constant__ float cFullOpacityDistance;
  */
 __constant__ float cGradientStep;
 
+/*
+0 = Default	
+1 = Isosurface
+2 = Max
+3 = Mean
+4 = XRay
+5 = XRay Gradient
+6 = XRay Color
+*/
+__constant__ int cRenderMode;
+
+__constant__ int cDataResolution;
+
+__constant__ float cXRayConst;
+
 
 /******************************************************************************
  ***************************** TYPE DEFINITION ********************************
@@ -149,6 +164,12 @@ public:
 	inline void runImpl( const BrickSamplerType& brickSampler, const float3 samplePosScene,
 		const float3 rayDir, float& rayStep, const float coneAperture );
 
+	
+	__device__
+	inline bool stopCriterionImpl(const float3& pRayPosInWorld) const;
+
+	void resetValues();
+
 	/**************************************************************************
 	 **************************** PROTECTED SECTION ***************************
 	 **************************************************************************/
@@ -168,6 +189,18 @@ private:
 	/******************************* ATTRIBUTES *******************************/
 
 	/******************************** METHODS *********************************/
+
+	int firstTouch = 2;
+
+	float maxCol = 0;
+
+	float meanCol = 0;
+
+	uint sampleCount = 0;
+
+	int currMode = 0;
+
+	float currXRayIntensity = 1.0f;
 
 };
 

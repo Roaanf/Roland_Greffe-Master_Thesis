@@ -121,6 +121,8 @@ void CustomSectionEditor::populate( GvViewerCore::GvvBrowsable* pBrowsable )
 		_shaderThresholdDoubleSpinBoxHigh->setValue( pipeline->getShaderThresholdHigh() );
 		_shaderFullOpacityDistanceDoubleSpinBox->setValue( pipeline->getFullOpacityDistance() );
 
+		_xRayConst->setValue(pipeline->getXRayConst());
+
 		// Gradient bool
 		// Should be set to the same thing but I don't think I can actually
 		//_gradientRenderingCheckBox->setTristate(pipeline->getGradientRenderingBool());
@@ -226,5 +228,33 @@ void CustomSectionEditor::on__gradientRenderingCheckBox_stateChanged(int pValue)
 
 	sampleCore->setGradientRenderingBool(pValue != 0);
 	std::cout << "Set GradientRenderingBool to : " << pValue << std::endl;
+}
+
+void CustomSectionEditor::on__renderModeComboBox_currentIndexChanged(int index)
+{
+	GvvApplication& application = GvvApplication::get();
+	GvvMainWindow* mainWindow = application.getMainWindow();
+	Gvv3DWindow* window3D = mainWindow->get3DWindow();
+	GvvPipelineInterfaceViewer* pipelineViewer = window3D->getPipelineViewer();
+	GvViewerCore::GvvPipelineInterface* pipeline = pipelineViewer->editPipeline();
+
+	SampleCore* sampleCore = dynamic_cast<SampleCore*>(pipeline);
+	assert(sampleCore != NULL);
+
+	sampleCore->setRenderMode(index);
+}
+
+void CustomSectionEditor::on__xRayConst_valueChanged(double value)
+{
+	GvvApplication& application = GvvApplication::get();
+	GvvMainWindow* mainWindow = application.getMainWindow();
+	Gvv3DWindow* window3D = mainWindow->get3DWindow();
+	GvvPipelineInterfaceViewer* pipelineViewer = window3D->getPipelineViewer();
+	GvViewerCore::GvvPipelineInterface* pipeline = pipelineViewer->editPipeline();
+
+	SampleCore* sampleCore = dynamic_cast<SampleCore*>(pipeline);
+	assert(sampleCore != NULL);
+
+	sampleCore->setXRayConst(value);
 }
 

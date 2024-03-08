@@ -138,6 +138,10 @@ private slots:
 	 */
 	void on__gradientRenderingCheckBox_stateChanged(int value);
 
+	void on__renderModeComboBox_currentIndexChanged(int index);
+
+	void on__xRayConst_valueChanged(double value);
+
 };
 
 #endif

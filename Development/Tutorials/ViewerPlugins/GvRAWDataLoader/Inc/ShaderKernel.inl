@@ -45,6 +45,7 @@
 
 // GigaVoxels
 #include <GvRendering/GsRendererContext.h>
+#include "ShaderKernel.h"
 
 /******************************************************************************
  ****************************** INLINE DEFINITION *****************************
@@ -83,12 +84,16 @@ __device__
 inline void ShaderKernel::runImpl( const BrickSamplerType& brickSampler, const float3 samplePosScene,
 					const float3 rayDir, float& rayStep, const float coneAperture )
 {
+	if (cRenderMode != currMode) {
+		resetValues();
+		currMode = cRenderMode;
+	}
 	// Sample data
 	float4 col = brickSampler.template getValue< 0 >( coneAperture );
 
 	// Threshold data
 	if ( (col.w < cShaderThresholdLow) || (col.w > cShaderThresholdHigh) ){
-		//col.w = 0.f;
+		//col.w = 0.f;0.2-
 		
 		// Exit
 		return;
@@ -104,28 +109,126 @@ inline void ShaderKernel::runImpl( const BrickSamplerType& brickSampler, const f
 	if ( col.w > 0.0f )
 	{
 		// Use transfer function to color density
+		float oldColW = col.w;
 		float conv = ((col.w - cShaderThresholdLow) * (0.85f-0.15f)) / (cShaderThresholdHigh - cShaderThresholdLow)+ 0.15f;
+		float4 meanColColor;
 		col = densityToColor(conv);
 
-		// Due to alpha pre-multiplication
-		//
-		// Note : inspecting device SASS code, assembly langage seemed to compute (1.f / color.w) each time, that's why we use a constant and multiply
-		const float alphaPremultiplyConstant = 1.f / col.w;
-		col.x = col.x * alphaPremultiplyConstant;
-		col.y = col.y * alphaPremultiplyConstant;
-		col.z = col.z * alphaPremultiplyConstant;
-		
-		// -- [ Opacity correction ] --
-		// The standard equation :
-		//		_accColor = _accColor + ( 1.0f - _accColor.w ) * color;
-		// must take alpha correction into account
-		// NOTE : if ( color.w == 0 ) then alphaCorrection equals 0.f
-		const float alphaCorrection = ( 1.0f -_accColor.w ) * ( 1.0f - __powf( 1.0f - col.w, rayStep * cFullOpacityDistance ) );
+		switch (cRenderMode) {
+		case 1:{
+			if (firstTouch > 0)
+				firstTouch--;
+			
+			float midColor = ((0.80f - cShaderThresholdLow) * (0.85f - 0.15f)) / (cShaderThresholdHigh - cShaderThresholdLow) + 0.15f;
+			col = densityToColor(midColor);
+			// le 2* il est un peu random mais ça marche ...
+			float colxp = brickSampler.template getValue< 0 >(coneAperture, make_float3(1.0 / (2 * cDataResolution), 0, 0)).w; // x+
+			float colxm = brickSampler.template getValue< 0 >(coneAperture, make_float3(-1.0 / (2 * cDataResolution), 0, 0)).w; // x-
+			float colyp = brickSampler.template getValue< 0 >(coneAperture, make_float3(0, 1.0 / (2 * cDataResolution), 0)).w; // y+
+			float colym = brickSampler.template getValue< 0 >(coneAperture, make_float3(0, -1.0 / (2 * cDataResolution), 0)).w; // y-
+			float colzp = brickSampler.template getValue< 0 >(coneAperture, make_float3(0, 0, 1.0 / (2 * cDataResolution))).w; // z+
+			float colzm = brickSampler.template getValue< 0 >(coneAperture, make_float3(0, 0, -1.0 / (2 * cDataResolution))).w; // z-
+			float3 normalVector = make_float3(colxp - colxm, colyp - colym, colzp - colzm); // pas sur du tout je suis un abruti c'est surement faux
+			// Check radiant degree
+			float cosAngle = clamp(dot(rayDir, normalVector), 0.0, 1.0);
+			cosAngle = clamp(((cosAngle) * (1.0f - 0.4f)) / (0.5) + 0.4f, 0.0f, 1.0f); // 0.5 c'est pcq j'ai jamais vu une valeur plus haute ...
+			_accColor.x = col.x * cosAngle;
+			_accColor.y = col.y * cosAngle;
+			_accColor.z = col.z * cosAngle;
+			_accColor.w = col.w;
 
-		// Accumulate the color
-		_accColor.x += alphaCorrection * col.x;
-		_accColor.y += alphaCorrection * col.y;
-		_accColor.z += alphaCorrection * col.z;
-		_accColor.w += alphaCorrection;
+			break;
+		}
+			
+		case 2: {
+			if (oldColW >= maxCol) {
+				maxCol = oldColW;
+				_accColor.x = col.x;
+				_accColor.y = col.y;
+				_accColor.z = col.z;
+				_accColor.w = col.w;
+			}
+			break;
+		}
+		
+		case 3: {
+			sampleCount++;
+			meanCol += oldColW;
+			meanColColor = densityToColor(meanCol / sampleCount);
+			
+			_accColor.x = meanColColor.x;
+			_accColor.y = meanColColor.y;
+			_accColor.z = meanColColor.z;
+			_accColor.w = meanColColor.w;
+			break;
+		}
+
+		case 4: {
+			currXRayIntensity *= 1 - rayStep * cXRayConst * oldColW;
+			col = densityToColor(currXRayIntensity);
+
+			_accColor.x = col.x;
+			_accColor.y = col.y;
+			_accColor.z = col.z;
+			_accColor.w = col.w;
+
+			break;
+		}
+			
+		default:
+			// Due to alpha pre-multiplication
+			//
+			// Note : inspecting device SASS code, assembly langage seemed to compute (1.f / color.w) each time, that's why we use a constant and multiply
+			const float alphaPremultiplyConstant = 1.f / col.w;
+			col.x = col.x * alphaPremultiplyConstant;
+			col.y = col.y * alphaPremultiplyConstant;
+			col.z = col.z * alphaPremultiplyConstant;
+
+			// -- [ Opacity correction ] --
+			// The standard equation :
+			//		_accColor = _accColor + ( 1.0f - _accColor.w ) * color;
+			// must take alpha correction into account
+			// NOTE : if ( color.w == 0 ) then alphaCorrection equals 0.f
+			const float alphaCorrection = (1.0f - _accColor.w) * (1.0f - __powf(1.0f - col.w, rayStep * cFullOpacityDistance));
+
+			// Accumulate the color
+			_accColor.x += alphaCorrection * col.x;
+			_accColor.y += alphaCorrection * col.y;
+			_accColor.z += alphaCorrection * col.z;
+			_accColor.w += alphaCorrection;
+		}
 	}
+}
+
+/******************************************************************************
+ * This method is called AFTER THE runImpl FUNTION (and not BEFORE !!!) to check whether or not the ray should stop.
+ *
+ * @param pRayPosInWorld the current ray's position in world space.
+ *
+ * @return true if you want to continue the ray. false otherwise.
+ ******************************************************************************/
+__device__
+inline bool ShaderKernel::stopCriterionImpl(const float3& rayPosInWorld) const
+{
+	switch (cRenderMode) {
+	case 1:
+		return (firstTouch == 0);
+	case 2:
+		return false;
+	case 3:
+		return false;
+	case 4:
+		return false;
+	default:
+		return (_accColor.w >= cOpacityStep);
+	}
+	
+}
+
+__device__
+inline void ShaderKernel::resetValues(){
+	firstTouch = 2;
+	maxCol = 0;
+	meanCol = 0;
+	sampleCount = 0;
 }
