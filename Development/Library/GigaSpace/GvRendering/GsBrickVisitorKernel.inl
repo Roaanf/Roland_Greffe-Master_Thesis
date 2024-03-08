@@ -82,13 +82,6 @@ float GsBrickVisitorKernel
 	// C'est à dire ?
 	float3 samplePosTree = pRayStartTree + pTTree * pRayDirTree;
 
-	/*
-	if (threadIdx.x == 0) {
-		printf("samplePosTree : %f / %f / %f \n", samplePosTree.x, samplePosTree.y, samplePosTree.z);
-		//printf("destAddress : %u / %u / %u \n", destAddress.x, destAddress.y, destAddress.z);
-	}
-	*/
-
 	// Local distance
 	float dt = 0.0f;
 
@@ -119,9 +112,11 @@ float GsBrickVisitorKernel
 		// Compute next step
 		//
 		// TO DO : check if coneAperture, based on radial distance to camera, could not generate spherical pattern
-		rayStep = max( coneAperture, pBrickSampler._nodeSizeTree * ( 0.66f / static_cast< float>( TVolumeTreeKernelType::BrickResolution::x ) ) );
+		// ARTIFACT removal costs performances !!!
+		rayStep = max( coneAperture * 0.5f, pBrickSampler._nodeSizeTree * ( 0.35f / static_cast< float>( TVolumeTreeKernelType::BrickResolution::x ) ) );
 		
 		// Shading (+ adaptative step)
+		// SHADER
 		pSampleShader.run( pBrickSampler, samplePosTree, pRayDirTree, rayStep, coneAperture );
 
 		// Update local distance
