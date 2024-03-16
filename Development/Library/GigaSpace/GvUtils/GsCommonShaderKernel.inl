@@ -135,6 +135,12 @@ __forceinline__ bool GsCommonShaderKernel::descentCriterionImpl( const float vox
 	return true;
 }
 
+__device__
+__forceinline__ float GsCommonShaderKernel::getRayStepImpl(const float coneAperture, const float voxelSize) const
+{
+	return 1.0f;
+}
+
 /******************************************************************************
  * This method is called for each sample. For example, shading or secondary rays
  * should be done here.

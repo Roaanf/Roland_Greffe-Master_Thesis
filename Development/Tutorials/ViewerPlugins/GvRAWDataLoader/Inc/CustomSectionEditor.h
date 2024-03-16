@@ -142,6 +142,10 @@ private slots:
 
 	void on__xRayConst_valueChanged(double value);
 
+	void on__coneApertureRayStepMult_valueChanged(double value);
+
+	void on__brickDimRayStepMult_valueChanged(double value);
+
 };
 
 #endif

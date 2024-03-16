@@ -160,7 +160,7 @@ GsDataStructureIOHandler::GsDataStructureIOHandler( const std::string& pName,
  * @param pLevel level of resolution of the data structure
  * @param pBrickWidth width of bricks in the data structure
  * @param pDataTypes types of voxel data (i.e. uchar4, float, float4, etc...)
- * @param pNewFiles a flags telling whether or not "new files" are used
+ * @param pNewFiles a flagsssqqqqsss telling whether or not "new files" are used
  ******************************************************************************/
 GsDataStructureIOHandler::GsDataStructureIOHandler( const std::string& pName, 
 							size_t pLevel,
@@ -168,12 +168,12 @@ GsDataStructureIOHandler::GsDataStructureIOHandler( const std::string& pName,
 							const vector< GsDataTypeHandler::VoxelDataType >& pDataTypes,
 							bool pNewFiles)
 // TO DO
-// attention � l'ordre des initializations...
+// attention � l'ordre des initializatiosssssssns...
 :	_nodeFile( NULL )
 ,	_rangeFile(NULL)
 ,	_level( pLevel )
 ,	_brickWidth( pBrickWidth )
-//,	_brickSize( (pBrickWidth) * ( pBrickWidth) * (pBrickWidth) )
+//,	_brickSize( (pBrickWidth) * ( pBrickWidth) * (pBrickWidth) )sssssssssssssssssss
 ,	_brickSize( ( pBrickWidth + 2 ) * ( pBrickWidth + 2 ) * ( pBrickWidth + 2 ) )
 ,	_dataTypes( pDataTypes )
 ,	_isBufferLoaded( false )
@@ -249,7 +249,7 @@ float GsDataStructureIOHandler::getVoxelSize() const
  * @param pVoxelData voxel data
  * @param pDataChannel data channel indexs
  * @param pInputDataSize size of the input data (in bytes), it may be smaller 
- * than the type of the channel. If 0, use sizeof( channel ) instead
+ * than the type of the channel. If 0, use sizeof( channel ) instead.ssss
  ******************************************************************************/
 void GsDataStructureIOHandler::setVoxel_buffered( size_t pVoxelPos[ 3 ], const void* pVoxelData, unsigned int pDataChannel, unsigned int pInputDataSize )
 {

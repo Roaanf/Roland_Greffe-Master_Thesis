@@ -14,6 +14,7 @@
 #include <QtGui/QApplication>
 #include <QtGui/QButtonGroup>
 #include <QtGui/QCheckBox>
+#include <QtGui/QComboBox>
 #include <QtGui/QDoubleSpinBox>
 #include <QtGui/QGridLayout>
 #include <QtGui/QGroupBox>
@@ -54,8 +55,18 @@ public:
     QDoubleSpinBox *_shaderThresholdDoubleSpinBoxHigh;
     QDoubleSpinBox *_shaderFullOpacityDistanceDoubleSpinBox;
     QLabel *label_81;
+    QGroupBox *groupBox_5;
+    QGridLayout *gridLayout_11;
     QLabel *label_82;
     QCheckBox *_gradientRenderingCheckBox;
+    QLabel *label_42;
+    QComboBox *_renderModeComboBox;
+    QLabel *label_43;
+    QDoubleSpinBox *_xRayConst;
+    QLabel *label_63;
+    QDoubleSpinBox *_coneApertureRayStepMult;
+    QLabel *label_75;
+    QDoubleSpinBox *_brickDimRayStepMult;
     QSpacerItem *verticalSpacer;
 
     void setupUi(QWidget *GvtQCustomEditor)
@@ -201,18 +212,81 @@ public:
 
         gridLayout_1->addWidget(label_81, 3, 0, 1, 1);
 
-        label_82 = new QLabel(groupBox_3);
-        label_82->setObjectName(QString::fromUtf8("label_82"));
-
-        gridLayout_1->addWidget(label_82, 4, 0, 1, 1);
-
-        _gradientRenderingCheckBox = new QCheckBox(groupBox_3);
-        _gradientRenderingCheckBox->setObjectName(QString::fromUtf8("_gradientRenderingCheckBox"));
-
-        gridLayout_1->addWidget(_gradientRenderingCheckBox, 4, 1, 1, 1);
-
 
         verticalLayout->addWidget(groupBox_3);
+
+        groupBox_5 = new QGroupBox(GvtQCustomEditor);
+        groupBox_5->setObjectName(QString::fromUtf8("groupBox_5"));
+        gridLayout_11 = new QGridLayout(groupBox_5);
+        gridLayout_11->setObjectName(QString::fromUtf8("gridLayout_11"));
+        label_82 = new QLabel(groupBox_5);
+        label_82->setObjectName(QString::fromUtf8("label_82"));
+
+        gridLayout_11->addWidget(label_82, 1, 0, 1, 1);
+
+        _gradientRenderingCheckBox = new QCheckBox(groupBox_5);
+        _gradientRenderingCheckBox->setObjectName(QString::fromUtf8("_gradientRenderingCheckBox"));
+
+        gridLayout_11->addWidget(_gradientRenderingCheckBox, 1, 1, 1, 1);
+
+        label_42 = new QLabel(groupBox_5);
+        label_42->setObjectName(QString::fromUtf8("label_42"));
+
+        gridLayout_11->addWidget(label_42, 2, 0, 1, 1);
+
+        _renderModeComboBox = new QComboBox(groupBox_5);
+        _renderModeComboBox->setObjectName(QString::fromUtf8("_renderModeComboBox"));
+        _renderModeComboBox->setLayoutDirection(Qt::RightToLeft);
+
+        gridLayout_11->addWidget(_renderModeComboBox, 2, 1, 1, 1);
+
+        label_43 = new QLabel(groupBox_5);
+        label_43->setObjectName(QString::fromUtf8("label_43"));
+
+        gridLayout_11->addWidget(label_43, 3, 0, 1, 1);
+
+        _xRayConst = new QDoubleSpinBox(groupBox_5);
+        _xRayConst->setObjectName(QString::fromUtf8("_xRayConst"));
+        _xRayConst->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        _xRayConst->setDecimals(1);
+        _xRayConst->setMinimum(0);
+        _xRayConst->setMaximum(1000);
+        _xRayConst->setSingleStep(1);
+
+        gridLayout_11->addWidget(_xRayConst, 3, 1, 1, 1);
+
+        label_63 = new QLabel(groupBox_5);
+        label_63->setObjectName(QString::fromUtf8("label_63"));
+
+        gridLayout_11->addWidget(label_63, 4, 0, 1, 1);
+
+        _coneApertureRayStepMult = new QDoubleSpinBox(groupBox_5);
+        _coneApertureRayStepMult->setObjectName(QString::fromUtf8("_coneApertureRayStepMult"));
+        _coneApertureRayStepMult->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        _coneApertureRayStepMult->setDecimals(2);
+        _coneApertureRayStepMult->setMinimum(0);
+        _coneApertureRayStepMult->setMaximum(1);
+        _coneApertureRayStepMult->setSingleStep(0.01);
+
+        gridLayout_11->addWidget(_coneApertureRayStepMult, 4, 1, 1, 1);
+
+        label_75 = new QLabel(groupBox_5);
+        label_75->setObjectName(QString::fromUtf8("label_75"));
+
+        gridLayout_11->addWidget(label_75, 5, 0, 1, 1);
+
+        _brickDimRayStepMult = new QDoubleSpinBox(groupBox_5);
+        _brickDimRayStepMult->setObjectName(QString::fromUtf8("_brickDimRayStepMult"));
+        _brickDimRayStepMult->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        _brickDimRayStepMult->setDecimals(2);
+        _brickDimRayStepMult->setMinimum(0);
+        _brickDimRayStepMult->setMaximum(1);
+        _brickDimRayStepMult->setSingleStep(0.01);
+
+        gridLayout_11->addWidget(_brickDimRayStepMult, 5, 1, 1, 1);
+
+
+        verticalLayout->addWidget(groupBox_5);
 
         verticalSpacer = new QSpacerItem(20, 122, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
@@ -220,6 +294,9 @@ public:
 
 
         retranslateUi(GvtQCustomEditor);
+
+        _renderModeComboBox->setCurrentIndex(0);
+
 
         QMetaObject::connectSlotsByName(GvtQCustomEditor);
     } // setupUi
@@ -291,7 +368,25 @@ public:
 "It ranges from 0 to 1.", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
         label_81->setText(QApplication::translate("GvtQCustomEditor", "Opacity Distance", 0, QApplication::UnicodeUTF8));
+        groupBox_5->setTitle(QApplication::translate("GvtQCustomEditor", "Filtering", 0, QApplication::UnicodeUTF8));
         label_82->setText(QApplication::translate("GvtQCustomEditor", "Gradient rendering", 0, QApplication::UnicodeUTF8));
+        label_42->setText(QApplication::translate("GvtQCustomEditor", "Rendering mode", 0, QApplication::UnicodeUTF8));
+        _renderModeComboBox->clear();
+        _renderModeComboBox->insertItems(0, QStringList()
+         << QApplication::translate("GvtQCustomEditor", "Default", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("GvtQCustomEditor", "Isosurface", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("GvtQCustomEditor", "Max intensity", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("GvtQCustomEditor", "Mean Intensity", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("GvtQCustomEditor", "XRay", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("GvtQCustomEditor", "XRay Gradient", 0, QApplication::UnicodeUTF8)
+         << QApplication::translate("GvtQCustomEditor", "XRay Color", 0, QApplication::UnicodeUTF8)
+        );
+#ifndef QT_NO_TOOLTIP
+        _renderModeComboBox->setToolTip(QApplication::translate("GvtQCustomEditor", "Render mode", 0, QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
+        label_43->setText(QApplication::translate("GvtQCustomEditor", "XRay Constant", 0, QApplication::UnicodeUTF8));
+        label_63->setText(QApplication::translate("GvtQCustomEditor", "RayStep ConApMul", 0, QApplication::UnicodeUTF8));
+        label_75->setText(QApplication::translate("GvtQCustomEditor", "RayStep BrickresMul", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

@@ -327,7 +327,7 @@ CUDA_nvToolsExt_LIBRARY:FILEPATH=CUDA_nvToolsExt_LIBRARY-NOTFOUND
 CUDA_nvcuvenc_LIBRARY:FILEPATH=CUDA_nvcuvenc_LIBRARY-NOTFOUND
 
 //"nvcuvid" library
-CUDA_nvcuvid_LIBRARY:FILEPATH=CUDA_nvcuvid_LIBRARY-NOTFOUND
+CUDA_nvcuvid_LIBRARY:FILEPATH=C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v7.0/lib/x64/nvcuvid.lib
 
 //Enable/disable generation of debug-able device code
 GV_ENABLE_DEBUGABLE_DEVICE_CODE:BOOL=OFF

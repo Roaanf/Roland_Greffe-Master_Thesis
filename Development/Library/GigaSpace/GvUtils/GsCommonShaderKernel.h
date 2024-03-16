@@ -166,6 +166,16 @@ public:
 	__forceinline__ void runImpl( const TSamplerType& pBrickSampler, const float3 pSamplePosScene,
 						const float3 pRayDir, float& pRayStep, const float pConeAperture );
 
+	/**
+	 * This method returns the raystep. (a bit stupid to do it this way but bon)
+	 *
+	 * @param pTTree the current distance along the ray's direction.
+	 *
+	 * @return the cone aperture
+	 */
+	__device__
+	__forceinline__ float getRayStepImpl(const float coneAperture, const float _nodeTreeSize) const;
+
 	/**************************************************************************
 	 **************************** PROTECTED SECTION ***************************
 	 **************************************************************************/

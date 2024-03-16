@@ -167,7 +167,7 @@ void Producer< TDataStructureType, TDataProductionManager >
 	}
 	else
 	{
-		// HEIN
+		// HEIN : Tried to render a volume with 10 level of res and it worked 
 		_maxDepth = 9;	// Limitation from nodes hashes
 	}
 

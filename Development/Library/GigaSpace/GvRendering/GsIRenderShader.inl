@@ -130,6 +130,13 @@ __forceinline__ bool GsIRenderShader< TDerived >::descentCriterion( const float 
 	return static_cast< const TDerived* >( this )->descentCriterionImpl( pVoxelSize );
 }
 
+template< typename TDerived >
+__device__
+__forceinline__ float GsIRenderShader< TDerived >::getRayStep(const float coneAperture, const float pVoxelSize) const
+{
+	return static_cast<const TDerived*>(this)->getRayStepImpl(coneAperture, pVoxelSize);
+}
+
 /******************************************************************************
  * This method is called for each sample. For example, shading or secondary rays
  * should be done here.

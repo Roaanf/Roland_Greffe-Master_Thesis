@@ -98,6 +98,10 @@ __constant__ int cDataResolution;
 
 __constant__ float cXRayConst;
 
+__constant__ float cConeApertureRayStepMult;
+
+__constant__ float cBrickDimRayStepMult;
+
 
 /******************************************************************************
  ***************************** TYPE DEFINITION ********************************
@@ -168,6 +172,10 @@ public:
 	__device__
 	inline bool stopCriterionImpl(const float3& pRayPosInWorld) const;
 
+	__device__
+	inline float getRayStepImpl(const float coneAperture, const float _nodeTreeSize) const;
+	
+	__device__
 	void resetValues();
 
 	/**************************************************************************

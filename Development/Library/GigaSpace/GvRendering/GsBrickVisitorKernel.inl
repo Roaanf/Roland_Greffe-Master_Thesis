@@ -113,8 +113,8 @@ float GsBrickVisitorKernel
 		//
 		// TO DO : check if coneAperture, based on radial distance to camera, could not generate spherical pattern
 		// ARTIFACT removal costs performances !!!
-		rayStep = max( coneAperture * 0.5f, pBrickSampler._nodeSizeTree * ( 0.35f / static_cast< float>( TVolumeTreeKernelType::BrickResolution::x ) ) );
-		
+		//rayStep = max( coneAperture * 0.5f, pBrickSampler._nodeSizeTree * ( 0.35f / static_cast< float>( TVolumeTreeKernelType::BrickResolution::x ) ) );
+		rayStep = pSampleShader.getRayStep(coneAperture, pBrickSampler._nodeSizeTree);
 		// Shading (+ adaptative step)
 		// SHADER
 		pSampleShader.run( pBrickSampler, samplePosTree, pRayDirTree, rayStep, coneAperture );

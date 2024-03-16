@@ -123,6 +123,9 @@ void CustomSectionEditor::populate( GvViewerCore::GvvBrowsable* pBrowsable )
 
 		_xRayConst->setValue(pipeline->getXRayConst());
 
+		_coneApertureRayStepMult->setValue(pipeline->getConeApertureRayStepMult());
+		_brickDimRayStepMult->setValue(pipeline->getBrickDimRayStepMult());
+
 		// Gradient bool
 		// Should be set to the same thing but I don't think I can actually
 		//_gradientRenderingCheckBox->setTristate(pipeline->getGradientRenderingBool());
@@ -256,5 +259,33 @@ void CustomSectionEditor::on__xRayConst_valueChanged(double value)
 	assert(sampleCore != NULL);
 
 	sampleCore->setXRayConst(value);
+}
+
+void CustomSectionEditor::on__coneApertureRayStepMult_valueChanged(double value)
+{
+	GvvApplication& application = GvvApplication::get();
+	GvvMainWindow* mainWindow = application.getMainWindow();
+	Gvv3DWindow* window3D = mainWindow->get3DWindow();
+	GvvPipelineInterfaceViewer* pipelineViewer = window3D->getPipelineViewer();
+	GvViewerCore::GvvPipelineInterface* pipeline = pipelineViewer->editPipeline();
+
+	SampleCore* sampleCore = dynamic_cast<SampleCore*>(pipeline);
+	assert(sampleCore != NULL);
+
+	sampleCore->setConeApertureRayStepMult(value);
+}
+
+void CustomSectionEditor::on__brickDimRayStepMult_valueChanged(double value)
+{
+	GvvApplication& application = GvvApplication::get();
+	GvvMainWindow* mainWindow = application.getMainWindow();
+	Gvv3DWindow* window3D = mainWindow->get3DWindow();
+	GvvPipelineInterfaceViewer* pipelineViewer = window3D->getPipelineViewer();
+	GvViewerCore::GvvPipelineInterface* pipeline = pipelineViewer->editPipeline();
+
+	SampleCore* sampleCore = dynamic_cast<SampleCore*>(pipeline);
+	assert(sampleCore != NULL);
+
+	sampleCore->setBrickDimRayStepMult(value);
 }
 

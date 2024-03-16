@@ -110,7 +110,7 @@ inline void ShaderKernel::runImpl( const BrickSamplerType& brickSampler, const f
 	{
 		// Use transfer function to color density
 		float oldColW = col.w;
-		float conv = ((col.w - cShaderThresholdLow) * (0.85f-0.15f)) / (cShaderThresholdHigh - cShaderThresholdLow)+ 0.15f;
+		float conv = ((col.w - cShaderThresholdLow) * (0.90f-0.10f)) / (cShaderThresholdHigh - cShaderThresholdLow)+ 0.10f;
 		float4 meanColColor;
 		col = densityToColor(conv);
 
@@ -119,7 +119,7 @@ inline void ShaderKernel::runImpl( const BrickSamplerType& brickSampler, const f
 			if (firstTouch > 0)
 				firstTouch--;
 			
-			float midColor = ((0.80f - cShaderThresholdLow) * (0.85f - 0.15f)) / (cShaderThresholdHigh - cShaderThresholdLow) + 0.15f;
+			float midColor = ((0.80f - cShaderThresholdLow) * (0.90f - 0.10f)) / (cShaderThresholdHigh - cShaderThresholdLow) + 0.10f;
 			col = densityToColor(midColor);
 			// le 2* il est un peu random mais ça marche ...
 			float colxp = brickSampler.template getValue< 0 >(coneAperture, make_float3(1.0 / (2 * cDataResolution), 0, 0)).w; // x+
@@ -131,7 +131,7 @@ inline void ShaderKernel::runImpl( const BrickSamplerType& brickSampler, const f
 			float3 normalVector = make_float3(colxp - colxm, colyp - colym, colzp - colzm); // pas sur du tout je suis un abruti c'est surement faux
 			// Check radiant degree
 			float cosAngle = clamp(dot(rayDir, normalVector), 0.0, 1.0);
-			cosAngle = clamp(((cosAngle) * (1.0f - 0.4f)) / (0.5) + 0.4f, 0.0f, 1.0f); // 0.5 c'est pcq j'ai jamais vu une valeur plus haute ...
+			cosAngle = clamp(((cosAngle) * (1.0f - 0.2f)) / (0.5) + 0.2f, 0.0f, 1.0f); // 0.5 c'est pcq j'ai jamais vu une valeur plus haute ...
 			_accColor.x = col.x * cosAngle;
 			_accColor.y = col.y * cosAngle;
 			_accColor.z = col.z * cosAngle;
@@ -154,7 +154,8 @@ inline void ShaderKernel::runImpl( const BrickSamplerType& brickSampler, const f
 		case 3: {
 			sampleCount++;
 			meanCol += oldColW;
-			meanColColor = densityToColor(meanCol / sampleCount);
+			float conv = (((meanCol / sampleCount) - cShaderThresholdLow) * (0.90f - 0.10f)) / (cShaderThresholdHigh - cShaderThresholdLow) + 0.10f;
+			meanColColor = densityToColor(conv);
 			
 			_accColor.x = meanColColor.x;
 			_accColor.y = meanColColor.y;
@@ -165,7 +166,7 @@ inline void ShaderKernel::runImpl( const BrickSamplerType& brickSampler, const f
 
 		case 4: {
 			currXRayIntensity *= 1 - rayStep * cXRayConst * oldColW;
-			col = densityToColor(currXRayIntensity);
+			col = densityToColor(1-currXRayIntensity); // Invert Colors
 
 			_accColor.x = col.x;
 			_accColor.y = col.y;
@@ -226,6 +227,11 @@ inline bool ShaderKernel::stopCriterionImpl(const float3& rayPosInWorld) const
 }
 
 __device__
+inline float ShaderKernel::getRayStepImpl(const float coneAperture, const float _nodeTreeSize) const
+{
+	return max(coneAperture * cConeApertureRayStepMult, _nodeTreeSize * (cBrickDimRayStepMult / static_cast<float>(cDataResolution)));
+}
+
 inline void ShaderKernel::resetValues(){
 	firstTouch = 2;
 	maxCol = 0;

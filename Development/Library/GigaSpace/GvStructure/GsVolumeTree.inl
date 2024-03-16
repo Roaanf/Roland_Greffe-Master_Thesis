@@ -91,6 +91,8 @@ GsVolumeTree< DataTList, NodeTileRes, BrickRes, BorderSize, TDataStructureKernel
 	std::cout << "\nData Structure ( N3-Tree )" << std::endl;
 	std::cout << "- node cache size : " << nodesCacheSize << std::endl;
 	std::cout << "- bricks cache resolution : " << bricksCacheRes << std::endl;
+	std::cout << "- NodeTileResMaxRes : " << TDataStructureKernelType::NodeResolution::maxRes << std::endl;
+
 
 	// Node pool initialization
 	_nodePool = new GvCore::GPUPoolHost< GvCore::GsLinearMemory, NodeTList >( nodesCacheSize, graphicsInteroperability );
@@ -116,6 +118,7 @@ GsVolumeTree< DataTList, NodeTileRes, BrickRes, BorderSize, TDataStructureKernel
 	volumeTreeKernel.brickCacheResINV = make_float3( 1.0f ) / make_float3( bricksCacheRes );	// Size of 1 voxel in the pool of bricks of voxels (3D texture)
 	volumeTreeKernel._rootAddress = NodeTileRes::getNumElements();
 	volumeTreeKernel.brickSizeInCacheNormalized = make_float3( BrickRes::get() ) / make_float3( bricksCacheRes );
+	std::cout << "BrickSizeInCacheNormalized : " << make_float3(BrickRes::get()) / make_float3(bricksCacheRes) << std::endl;
 
 	////Localization codes////
 	uint3 nodeCacheRes = nodesCacheSize / NodeTileRes::get();

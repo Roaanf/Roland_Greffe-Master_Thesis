@@ -62,6 +62,7 @@ template< int channel >
 __device__
 __forceinline__ float4 GsSamplerKernel< VolumeTreeKernelType >::getValue( const float coneAperture ) const
 {
+	//printf("\n%f/%f/%f\n", (_scaleTree2BrickPool * _sampleOffsetInNodeTree).x, (_scaleTree2BrickPool * _sampleOffsetInNodeTree).y, (_scaleTree2BrickPool * _sampleOffsetInNodeTree).z);
 	return _volumeTree->template getSampleValue< channel >( _brickChildPosInPool, _brickParentPosInPool, _scaleTree2BrickPool * _sampleOffsetInNodeTree,
 														   coneAperture,
 														   _mipMapOn, _mipMapInterpCoef );

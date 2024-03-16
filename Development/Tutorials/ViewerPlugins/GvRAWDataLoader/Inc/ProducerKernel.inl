@@ -204,12 +204,12 @@ inline uint ProducerKernel< TDataStructureType >
 	unsigned short min = _hostRangeCache.get(pRequestID * 2);
 	unsigned short max = _hostRangeCache.get(pRequestID * 2 + 1);
 	// If we are in gradient rendering, the range value are not correct anymore ! -> Fallback to the old solution ?
-	if (!cGradientRendering) {
+	//if (!cGradientRendering) {
 		if (((min <= cProducerThresholdLow) && (max <= cProducerThresholdLow)) || ((min >= cProducerThresholdHigh) && (max >= cProducerThresholdHigh))) {
 			// The brick is not in the Producer's range
 			return 2;
 		}
-	}
+	//}
 	
 	/*
 	if (threadIdx.x == 0) {

@@ -155,6 +155,9 @@ namespace GvRendering
 		__device__
 		__forceinline__ bool descentCriterion( const float pVoxelSize ) const;
 
+		__device__
+		__forceinline__ float getRayStep(const float coneAperture, const float pVoxelSize) const;
+
 		/**
 		 * This method is called for each sample. For example, shading or secondary rays
 		 * should be done here.

@@ -521,6 +521,14 @@ public:
 
 	void setXRayConst(float pValue);
 
+	float getConeApertureRayStepMult() const;
+
+	void setConeApertureRayStepMult(float pValue);
+
+	float getBrickDimRayStepMult() const;
+
+	void setBrickDimRayStepMult(float pValue);
+
 	/**
 	 * Get the min data value
 	 *
@@ -698,6 +706,10 @@ protected:
 	uint _radius;
 
 	float _xRayConst;
+
+	float _coneApertureRayStepMult;
+	
+	float _brickDimRayStepMult;
 
 	/******************************** METHODS *********************************/
 

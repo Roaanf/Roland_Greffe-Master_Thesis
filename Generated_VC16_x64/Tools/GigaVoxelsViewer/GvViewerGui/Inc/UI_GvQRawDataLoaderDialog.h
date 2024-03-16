@@ -41,7 +41,7 @@ public:
     QComboBox *_3DModelDataTypeComboBox;
     QSpacerItem *horizontalSpacer;
     QLabel *label_2;
-    QComboBox *_brickSize;
+    QSpinBox *_radius;
     QLabel *label_21;
     QSpinBox *_trueXSpinBox;
     QSpinBox *_trueYSpinBox;
@@ -97,11 +97,13 @@ public:
 
         gridLayout->addWidget(label_2, 2, 0, 1, 1);
 
-        _brickSize = new QComboBox(groupBox);
-        _brickSize->setObjectName(QString::fromUtf8("_brickSize"));
-        _brickSize->setLayoutDirection(Qt::RightToLeft);
+        _radius = new QSpinBox(groupBox);
+        _radius->setObjectName(QString::fromUtf8("_radius"));
+        _radius->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        _radius->setMinimum(0);
+        _radius->setMaximum(1e+06);
 
-        gridLayout->addWidget(_brickSize, 2, 1, 1, 1);
+        gridLayout->addWidget(_radius, 2, 1, 1, 1);
 
         label_21 = new QLabel(groupBox);
         label_21->setObjectName(QString::fromUtf8("label_21"));
@@ -147,9 +149,6 @@ public:
         QObject::connect(buttonBox, SIGNAL(accepted()), GvQRawDataLoaderDialog, SLOT(accept()));
         QObject::connect(buttonBox, SIGNAL(rejected()), GvQRawDataLoaderDialog, SLOT(reject()));
 
-        _brickSize->setCurrentIndex(2);
-
-
         QMetaObject::connectSlotsByName(GvQRawDataLoaderDialog);
     } // setupUi
 
@@ -165,21 +164,13 @@ public:
          << QApplication::translate("GvQRawDataLoaderDialog", "USHORT", 0, QApplication::UnicodeUTF8)
         );
 #ifndef QT_NO_TOOLTIP
-        label_2->setToolTip(QApplication::translate("GvQRawDataLoaderDialog", "Number of levels of resolution of the generated data strucutre.", 0, QApplication::UnicodeUTF8));
+        label_2->setToolTip(QApplication::translate("GvQRawDataLoaderDialog", "Radius to remove.", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
-        label_2->setText(QApplication::translate("GvQRawDataLoaderDialog", "BrickRes", 0, QApplication::UnicodeUTF8));
-        _brickSize->clear();
-        _brickSize->insertItems(0, QStringList()
-         << QApplication::translate("GvQRawDataLoaderDialog", "4", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("GvQRawDataLoaderDialog", "8", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("GvQRawDataLoaderDialog", "16", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("GvQRawDataLoaderDialog", "32", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("GvQRawDataLoaderDialog", "64", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("GvQRawDataLoaderDialog", "128", 0, QApplication::UnicodeUTF8)
-         << QApplication::translate("GvQRawDataLoaderDialog", "256", 0, QApplication::UnicodeUTF8)
-        );
+        label_2->setText(QApplication::translate("GvQRawDataLoaderDialog", "Radius", 0, QApplication::UnicodeUTF8));
 #ifndef QT_NO_TOOLTIP
-        _brickSize->setToolTip(QApplication::translate("GvQRawDataLoaderDialog", "Size of the brick", 0, QApplication::UnicodeUTF8));
+        _radius->setToolTip(QApplication::translate("GvQRawDataLoaderDialog", "\n"
+"              defines the outer radius that will be raplced by empty voxels -> 0 does nothing.\n"
+"            ", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
 #ifndef QT_NO_TOOLTIP
         label_21->setToolTip(QApplication::translate("GvQRawDataLoaderDialog", "True res.", 0, QApplication::UnicodeUTF8));

@@ -127,7 +127,9 @@ SampleCore::SampleCore()
 ,	_producerThresholdHigh( 65535.f )
 ,	_shaderThresholdLow( 0.f )
 ,	_shaderThresholdHigh(65535.f)
-,	_xRayConst(40.f)
+,	_xRayConst(120.f)
+,	_coneApertureRayStepMult(0.5f)
+,	_brickDimRayStepMult(0.35f)
 ,	_fullOpacityDistance( 300.f )
 ,	_gradientStep( 0.f )
 ,	_transferFunction( NULL )
@@ -401,7 +403,9 @@ fileload:
 	setFullOpacityDistance( dataResolution ); // the distance ( 1 / FullOpacityDistance ) is the distance after which opacity is full.
 	setGradientStep( 0.25f );
 	setGradientRenderingBool(false);
-	setXRayConst(40.f);
+	setXRayConst(120.f);
+	setConeApertureRayStepMult(0.5f);
+	setBrickDimRayStepMult(0.35f);
 	_transferFunction->updateDeviceMemory();
 }
 
@@ -1165,6 +1169,40 @@ void SampleCore::setXRayConst(float pValue)
 
 	// Update device memory
 	GS_CUDA_SAFE_CALL(cudaMemcpyToSymbol(cXRayConst, &_xRayConst, sizeof(cXRayConst), 0, cudaMemcpyHostToDevice));
+}
+
+float SampleCore::getConeApertureRayStepMult() const
+{
+	return _coneApertureRayStepMult;
+}
+/******************************************************************************
+ * Set the cConeApertureRayStepMult
+ *
+ * @param pValue the full opacity distance
+ ******************************************************************************/
+void SampleCore::setConeApertureRayStepMult(float pValue)
+{
+	_coneApertureRayStepMult = pValue;
+
+	// Update device memory
+	GS_CUDA_SAFE_CALL(cudaMemcpyToSymbol(cConeApertureRayStepMult, &_coneApertureRayStepMult, sizeof(_coneApertureRayStepMult), 0, cudaMemcpyHostToDevice));
+}
+
+float SampleCore::getBrickDimRayStepMult() const
+{
+	return _brickDimRayStepMult;
+}
+/******************************************************************************
+ * Set the XRay constant
+ *
+ * @param pValue the full opacity distance
+ ******************************************************************************/
+void SampleCore::setBrickDimRayStepMult(float pValue)
+{
+	_brickDimRayStepMult = pValue;
+
+	// Update device memory
+	GS_CUDA_SAFE_CALL(cudaMemcpyToSymbol(cBrickDimRayStepMult, &_brickDimRayStepMult, sizeof(_brickDimRayStepMult), 0, cudaMemcpyHostToDevice));
 }
 
 /******************************************************************************

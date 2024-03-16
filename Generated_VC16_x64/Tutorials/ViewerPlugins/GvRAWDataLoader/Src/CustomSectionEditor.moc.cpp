@@ -22,7 +22,7 @@ static const uint qt_meta_data_CustomSectionEditor[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       6,   14, // methods
+      10,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -36,6 +36,10 @@ static const uint qt_meta_data_CustomSectionEditor[] = {
      203,   21,   20,   20, 0x08,
      261,   21,   20,   20, 0x08,
      325,   21,   20,   20, 0x08,
+     379,  373,   20,   20, 0x08,
+     427,   21,   20,   20, 0x08,
+     462,   21,   20,   20, 0x08,
+     511,   21,   20,   20, 0x08,
 
        0        // eod
 };
@@ -48,6 +52,10 @@ static const char qt_meta_stringdata_CustomSectionEditor[] = {
     "on__shaderThresholdDoubleSpinBoxHigh_valueChanged(double)\0"
     "on__shaderFullOpacityDistanceDoubleSpinBox_valueChanged(double)\0"
     "on__gradientRenderingCheckBox_stateChanged(int)\0"
+    "index\0on__renderModeComboBox_currentIndexChanged(int)\0"
+    "on__xRayConst_valueChanged(double)\0"
+    "on__coneApertureRayStepMult_valueChanged(double)\0"
+    "on__brickDimRayStepMult_valueChanged(double)\0"
 };
 
 void CustomSectionEditor::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -62,6 +70,10 @@ void CustomSectionEditor::qt_static_metacall(QObject *_o, QMetaObject::Call _c, 
         case 3: _t->on__shaderThresholdDoubleSpinBoxHigh_valueChanged((*reinterpret_cast< double(*)>(_a[1]))); break;
         case 4: _t->on__shaderFullOpacityDistanceDoubleSpinBox_valueChanged((*reinterpret_cast< double(*)>(_a[1]))); break;
         case 5: _t->on__gradientRenderingCheckBox_stateChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 6: _t->on__renderModeComboBox_currentIndexChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 7: _t->on__xRayConst_valueChanged((*reinterpret_cast< double(*)>(_a[1]))); break;
+        case 8: _t->on__coneApertureRayStepMult_valueChanged((*reinterpret_cast< double(*)>(_a[1]))); break;
+        case 9: _t->on__brickDimRayStepMult_valueChanged((*reinterpret_cast< double(*)>(_a[1]))); break;
         default: ;
         }
     }
@@ -103,9 +115,9 @@ int CustomSectionEditor::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 6)
+        if (_id < 10)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 6;
+        _id -= 10;
     }
     return _id;
 }
