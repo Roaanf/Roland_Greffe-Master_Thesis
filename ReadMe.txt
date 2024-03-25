@@ -1,3 +1,5 @@
+Surface detection folder contains the Surface detection code
+
 GigaVoxels - GigaSpace
 
 [GigaVoxels] is a ray-guided out-of-core, on demand production, and smart caching library
