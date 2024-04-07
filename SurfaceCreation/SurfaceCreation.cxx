@@ -7,15 +7,35 @@
 #include <vtkProperty.h>
 #include <vtkRenderWindow.h>
 #include <vtkRenderWindowInteractor.h>
+#include <vtkPCANormalEstimation.h>
+#include <vtkSignedDistance.h>
+#include <vtkPoissonReconstruction.h>
+#include <vtkPowerCrustSurfaceReconstruction.h>
+#include <vtkSurfaceReconstructionFilter.h>
+#include <vtkContourFilter.h>
+#include <vtkReverseSense.h>
+#include <vtkTransform.h>
+#include <vtkTransformPolyDataFilter.h>
 #include <vtkRenderer.h>
+#include <vtkExtractSurface.h>
 #include <vtkSTLReader.h>
+#include <vtkSTLWriter.h>
+#include <vtkCylinder.h>
 #include <vtkVertexGlyphFilter.h>
+#include <vtkClipPolyData.h>
+#include <vtkImplicitBoolean.h>
 #include <sstream>
 
 int main(int argc, char* argv[])
 {
     vtkNew<vtkNamedColors> colors;
-
+    vtkNew<vtkRenderer> renderer;
+    vtkNew<vtkRenderWindow> renderWindow;
+    renderWindow->AddRenderer(renderer);
+    renderWindow->SetWindowName("SurfaceCreation");
+    vtkNew<vtkRenderWindowInteractor> renderWindowInteractor;
+    renderWindowInteractor->SetRenderWindow(renderWindow);
+    /* Construct initial model
     std::vector<std::string> files;
     std::string box = "./Data/box.stl";
     std::string cylinder = "./Data/cylinder.stl";
@@ -26,13 +46,6 @@ int main(int argc, char* argv[])
 
     std::vector<vtkSmartPointer<vtkPolyData>> polyDataVec;
 
-    vtkNew<vtkRenderer> renderer;
-    vtkNew<vtkRenderWindow> renderWindow;
-    renderWindow->AddRenderer(renderer);
-    renderWindow->SetWindowName("ReadSTL");
-    vtkNew<vtkRenderWindowInteractor> renderWindowInteractor;
-    renderWindowInteractor->SetRenderWindow(renderWindow);
-
     for (const std::string &i : files) {
         vtkNew<vtkSTLReader> reader;
         reader->SetFileName(i.c_str());
@@ -40,7 +53,7 @@ int main(int argc, char* argv[])
         auto poly_data = vtkSmartPointer<vtkPolyData>::New();
         poly_data->ShallowCopy(reader->GetOutput());
         polyDataVec.push_back(poly_data);
-        /*
+
         // Visualize
         vtkNew<vtkPolyDataMapper> mapper;
         mapper->SetInputConnection(reader->GetOutputPort());
@@ -53,7 +66,6 @@ int main(int argc, char* argv[])
         actor->GetProperty()->SetSpecular(0.3);
         actor->GetProperty()->SetSpecularPower(60.0);
         renderer->AddActor(actor);
-        */
     }
     auto addFilter = vtkSmartPointer<vtkBooleanOperationPolyDataFilter>::New();
     addFilter->SetInputData(0, polyDataVec[0]);
@@ -77,8 +89,8 @@ int main(int argc, char* argv[])
     actor->GetProperty()->SetSpecular(0.3);
     actor->GetProperty()->SetSpecularPower(60.0);
     renderer->AddActor(actor);
-
-    std::string filename = "./Data/PointCloud.txt";
+    */
+    std::string filename = "./Data/PointCloud(Maison)Crop.txt";
     std::ifstream filestream(filename.c_str());
     std::string line;
     vtkNew<vtkPoints> points;
@@ -88,7 +100,6 @@ int main(int argc, char* argv[])
         std::stringstream linestream;
         linestream << line;
         linestream >> x >> y >> z;
-
         points->InsertNextPoint(x, y, z);
     }
 
@@ -98,17 +109,101 @@ int main(int argc, char* argv[])
 
     polyData->SetPoints(points);
 
+    // Taken from ExtractSurface example
+    double bounds[6];
+    polyData->GetBounds(bounds);
+    double range[3];
+    int sampleSize = 20;
+    std::cout << sampleSize << std::endl;
+    for (int i = 0; i < 3; ++i)
+    {
+        range[i] = bounds[2 * i + 1] - bounds[2 * i];
+    }
+    vtkNew<vtkSignedDistance> distance;
+    vtkNew<vtkPCANormalEstimation> normals;
+
     vtkNew<vtkVertexGlyphFilter> glyphFilter;
     glyphFilter->SetInputData(polyData);
     glyphFilter->Update();
 
-    vtkNew<vtkPolyDataMapper> mapperPoint;
-    mapperPoint->SetInputConnection(glyphFilter->GetOutputPort());
-    vtkNew<vtkActor> actorPoint;
-    actorPoint->SetMapper(mapperPoint);
-    actorPoint->GetProperty()->SetColor(colors->GetColor3d("Red").GetData());
+    normals->SetInputData(polyData);
+    normals->SetSampleSize(sampleSize);
+    normals->SetNormalOrientationToGraphTraversal();
+    normals->FlipNormalsOn();
+    distance->SetInputConnection(normals->GetOutputPort());
 
-    renderer->AddActor(actorPoint);
+    int dimension = 1024;
+    double radius;
+    radius = std::max(std::max(range[0], range[1]), range[2]) / static_cast<double>(dimension) * 4; // ~4 voxels
+
+    distance->SetRadius(radius);
+    distance->SetDimensions(dimension, dimension, dimension);
+    distance->SetBounds(bounds[0] - range[0] * .1, bounds[1] + range[0] * .1,
+        bounds[2] - range[1] * .1, bounds[3] + range[1] * .1,
+        bounds[4] - range[2] * .1, bounds[5] + range[2] * .1);
+
+    /* Surface Extract
+    vtkNew<vtkExtractSurface> surface;
+    surface->SetInputConnection(distance->GetOutputPort());
+    surface->SetRadius(radius * .99);
+    surface->Update();
+    */
+    /* Poisson Extract
+    vtkSmartPointer<vtkPoissonReconstruction> surface = vtkSmartPointer<vtkPoissonReconstruction>::New();
+    surface->SetDepth(12);
+    surface->SetInputConnection(normals->GetOutputPort());
+    */
+    /* Crust Extract
+    vtkSmartPointer<vtkPowerCrustSurfaceReconstruction> surface = vtkSmartPointer<vtkPowerCrustSurfaceReconstruction>::New();
+    surface->SetInputData(polyData);
+    */
+    // Construct the surfaceand create isosurface.
+    vtkNew<vtkSurfaceReconstructionFilter> surf;
+    surf->SetInputData(polyData);
+    surf->SetNeighborhoodSize(10);
+    surf->SetSampleSpacing(0.1);
+
+    vtkNew<vtkContourFilter> contourFilter;
+    contourFilter->SetInputConnection(surf->GetOutputPort());
+    contourFilter->SetValue(0, 0.0);
+
+    // Sometimes the contouring algorithm can create a volume whose gradient
+    // vector and ordering of polygon (using the right hand rule) are
+    // inconsistent. vtkReverseSense cures this problem.
+    vtkNew<vtkReverseSense> surface;
+    surface->SetInputConnection(contourFilter->GetOutputPort());
+    surface->ReverseCellsOn();
+    surface->ReverseNormalsOn();
+    surface->Update();
+    // auto newSurf = transform_back(points, reverse->GetOutput());
+    //
+    vtkNew<vtkPolyDataMapper> map;
+    map->SetInputConnection(surface->GetOutputPort());
+    map->ScalarVisibilityOff();
+
+    vtkNew<vtkSTLWriter> stlWriter;
+    stlWriter->SetFileName("ExtractedSurface.stl");
+    stlWriter->SetInputConnection(surface->GetOutputPort());
+    stlWriter->Write();
+    
+    /*
+    vtkNew<vtkSTLWriter> stlWriterDiff;
+    stlWriterDiff->SetFileName("InitialModel.stl");
+    stlWriterDiff->SetInputConnection(diffFilter->GetOutputPort());
+    stlWriterDiff->Write();
+    */
+    vtkNew<vtkPolyDataMapper> surfaceMapper;
+    surfaceMapper->SetInputConnection(surface->GetOutputPort());
+
+    vtkNew<vtkProperty> back;
+    back->SetColor(colors->GetColor3d("Banana").GetData());
+
+    vtkNew<vtkActor> surfaceActor;
+    surfaceActor->SetMapper(surfaceMapper);
+    surfaceActor->GetProperty()->SetColor(colors->GetColor3d("Tomato").GetData());
+    surfaceActor->SetBackfaceProperty(back);
+
+    renderer->AddActor(surfaceActor);
 
     renderer->SetBackground(colors->GetColor3d("Gray").GetData());
     renderWindow->Render();

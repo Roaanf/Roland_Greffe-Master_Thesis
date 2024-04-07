@@ -27,7 +27,7 @@ int main()
 	typedef float CannyPixelType;
 	typedef itk::Image< CannyPixelType, 3 > CannyOutputImageType;
 
-	InputImageType::Pointer image = itk::ReadImage<InputImageType>("./Data/rekoRoland.mhd");
+	InputImageType::Pointer image = itk::ReadImage<InputImageType>("./Data/fdk.mhd");
 	InputImageType::RegionType region = image->GetLargestPossibleRegion();
 	InputImageType::SizeType size = region.GetSize();
 	std::cout << size << std::endl;
@@ -49,6 +49,7 @@ int main()
 	maskFilter->SetInput(image);
 	maskFilter->SetMaskImage(maskImage);
 	maskFilter->Update();
+	std::cout << "Otsu done !" << std::endl;
 
 	using CastFilterType = itk::CastImageFilter<InputImageType, CannyOutputImageType>;
 	auto castFilter = CastFilterType::New();
@@ -57,8 +58,8 @@ int main()
 	typedef itk::CannyEdgeDetectionImageFilter<CannyOutputImageType, CannyOutputImageType> CannyFilter;
 	CannyFilter::Pointer canny = CannyFilter::New();
 	canny->SetInput(castFilter->GetOutput());
-	canny->SetLowerThreshold(350.f); // Presque parfait banger
-	canny->SetUpperThreshold(2000.f);
+	canny->SetLowerThreshold(150.f);
+	canny->SetUpperThreshold(500.f);
 	std::cout << "Threshold : " << canny->GetLowerThreshold() << " " << canny->GetUpperThreshold() << std::endl;
 	canny->SetVariance(0.1);
 
@@ -69,7 +70,6 @@ int main()
 	// faire par région pour optimiser la mémoire !!!
 	rescale->SetInput(canny->GetOutput());
 	MaskImageType::Pointer cannyImage = rescale->GetOutput();
-	rescale->SetInput(canny->GetOutput());
 	std::cout << "Canny done !" << std::endl;
 	
 	typedef itk::ImageFileWriter<MaskImageType> ImageWriter;
@@ -77,6 +77,7 @@ int main()
 	imageWriter->SetInput(cannyImage);
 	imageWriter->SetFileName("TestCanny.mhd");
 	imageWriter->Update();
+	std::cout << "Canny write done !" << std::endl;
 
 	/*
 	typedef itk::BinaryImageToLabelMapFilter<MaskImageType> BinaryMapToLabelType;
@@ -133,15 +134,16 @@ int main()
 	gradientFilter->SetInput(image);
 	gradientFilter->Update();
 	GradientImageType::Pointer gradientImage = (gradientFilter->GetOutput());
-	/*
-	typedef itk::ImageFileWriter<GradientImageType> ImageWriter;
-	ImageWriter::Pointer imageWriter = ImageWriter::New();
-	imageWriter->SetInput(gradientFilter->GetOutput());
-	imageWriter->SetFileName("TestGrad.mhd");
-	imageWriter->Update();
-	*/
 	std::cout << "Gradient done !" << std::endl;
 
+	/*
+	typedef itk::ImageFileWriter<GradientImageType> GradientWriter;
+	GradientWriter::Pointer gradientWriter = GradientWriter::New();
+	gradientWriter->SetInput(gradientImage);
+	gradientWriter->SetFileName("TestGrad.mhd");
+	gradientWriter->Update();
+	std::cout << "Gradient writing done !" << std::endl;
+	*/
 	typedef itk::Index<3> indexType;
 	/*
 	while (!cannyIt.IsAtEnd()) {

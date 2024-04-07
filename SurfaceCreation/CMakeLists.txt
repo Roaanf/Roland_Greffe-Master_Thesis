@@ -6,17 +6,26 @@ project(SurfaceCreation)
 find_package(VTK COMPONENTS 
   CommonColor
   CommonCore
-  IOGeometry
+  CommonDataModel
+  FiltersPoints
   FiltersSources
+  IOGeometry
   InteractionStyle
   RenderingContextOpenGL2
   RenderingCore
   RenderingFreeType
   RenderingGL2PSOpenGL2
   RenderingOpenGL2
-)
-include(${VTK_USE_FILE})
-
+  PoissonReconstruction
+  Powercrust
+  IOLegacy
+  IOPLY
+  IOXML
+  CommonTransforms
+  FiltersCore
+  FiltersGeneral
+  ImagingHybrid
+ )
 add_executable(SurfaceCreation SurfaceCreation.cxx)
 
 target_link_libraries(SurfaceCreation PRIVATE ${VTK_LIBRARIES})
