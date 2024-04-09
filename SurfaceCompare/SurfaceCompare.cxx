@@ -14,6 +14,8 @@
 #include <vtkSmartPointer.h>
 #include <vtkSphereSource.h>
 #include <vtkSTLReader.h>
+#include <vtkSTLWriter.h>
+#include <vtkPolyDataWriter.h>
 
 int main(int argc, char* argv[])
 {
@@ -35,7 +37,7 @@ int main(int argc, char* argv[])
 
     // Load Target STL
     vtkNew<vtkSTLReader> targetReader;
-    targetReader->SetFileName("./Data/ExtractedSurface(ExtractSurface 1024).stl");
+    targetReader->SetFileName("./Data/ExtractedSurface(Poisson 8).stl");
     targetReader->Update();
 
     vtkNew<vtkCleanPolyData> targetPolyData;
@@ -69,6 +71,13 @@ int main(int argc, char* argv[])
 
     renderer->AddActor(referenceActor);
     renderer->AddActor2D(scalarBar);
+
+    // Doesn't seem to be extractable from the filter ?
+    // Will try a .vtk file instead
+    vtkNew<vtkPolyDataWriter> vtkWriter;
+    vtkWriter->SetFileName("CompPois8.vtk");
+    vtkWriter->SetInputConnection(distanceFilter->GetOutputPort());
+    vtkWriter->Write();
 
     renWin->Render();
     renWinInteractor->Start();
