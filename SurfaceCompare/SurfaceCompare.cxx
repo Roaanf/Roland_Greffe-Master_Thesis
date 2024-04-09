@@ -35,14 +35,15 @@ int main(int argc, char* argv[])
 
     // Load Target STL
     vtkNew<vtkSTLReader> targetReader;
-    targetReader->SetFileName("./Data/Poisson14Crop.stl");
+    targetReader->SetFileName("./Data/ExtractedSurface(ExtractSurface 1024).stl");
+    targetReader->Update();
 
     vtkNew<vtkCleanPolyData> targetPolyData;
     targetPolyData->SetInputData(targetReader->GetOutput());
 
     vtkNew<vtkDistancePolyDataFilter> distanceFilter;
-    distanceFilter->SetInputConnection(0, referencePolyData->GetOutputPort());
-    distanceFilter->SetInputConnection(1, targetPolyData->GetOutputPort());
+    distanceFilter->SetInputConnection(1, referencePolyData->GetOutputPort());
+    distanceFilter->SetInputConnection(0, targetPolyData->GetOutputPort());
     distanceFilter->Update();
 
     vtkNew<vtkPolyDataMapper> referenceMapper;
