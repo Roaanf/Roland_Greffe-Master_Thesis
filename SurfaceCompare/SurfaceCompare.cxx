@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
 
     // Load Target STL
     vtkNew<vtkSTLReader> targetReader;
-    targetReader->SetFileName("./Data/ExtractedSurface(Poisson 8).stl");
+    targetReader->SetFileName("./Data/Poison14CropFiltered.stl");
     targetReader->Update();
 
     vtkNew<vtkCleanPolyData> targetPolyData;
@@ -46,6 +46,7 @@ int main(int argc, char* argv[])
     vtkNew<vtkDistancePolyDataFilter> distanceFilter;
     distanceFilter->SetInputConnection(1, referencePolyData->GetOutputPort());
     distanceFilter->SetInputConnection(0, targetPolyData->GetOutputPort());
+    distanceFilter->SetSignedDistance(false);
     distanceFilter->Update();
 
     vtkNew<vtkPolyDataMapper> referenceMapper;
@@ -75,7 +76,7 @@ int main(int argc, char* argv[])
     // Doesn't seem to be extractable from the filter ?
     // Will try a .vtk file instead
     vtkNew<vtkPolyDataWriter> vtkWriter;
-    vtkWriter->SetFileName("CompPois8.vtk");
+    vtkWriter->SetFileName("./Data/CompPois14Filtered.vtk");
     vtkWriter->SetInputConnection(distanceFilter->GetOutputPort());
     vtkWriter->Write();
 

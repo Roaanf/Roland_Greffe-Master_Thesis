@@ -24,10 +24,26 @@
 #include <vtkVertexGlyphFilter.h>
 #include <vtkClipPolyData.h>
 #include <vtkImplicitBoolean.h>
+#include <vtkStaticPointLocator.h>
+#include <vtkSurfaceNets3D.h>
 #include <sstream>
 
 int main(int argc, char* argv[])
 {
+    bool computePointError = false;
+    std::string answer;
+    std::cout << "Compute error ?" << std::endl;
+    std::cin >> answer;
+    if (answer != "0") {
+        computePointError = true;
+    }
+
+    // TestChamber
+    if (true) {
+
+        return 0;
+    }
+
     vtkNew<vtkNamedColors> colors;
     vtkNew<vtkRenderer> renderer;
     vtkNew<vtkRenderWindow> renderWindow;
@@ -109,6 +125,47 @@ int main(int argc, char* argv[])
 
     polyData->SetPoints(points);
 
+    if (computePointError) {
+        // Length of edges
+        vtkNew<vtkStaticPointLocator> pointLocator;
+        pointLocator->SetDataSet(polyData);
+        pointLocator->BuildLocator();
+
+        // Hardcoded array because flemme
+        double point1Coord[16][3] = { {-20.0, 20.0, 20.0},{-20.0, 20.0, 20.0},{-20.0, 20.0, 20.0},
+                                      {20.0, 20.0, 20.0},{20.0, 20.0, 20.0},{20.0, 20.0, -20.0},
+                                      {20.0, 20.0, -20.0},{-20.0, 20.0, -20.0},{-20.0, -20.0, -20.0},
+                                      {-20.0, -20.0, -20.0},{-20.0, -20.0, 20.0},{20.0, -20.0, 20.0},
+                                      {0.0, 50.0 ,0.0},{0.0, 50.0 ,0.0},{0.0, 50.0 ,0.0},{0.0, 50.0 ,0.0} };
+
+        double point2Coord[16][3] = { {20.0, 20.0, 20.0},{-20.0, -20.0, 20.0},{-20.0, 20.0, -20.0},
+                                      {20.0, 20.0, -20.0},{20.0, -20.0, 20.0},{20.0, -20.0, -20.0},
+                                      {-20.0, 20.0, -20.0},{-20.0, -20.0, -20.0},{-20.0, -20.0, 20.0},
+                                      {20.0, -20.0, -20.0},{20.0, -20.0, 20.0},{20.0, -20.0, -20.0},
+                                      {-20.0, 20.0, 20.0},{-20.0, 20.0, -20.0},{20.0, 20.0, -20.0},{20.0, 20.0, 20.0} };
+        double distancesError[16];
+        // Loop through all 16 outer edges
+        for (size_t i = 0; i < 16; i++){
+            vtkIdType point1ID = pointLocator->FindClosestPoint(point1Coord[i]);
+            double* point1Point = polyData->GetPoint(point1ID);
+            double point1[3] = { point1Point[0], point1Point[1], point1Point[2] };
+            vtkIdType point2ID = pointLocator->FindClosestPoint(point2Coord[i]);
+            double* point2Point = polyData->GetPoint(point2ID);
+            double point2[3] = { point2Point[0], point2Point[1], point2Point[2] };
+            double distance = std::sqrt(vtkMath::Distance2BetweenPoints(point1, point2));
+            //compute distance btw the two points
+            if (i < 12) {
+                distancesError[i] = abs(distance - 40.0);
+            } else {
+                distancesError[i] = abs(distance - 41.2309);
+            }
+            std::cout << distancesError[i] << " ";
+        }
+        std::cout << std::endl;
+        // Angles
+
+    }
+
     // Taken from ExtractSurface example
     double bounds[6];
     polyData->GetBounds(bounds);
@@ -132,7 +189,7 @@ int main(int argc, char* argv[])
     normals->FlipNormalsOn();
     distance->SetInputConnection(normals->GetOutputPort());
 
-    int dimension = 1024;
+    int dimension = 2048;
     double radius;
     radius = std::max(std::max(range[0], range[1]), range[2]) / static_cast<double>(dimension) * 4; // ~4 voxels
 

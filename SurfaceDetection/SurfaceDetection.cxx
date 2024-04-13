@@ -18,6 +18,16 @@
 
 int main()
 {
+	bool writeCanny = true;
+	bool writeGradient = false;
+	bool computeError = false;
+	std::string answer;
+	std::cout << "Compute error ?" << std::endl;
+	std::cin >> answer;
+	if (answer != "0") {
+		computeError = true;
+	}
+
 	typedef unsigned short InputPixelType;
 	typedef itk::Image< InputPixelType, 3 > InputImageType;
 
@@ -27,7 +37,9 @@ int main()
 	typedef float CannyPixelType;
 	typedef itk::Image< CannyPixelType, 3 > CannyOutputImageType;
 
-	InputImageType::Pointer image = itk::ReadImage<InputImageType>("./Data/fdk.mhd");
+	std::string filename = "rekoRoland";
+
+	InputImageType::Pointer image = itk::ReadImage<InputImageType>("./Data/"+ filename + ".mhd");
 	InputImageType::RegionType region = image->GetLargestPossibleRegion();
 	InputImageType::SizeType size = region.GetSize();
 	std::cout << size << std::endl;
@@ -50,6 +62,15 @@ int main()
 	maskFilter->SetMaskImage(maskImage);
 	maskFilter->Update();
 	std::cout << "Otsu done !" << std::endl;
+	if (true) {
+		typedef itk::ImageFileWriter<MaskImageType> ImageWriter;
+		ImageWriter::Pointer imageWriter = ImageWriter::New();
+		imageWriter->SetInput(maskImage);
+		imageWriter->SetFileName("TestOtsu.mhd");
+		imageWriter->Update();
+		std::cout << "Canny write done !" << std::endl;
+		return 0;
+	}
 
 	using CastFilterType = itk::CastImageFilter<InputImageType, CannyOutputImageType>;
 	auto castFilter = CastFilterType::New();
@@ -72,12 +93,14 @@ int main()
 	MaskImageType::Pointer cannyImage = rescale->GetOutput();
 	std::cout << "Canny done !" << std::endl;
 	
-	typedef itk::ImageFileWriter<MaskImageType> ImageWriter;
-	ImageWriter::Pointer imageWriter = ImageWriter::New();
-	imageWriter->SetInput(cannyImage);
-	imageWriter->SetFileName("TestCanny.mhd");
-	imageWriter->Update();
-	std::cout << "Canny write done !" << std::endl;
+	if (writeCanny) {
+		typedef itk::ImageFileWriter<MaskImageType> ImageWriter;
+		ImageWriter::Pointer imageWriter = ImageWriter::New();
+		imageWriter->SetInput(cannyImage);
+		imageWriter->SetFileName("TestCanny.mhd");
+		imageWriter->Update();
+		std::cout << "Canny write done !" << std::endl;
+	}
 
 	/*
 	typedef itk::BinaryImageToLabelMapFilter<MaskImageType> BinaryMapToLabelType;
@@ -136,14 +159,15 @@ int main()
 	GradientImageType::Pointer gradientImage = (gradientFilter->GetOutput());
 	std::cout << "Gradient done !" << std::endl;
 
-	/*
-	typedef itk::ImageFileWriter<GradientImageType> GradientWriter;
-	GradientWriter::Pointer gradientWriter = GradientWriter::New();
-	gradientWriter->SetInput(gradientImage);
-	gradientWriter->SetFileName("TestGrad.mhd");
-	gradientWriter->Update();
-	std::cout << "Gradient writing done !" << std::endl;
-	*/
+	if (writeGradient) {
+		typedef itk::ImageFileWriter<GradientImageType> GradientWriter;
+		GradientWriter::Pointer gradientWriter = GradientWriter::New();
+		gradientWriter->SetInput(gradientImage);
+		gradientWriter->SetFileName("TestGrad.mhd");
+		gradientWriter->Update();
+		std::cout << "Gradient writing done !" << std::endl;
+	}
+	
 	typedef itk::Index<3> indexType;
 	/*
 	while (!cannyIt.IsAtEnd()) {
@@ -280,13 +304,14 @@ int main()
 
 
 					myfile << absZPos << " " << absYPos << " " << absXPos << "\n";
-					//mesh->SetPoint(mesh->GetNumberOfPoints(), point);
 					//std::cout << "Position : " << xPos << " " << yPos << " " << zPos << std::endl;
 				}
 			}
 		}
 	}
 	myfile.close();
+	std::cout << "Writer done" << std::endl;
+
 	/*
 	MeshWriterType::Pointer meshWriter = MeshWriterType::New();
 	meshWriter->SetInput(mesh);
@@ -299,7 +324,7 @@ int main()
 	imageWriter->SetFileName("TestCanny.mhd");
 	imageWriter->Update();
 	*/
-	std::cout << "Writer done" << std::endl;
+	
 
 	return EXIT_SUCCESS;
 }
