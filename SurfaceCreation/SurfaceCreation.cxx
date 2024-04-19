@@ -26,6 +26,11 @@
 #include <vtkImplicitBoolean.h>
 #include <vtkStaticPointLocator.h>
 #include <vtkSurfaceNets3D.h>
+#include <vtkVector.h>
+#include <vtkMath.h>
+#include <vtkExtractPolyDataGeometry.h>
+#include <vtkConvertToPointCloud.h>
+#include <vtkPolyDataWriter.h>
 #include <sstream>
 
 int main(int argc, char* argv[])
@@ -36,12 +41,6 @@ int main(int argc, char* argv[])
     std::cin >> answer;
     if (answer != "0") {
         computePointError = true;
-    }
-
-    // TestChamber
-    if (true) {
-
-        return 0;
     }
 
     vtkNew<vtkNamedColors> colors;
@@ -163,6 +162,61 @@ int main(int argc, char* argv[])
         }
         std::cout << std::endl;
         // Angles
+        double anglesErrors[3]; // Voir si j'en fais plus ?
+        double realAngles[3] = { 90.0, 90.0, 43.313 };
+        double point1Vec[4][3] = { {20.0, -20.0, -20.0},{-20.0, -20.0, -20.0},{-20.0, -20.0, 20.0},
+                                      {-20.0, 20.0, 20.0} };
+        double point2Vec[4][3] = { {-20.0, -20.0, 20.0},{-20.0, -20.0, 20.0},{-20.0, 20.0, 20.0},
+                                      {0.0, 50.0, 0.0} };
+        // Flemme de la boucle polalalalala
+        std::vector<vtkVector3d> vectors;
+        for (size_t i = 0; i < 4; i++) {
+            vtkIdType point1ID = pointLocator->FindClosestPoint(point1Vec[i]);
+            double* point1Point = polyData->GetPoint(point1ID);
+            double point1[3] = { point1Point[0], point1Point[1], point1Point[2] };
+            vtkIdType point2ID = pointLocator->FindClosestPoint(point2Vec[i]);
+            double* point2Point = polyData->GetPoint(point2ID);
+            double point2[3] = { point2Point[0], point2Point[1], point2Point[2] };
+            double diff[3] = { point2[0] - point1[0], point2[1] - point1[1], point2[2] - point1[2] };
+            //create vector
+            vtkVector3d vector = vtkVector3d(diff);
+            vectors.push_back(vector);
+        }
+
+        anglesErrors[0] = vtkMath::DegreesFromRadians(vtkMath::AngleBetweenVectors(vectors[0].GetData(), vectors[2].GetData())) - realAngles[0];
+        anglesErrors[1] = vtkMath::DegreesFromRadians(vtkMath::AngleBetweenVectors(vectors[1].GetData(), vectors[2].GetData())) - realAngles[1];
+        anglesErrors[2] = vtkMath::DegreesFromRadians(vtkMath::AngleBetweenVectors(vectors[3].GetData(), vectors[2].GetData())) - realAngles[2];
+
+        std::cout << anglesErrors[0] << " " << anglesErrors[1] << " " << anglesErrors[2] << std::endl;
+
+        vtkNew<vtkCylinder> cylinder;
+        cylinder->SetCenter(-20.0, 0.0, 0.0);
+        cylinder->SetRadius(10.15);
+        cylinder->SetAxis(1.0, 0.0, 0.0);
+        vtkNew<vtkImplicitBoolean> boolean;
+        boolean->AddFunction(cylinder);
+        vtkNew<vtkExtractPolyDataGeometry> extractPolyDataGeometry;
+        extractPolyDataGeometry->SetInputData(polyData);
+        extractPolyDataGeometry->SetExtractInside(true);
+        extractPolyDataGeometry->SetImplicitFunction(boolean);
+        extractPolyDataGeometry->Update();
+
+        vtkNew<vtkConvertToPointCloud> pcConvert;
+        pcConvert->SetInputConnection(extractPolyDataGeometry->GetOutputPort());
+        pcConvert->SetCellGenerationMode(vtkConvertToPointCloud::NO_CELLS);
+        pcConvert->Update();
+        vtkPolyData* cylPoints = pcConvert->GetOutput();
+        std::ofstream myfile;
+        myfile.open("PointCloud.txt");
+        for (size_t i = 0; i < cylPoints->GetNumberOfPoints(); i++) {
+            double* point = cylPoints->GetPoint(i);
+            myfile << point[0] << " " << point[1] << " " << point[2] << "\n";
+        }
+        myfile.close();
+        vtkNew<vtkPolyDataWriter> vtkWriter;
+        vtkWriter->SetFileName("./Data/TestCylinderCrop.vtk");
+        vtkWriter->SetInputConnection(extractPolyDataGeometry->GetOutputPort());
+        vtkWriter->Write();
 
     }
 

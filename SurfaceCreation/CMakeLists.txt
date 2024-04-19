@@ -7,7 +7,13 @@ find_package(VTK COMPONENTS
   CommonColor
   CommonCore
   CommonDataModel
+  CommonTransforms
+  FiltersCore
   FiltersPoints
+  FiltersGeneral
+  FiltersExtraction
+  FiltersGeometry
+  FiltersModeling
   FiltersSources
   IOGeometry
   InteractionStyle
