@@ -5,6 +5,8 @@
 #include "itkMeshFileWriter.h"
 #include "itkOtsuThresholdImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
+#include "itkMaskImageFilter.h"
+#include "itkConstantPadImageFilter.h"
 #include "itkGradientImageFilter.h"
 #include "itkBSplineInterpolateImageFunction.h"
 #include "itkBinaryImageToLabelMapFilter.h"
@@ -19,16 +21,9 @@
 int main()
 {
 	bool writeCanny = true;
-	bool writeGradient = false;
-	bool computeError = false;
-	std::string answer;
-	std::cout << "Compute error ?" << std::endl;
-	std::cin >> answer;
-	if (answer != "0") {
-		computeError = true;
-	}
+	bool writeGradient = true;
 
-	typedef unsigned short InputPixelType;
+	typedef unsigned char InputPixelType;
 	typedef itk::Image< InputPixelType, 3 > InputImageType;
 
 	typedef unsigned char MaskPixelType;
@@ -37,11 +32,25 @@ int main()
 	typedef float CannyPixelType;
 	typedef itk::Image< CannyPixelType, 3 > CannyOutputImageType;
 
-	std::string filename = "rekoRoland";
+	std::string filename = "ReferenceVoxelWONoise";
 
 	InputImageType::Pointer image = itk::ReadImage<InputImageType>("./Data/"+ filename + ".mhd");
 	InputImageType::RegionType region = image->GetLargestPossibleRegion();
 	InputImageType::SizeType size = region.GetSize();
+
+	using PaddingFilterType = itk::ConstantPadImageFilter<InputImageType, InputImageType>;
+	auto padding = PaddingFilterType::New();
+	padding->SetInput(image);
+	InputImageType::SizeType lowerExtendRegion;
+	lowerExtendRegion.Fill(1);
+	padding->SetPadLowerBound(lowerExtendRegion);
+	padding->SetPadUpperBound(lowerExtendRegion);
+	padding->SetConstant(0);
+	
+	image = padding->GetOutput();
+	size[0] += 2;
+	size[1] += 2;
+	size[2] += 2;
 	std::cout << size << std::endl;
 
 	//ThresholdImage
@@ -62,15 +71,6 @@ int main()
 	maskFilter->SetMaskImage(maskImage);
 	maskFilter->Update();
 	std::cout << "Otsu done !" << std::endl;
-	if (true) {
-		typedef itk::ImageFileWriter<MaskImageType> ImageWriter;
-		ImageWriter::Pointer imageWriter = ImageWriter::New();
-		imageWriter->SetInput(maskImage);
-		imageWriter->SetFileName("TestOtsu.mhd");
-		imageWriter->Update();
-		std::cout << "Canny write done !" << std::endl;
-		return 0;
-	}
 
 	using CastFilterType = itk::CastImageFilter<InputImageType, CannyOutputImageType>;
 	auto castFilter = CastFilterType::New();
@@ -79,8 +79,8 @@ int main()
 	typedef itk::CannyEdgeDetectionImageFilter<CannyOutputImageType, CannyOutputImageType> CannyFilter;
 	CannyFilter::Pointer canny = CannyFilter::New();
 	canny->SetInput(castFilter->GetOutput());
-	canny->SetLowerThreshold(150.f);
-	canny->SetUpperThreshold(500.f);
+	canny->SetLowerThreshold(0.1f);
+	canny->SetUpperThreshold(1.0f);
 	std::cout << "Threshold : " << canny->GetLowerThreshold() << " " << canny->GetUpperThreshold() << std::endl;
 	canny->SetVariance(0.1);
 
@@ -215,11 +215,13 @@ int main()
 	// Should be done with an iterator in a ideal world ... (but the example doesn't work ...)
 	//CannyPixelType* cannyBuffer = cannyImage->GetBufferPointer(); // Bad should do it correctly !!!
 	//GradientType* gradientBuffer = gradientImage->GetBufferPointer(); // Bad should do it correctly !!!
+	// Crash here when changing the size
 	std::ofstream myfile;
 	myfile.open("PointCloud.txt");
 	for (size_t i = 0; i < size[0]; i++) {
 		for (size_t j = 0; j < size[1]; j++){
 			for (size_t k = 0; k < size[2]; k++){
+				std::cout << "i : " << k << std::endl;
 				indexType currIndex;
 				indexType index;
 				currIndex[0] = i;

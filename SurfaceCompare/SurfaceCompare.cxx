@@ -65,9 +65,9 @@ int main(int argc, char* argv[])
         double bounds[6];
         referenceReader->GetOutput()->GetBounds(bounds);
         double spacing[3]; // desired volume spacing
-        spacing[0] = 0.05;
-        spacing[1] = 0.05;
-        spacing[2] = 0.05;
+        spacing[0] = 0.2; // This spacing leads to a volume close to the original reconstructed volume (200*350*200)
+        spacing[1] = 0.2;
+        spacing[2] = 0.2;
         whiteImage->SetSpacing(spacing);
 
         // compute dimensions
@@ -123,7 +123,7 @@ int main(int argc, char* argv[])
 
     // Load Target STL
     vtkNew<vtkSTLReader> targetReader;
-    targetReader->SetFileName("./Data/SurfaceNets.stl");
+    targetReader->SetFileName("./Data/SurfaceNetsFromNoNoise.stl");
     targetReader->Update();
 
     if (!computePreciseErrors) {
@@ -164,7 +164,7 @@ int main(int argc, char* argv[])
         // Doesn't seem to be extractable from the filter ?
         // Will try a .vtk file instead
         vtkNew<vtkPolyDataWriter> vtkWriter;
-        vtkWriter->SetFileName("./Data/CompPoison14CropFiltered.vtk");
+        vtkWriter->SetFileName("./Data/SurfaceNetCompare.vtk");
         vtkWriter->SetInputConnection(distanceFilter->GetOutputPort());
         vtkWriter->Write();
         renWin->Render();
