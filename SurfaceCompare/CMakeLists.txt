@@ -18,9 +18,11 @@ find_package(VTK COMPONENTS
   IOGeometry
   IOLegacy
   IOPLY
+  IOImage
   IOXML
   InteractionStyle
   InteractionWidgets
+  ImagingStencil
   RenderingAnnotation
   RenderingContextOpenGL2
   RenderingCore

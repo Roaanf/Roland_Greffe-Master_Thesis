@@ -15,7 +15,11 @@
 #include <vtkSmartPointer.h>
 #include <vtkSphereSource.h>
 #include <vtkSTLReader.h>
+#include <vtkImageData.h>
+#include <vtkImageStencil.h>
+#include <vtkMetaImageWriter.h>
 #include <vtkConvertToPointCloud.h>
+#include <vtkPolyDataToImageStencil.h>
 #include <vtkSTLWriter.h>
 #include <vtkImplicitBoolean.h>
 #include <vtkPolyDataWriter.h>
@@ -46,6 +50,73 @@ int main(int argc, char* argv[])
     vtkNew<vtkSTLReader> referenceReader;
     referenceReader->SetFileName("./Data/InitialModel.stl");
     referenceReader->Update();
+
+    //Generate a voxel volume from the reference model
+    bool genereateRefVoxelData = true;
+    std::cout << "Generate MHD of ref model ? (0/1)" << std::endl;
+    std::cin >> userAnswer;
+    if (userAnswer == "0" || userAnswer == "n" || userAnswer == "N") {
+        genereateRefVoxelData = false;
+    }
+
+    if (genereateRefVoxelData) {
+        // Stuff to generate the voxel volume
+        vtkNew<vtkImageData> whiteImage;
+        double bounds[6];
+        referenceReader->GetOutput()->GetBounds(bounds);
+        double spacing[3]; // desired volume spacing
+        spacing[0] = 0.05;
+        spacing[1] = 0.05;
+        spacing[2] = 0.05;
+        whiteImage->SetSpacing(spacing);
+
+        // compute dimensions
+        int dim[3];
+        for (int i = 0; i < 3; i++)
+        {
+            dim[i] = static_cast<int>(
+                ceil((bounds[i * 2 + 1] - bounds[i * 2]) / spacing[i]));
+        }
+        whiteImage->SetDimensions(dim);
+        whiteImage->SetExtent(0, dim[0] - 1, 0, dim[1] - 1, 0, dim[2] - 1);
+        
+        double origin[3];
+        origin[0] = bounds[0] + spacing[0] / 2;
+        origin[1] = bounds[2] + spacing[1] / 2;
+        origin[2] = bounds[4] + spacing[2] / 2;
+        whiteImage->SetOrigin(origin);
+        whiteImage->AllocateScalars(VTK_UNSIGNED_CHAR, 1);
+
+        // Fill the image with foreground voxels:
+        unsigned char inval = 255;
+        unsigned char outval = 0;
+        vtkIdType count = whiteImage->GetNumberOfPoints();
+        for (vtkIdType i = 0; i < count; ++i)
+        {
+            whiteImage->GetPointData()->GetScalars()->SetTuple1(i, inval);
+        }
+
+        vtkNew<vtkPolyDataToImageStencil> pol2stenc;
+        pol2stenc->SetInputData(referenceReader->GetOutput());
+        pol2stenc->SetOutputOrigin(origin);
+        pol2stenc->SetOutputSpacing(spacing);
+        pol2stenc->SetOutputWholeExtent(whiteImage->GetExtent());
+        pol2stenc->Update();
+
+        vtkNew<vtkImageStencil> imgstenc;
+        imgstenc->SetInputData(whiteImage);
+        imgstenc->SetStencilConnection(pol2stenc->GetOutputPort());
+        imgstenc->ReverseStencilOff();
+        imgstenc->SetBackgroundValue(outval);
+        imgstenc->Update();
+
+        vtkNew<vtkMetaImageWriter> writer;
+        writer->SetFileName("ReferenceVoxelWONoise.mhd");
+        writer->SetInputData(imgstenc->GetOutput());
+        writer->Write();
+        return EXIT_SUCCESS;
+
+	}
 
     vtkNew<vtkCleanPolyData> referencePolyData;
     referencePolyData->SetInputData(referenceReader->GetOutput());
