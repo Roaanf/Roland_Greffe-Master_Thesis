@@ -105,7 +105,7 @@ int main(int argc, char* argv[])
     actor->GetProperty()->SetSpecularPower(60.0);
     renderer->AddActor(actor);
     */
-    std::string filename = "./Data/PointCloud(Maison)Crop.txt";
+    std::string filename = "./Data/PointCloudNoNoise.txt";
     std::ifstream filestream(filename.c_str());
     std::string line;
     vtkNew<vtkPoints> points;
@@ -207,7 +207,7 @@ int main(int argc, char* argv[])
         pcConvert->Update();
         vtkPolyData* cylPoints = pcConvert->GetOutput();
         std::ofstream myfile;
-        myfile.open("PointCloud.txt");
+        myfile.open("CylinderPointCloud.txt");
         for (size_t i = 0; i < cylPoints->GetNumberOfPoints(); i++) {
             double* point = cylPoints->GetPoint(i);
             myfile << point[0] << " " << point[1] << " " << point[2] << "\n";
@@ -259,16 +259,16 @@ int main(int argc, char* argv[])
     surface->SetRadius(radius * .99);
     surface->Update();
     */
-    /* Poisson Extract
+    // Poisson Extract
     vtkSmartPointer<vtkPoissonReconstruction> surface = vtkSmartPointer<vtkPoissonReconstruction>::New();
     surface->SetDepth(12);
     surface->SetInputConnection(normals->GetOutputPort());
-    */
+    //
     /* Crust Extract
     vtkSmartPointer<vtkPowerCrustSurfaceReconstruction> surface = vtkSmartPointer<vtkPowerCrustSurfaceReconstruction>::New();
     surface->SetInputData(polyData);
     */
-    // Construct the surfaceand create isosurface.
+    /* Construct the surfaceand create isosurface.
     vtkNew<vtkSurfaceReconstructionFilter> surf;
     surf->SetInputData(polyData);
     surf->SetNeighborhoodSize(10);
@@ -287,7 +287,7 @@ int main(int argc, char* argv[])
     surface->ReverseNormalsOn();
     surface->Update();
     // auto newSurf = transform_back(points, reverse->GetOutput());
-    //
+    */
     vtkNew<vtkPolyDataMapper> map;
     map->SetInputConnection(surface->GetOutputPort());
     map->ScalarVisibilityOff();

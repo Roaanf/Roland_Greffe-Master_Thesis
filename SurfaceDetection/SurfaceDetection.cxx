@@ -308,7 +308,7 @@ int main()
 						continue;
 
 					float absXPos = xPos * image->GetSpacing()[0] + image->GetOrigin()[0];
-					float absYPos = -(yPos * image->GetSpacing()[1] + image->GetOrigin()[1]);
+					float absYPos = (yPos * image->GetSpacing()[1] + image->GetOrigin()[1]); // Pas oublier le - !!!
 					float absZPos = zPos * image->GetSpacing()[2] + image->GetOrigin()[2];
 
 

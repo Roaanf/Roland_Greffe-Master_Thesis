@@ -85,7 +85,7 @@ int main(int argc, char* argv[])
         origin[1] = bounds[2] + spacing[1] / 2;
         origin[2] = bounds[4] + spacing[2] / 2;
         whiteImage->SetOrigin(origin);
-        whiteImage->AllocateScalars(VTK_UNSIGNED_CHAR, 1);
+        whiteImage->AllocateScalars(VTK_UNSIGNED_SHORT, 1);
 
         // Fill the image with foreground voxels:
         unsigned char inval = 255;
@@ -123,54 +123,53 @@ int main(int argc, char* argv[])
 
     // Load Target STL
     vtkNew<vtkSTLReader> targetReader;
-    targetReader->SetFileName("./Data/SurfaceNetsFromNoNoise.stl");
+    targetReader->SetFileName("./Data/PoissonNoNoise.stl");
     targetReader->Update();
 
-    if (!computePreciseErrors) {
 
-        vtkNew<vtkCleanPolyData> targetPolyData;
-        targetPolyData->SetInputData(targetReader->GetOutput());
+    vtkNew<vtkCleanPolyData> targetPolyData;
+    targetPolyData->SetInputData(targetReader->GetOutput());
 
-        vtkNew<vtkDistancePolyDataFilter> distanceFilter;
-        distanceFilter->SetInputConnection(1, referencePolyData->GetOutputPort());
-        distanceFilter->SetInputConnection(0, targetPolyData->GetOutputPort());
-        distanceFilter->SetSignedDistance(false);
-        distanceFilter->Update();
+    vtkNew<vtkDistancePolyDataFilter> distanceFilter;
+    distanceFilter->SetInputConnection(1, referencePolyData->GetOutputPort());
+    distanceFilter->SetInputConnection(0, targetPolyData->GetOutputPort());
+    distanceFilter->SetSignedDistance(false);
+    distanceFilter->Update();
 
-        vtkNew<vtkPolyDataMapper> referenceMapper;
-        referenceMapper->SetInputConnection(distanceFilter->GetOutputPort());
-        referenceMapper->SetScalarRange(
-            distanceFilter->GetOutput()->GetPointData()->GetScalars()->GetRange()[0],
-            distanceFilter->GetOutput()->GetPointData()->GetScalars()->GetRange()[1]);
-        vtkNew<vtkActor> referenceActor;
-        referenceActor->SetMapper(referenceMapper);
+    vtkNew<vtkPolyDataMapper> referenceMapper;
+    referenceMapper->SetInputConnection(distanceFilter->GetOutputPort());
+    referenceMapper->SetScalarRange(
+        distanceFilter->GetOutput()->GetPointData()->GetScalars()->GetRange()[0],
+        distanceFilter->GetOutput()->GetPointData()->GetScalars()->GetRange()[1]);
+    vtkNew<vtkActor> referenceActor;
+    referenceActor->SetMapper(referenceMapper);
 
-        vtkNew<vtkScalarBarActor> scalarBar;
-        scalarBar->SetLookupTable(referenceMapper->GetLookupTable());
-        scalarBar->SetTitle("Distance");
-        scalarBar->SetNumberOfLabels(4);
-        scalarBar->UnconstrainedFontSizeOn();
-
-        vtkNew<vtkRenderWindow> renWin;
-        renWin->AddRenderer(renderer);
-        renWin->SetWindowName("DistancePolyDataFilter");
-
-        vtkNew<vtkRenderWindowInteractor> renWinInteractor;
-        renWinInteractor->SetRenderWindow(renWin);
-
-        renderer->AddActor(referenceActor);
-        renderer->AddActor2D(scalarBar);
-
-        // Doesn't seem to be extractable from the filter ?
-        // Will try a .vtk file instead
-        vtkNew<vtkPolyDataWriter> vtkWriter;
-        vtkWriter->SetFileName("./Data/SurfaceNetCompare.vtk");
-        vtkWriter->SetInputConnection(distanceFilter->GetOutputPort());
-        vtkWriter->Write();
-        renWin->Render();
-        renWinInteractor->Start();
+    vtkNew<vtkScalarBarActor> scalarBar;
+    scalarBar->SetLookupTable(referenceMapper->GetLookupTable());
+    scalarBar->SetTitle("Distance");
+    scalarBar->SetNumberOfLabels(4);
+    scalarBar->UnconstrainedFontSizeOn();
     
-    } else {
+    vtkNew<vtkRenderWindow> renWin;
+    renWin->AddRenderer(renderer);
+    renWin->SetWindowName("DistancePolyDataFilter");
+    
+    vtkNew<vtkRenderWindowInteractor> renWinInteractor;
+    renWinInteractor->SetRenderWindow(renWin);
+
+    renderer->AddActor(referenceActor);
+    renderer->AddActor2D(scalarBar);
+
+    // Doesn't seem to be extractable from the filter ?
+    // Will try a .vtk file instead
+    vtkNew<vtkPolyDataWriter> vtkWriter;
+    vtkWriter->SetFileName("./Data/PoissonNoNoise.vtk");
+    vtkWriter->SetInputConnection(distanceFilter->GetOutputPort());
+    vtkWriter->Write();
+    renWin->Render();
+    renWinInteractor->Start();
+    
+    if (computePreciseErrors) {
         // Length of edges
         vtkNew<vtkStaticPointLocator> pointLocator;
         vtkPolyData* polyData = targetReader->GetOutput();
