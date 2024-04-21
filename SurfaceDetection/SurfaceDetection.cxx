@@ -22,6 +22,7 @@ int main()
 {
 	bool writeCanny = true;
 	bool writeGradient = true;
+	bool boolPadding = false;
 
 	typedef unsigned char InputPixelType;
 	typedef itk::Image< InputPixelType, 3 > InputImageType;
@@ -32,25 +33,32 @@ int main()
 	typedef float CannyPixelType;
 	typedef itk::Image< CannyPixelType, 3 > CannyOutputImageType;
 
-	std::string filename = "ReferenceVoxelWONoise";
+	std::string filename = "PaddedInput";
 
 	InputImageType::Pointer image = itk::ReadImage<InputImageType>("./Data/"+ filename + ".mhd");
 	InputImageType::RegionType region = image->GetLargestPossibleRegion();
 	InputImageType::SizeType size = region.GetSize();
 
-	using PaddingFilterType = itk::ConstantPadImageFilter<InputImageType, InputImageType>;
-	auto padding = PaddingFilterType::New();
-	padding->SetInput(image);
-	InputImageType::SizeType lowerExtendRegion;
-	lowerExtendRegion.Fill(1);
-	padding->SetPadLowerBound(lowerExtendRegion);
-	padding->SetPadUpperBound(lowerExtendRegion);
-	padding->SetConstant(0);
-	
-	image = padding->GetOutput();
-	size[0] += 2;
-	size[1] += 2;
-	size[2] += 2;
+	if (boolPadding) {
+		using PaddingFilterType = itk::ConstantPadImageFilter<InputImageType, InputImageType>;
+		auto padding = PaddingFilterType::New();
+		padding->SetInput(image);
+		InputImageType::SizeType lowerExtendRegion;
+		lowerExtendRegion.Fill(1);
+		padding->SetPadLowerBound(lowerExtendRegion);
+		padding->SetPadUpperBound(lowerExtendRegion);
+		padding->SetConstant(0);
+		padding->Update();
+
+		typedef itk::ImageFileWriter<InputImageType> PaddedImageWriter;
+		PaddedImageWriter::Pointer paddedImageWriter = PaddedImageWriter::New();
+		paddedImageWriter->SetInput(padding->GetOutput());
+		paddedImageWriter->SetFileName("PaddedInput.mhd");
+		paddedImageWriter->Update();
+		
+		return true;
+	}
+
 	std::cout << size << std::endl;
 
 	//ThresholdImage
@@ -221,7 +229,6 @@ int main()
 	for (size_t i = 0; i < size[0]; i++) {
 		for (size_t j = 0; j < size[1]; j++){
 			for (size_t k = 0; k < size[2]; k++){
-				std::cout << "i : " << k << std::endl;
 				indexType currIndex;
 				indexType index;
 				currIndex[0] = i;
