@@ -76,7 +76,11 @@
         "xstring": "cpp",
         "xtr1common": "cpp",
         "xtree": "cpp",
-        "xutility": "cpp"
+        "xutility": "cpp",
+        "chrono": "cpp",
+        "forward_list": "cpp",
+        "random": "cpp",
+        "xstddef": "cpp"
     },
     "cmake.configureOnOpen": false
 }
