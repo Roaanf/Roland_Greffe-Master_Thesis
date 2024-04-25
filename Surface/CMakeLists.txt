@@ -3,8 +3,8 @@ option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 project(SurfaceDetect)
 
 # Find ITK
+find_package(ITK REQUIRED)
 find_package(
-    ITK REQUIRED
     VTK COMPONENTS 
     CommonColor
     CommonCore
