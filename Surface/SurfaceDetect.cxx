@@ -1,8 +1,6 @@
-#include "itkMesh.h"
 #include "itkImage.h"
 #include "itkImageFileReader.h"
 #include "itkCannyEdgeDetectionImageFilter.h"
-#include "itkMeshFileWriter.h"
 #include "itkOtsuThresholdImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 #include "itkMaskImageFilter.h"
@@ -292,7 +290,7 @@ int main()
 		std::cout << "Entering loop" << std::endl;
 		int nbOfPoints = lifeHackPart1->GetNumberOfPoints();
 		std::cout << nbOfPoints << std::endl;
-		int modifiedPoints;
+		int modifiedPoints = 0;
 		for (int i = 0; i < nbOfPoints; i++) {
 			lifeHackPart1->GetPoint(i, currPointCoord);
 			std::array<int,3> imageIndex = polyDataCoordToImageCoord({ currPointCoord[0],currPointCoord[1],currPointCoord[2] }, image->GetSpacing(), image->GetOrigin());
@@ -304,7 +302,7 @@ int main()
 				continue;
 			}
 			currDir.Normalize();
-			currDir *= 0.1f;
+			currDir *= image->GetSpacing()[0] * 0.1f; // The voxel size is defined by the image spacing (the 0.1f is a subvoxel refinement)
 			unsigned short maxValue = 0;
 			int maxIndex = 0;
 			for (int i = -5; i < 6; i++){
