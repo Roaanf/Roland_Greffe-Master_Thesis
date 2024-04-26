@@ -32,6 +32,7 @@
 #include <vtkPoissonReconstruction.h>
 #include <vtkCleanPolyData.h>
 #include <vtkPowerCrustSurfaceReconstruction.h>
+#include <vtkWindowedSincPolyDataFilter.h>
 #include <vtkSurfaceReconstructionFilter.h>
 #include <vtkContourFilter.h>
 #include <vtkReverseSense.h>
@@ -161,8 +162,8 @@ int main()
 	typedef itk::CannyEdgeDetectionImageFilter<CannyOutputImageType, CannyOutputImageType> CannyFilter;
 	CannyFilter::Pointer canny = CannyFilter::New();
 	canny->SetInput(castFilter->GetOutput());
-	canny->SetLowerThreshold(800.f);
-	canny->SetUpperThreshold(2500.f);
+	canny->SetLowerThreshold(800.0f); // 800
+	canny->SetUpperThreshold(2500.0f); // 2500
 	std::cout << "Threshold : " << canny->GetLowerThreshold() << " " << canny->GetUpperThreshold() << std::endl;
 	canny->SetVariance(0.1);
 
@@ -223,6 +224,7 @@ int main()
 			vtkNew<vtkSurfaceNets3D> surfaceNets;
 			surfaceNets->SetInputData(ITKToVTkConverter->GetOutput());
 			surfaceNets->SetValue(0, 255);
+			surfaceNets->SmoothingOff();
 			surfaceNets->SetNumberOfIterations(20);
 			surfaceNets->Update();
 			polyDataNotRotated = surfaceNets->GetOutput();
@@ -286,47 +288,69 @@ int main()
 		itk::CovariantVector< float, 3 > currDir;
 		itk::CovariantVector< float, 3 > brokenDir; // BrokenDir
 		brokenDir.Fill(0);
-		vtkNew<vtkPoints> newPoints;
-		std::cout << "Entering loop" << std::endl;
-		int nbOfPoints = lifeHackPart1->GetNumberOfPoints();
-		std::cout << nbOfPoints << std::endl;
-		int modifiedPoints = 0;
-		for (int i = 0; i < nbOfPoints; i++) {
-			lifeHackPart1->GetPoint(i, currPointCoord);
-			std::array<int,3> imageIndex = polyDataCoordToImageCoord({ currPointCoord[0],currPointCoord[1],currPointCoord[2] }, image->GetSpacing(), image->GetOrigin());
-			// gardientImageindex will have the correct position
-			InputImageType::IndexType gardientImageindex{{imageIndex[0], imageIndex[1], imageIndex[2]}};
-			currDir = gradientImage->GetPixel(gardientImageindex);
-			if (currDir == brokenDir) {
-				newPoints->InsertNextPoint(currPointCoord[0], currPointCoord[1], currPointCoord[2]);
-				continue;
-			}
-			currDir.Normalize();
-			currDir *= image->GetSpacing()[0] * 0.1f; // The voxel size is defined by the image spacing (the 0.1f is a subvoxel refinement)
-			unsigned short maxValue = 0;
-			int maxIndex = 0;
-			for (int i = -5; i < 6; i++){
-				itk::ContinuousIndex<double, 3> interpCoord;
-				interpCoord[0] = gardientImageindex[0] + i * currDir[0];
-				interpCoord[1] = gardientImageindex[1] + i * currDir[1];
-				interpCoord[2] = gardientImageindex[2] + i * currDir[2];
-				double interpValue = bSplineInterpFilter->EvaluateAtContinuousIndex(interpCoord);
-				if (interpValue > maxValue) {
-					maxValue = interpValue;
-					maxIndex = i;
+		
+		for (size_t iter = 0; iter < 3; iter++){
+			std::cout << "Entering loop iter " << iter << std::endl;
+			int nbOfPoints = lifeHackPart1->GetNumberOfPoints();
+			std::cout << nbOfPoints << std::endl;
+			vtkNew<vtkPoints> newPoints;
+			int modifiedPoints = 0;
+			for (int i = 0; i < nbOfPoints; i++) {
+				lifeHackPart1->GetPoint(i, currPointCoord);
+				std::array<int, 3> imageIndex = polyDataCoordToImageCoord({ currPointCoord[0],currPointCoord[1],currPointCoord[2] }, image->GetSpacing(), image->GetOrigin());
+				// gardientImageindex will have the correct position
+				InputImageType::IndexType gardientImageindex{ {imageIndex[0], imageIndex[1], imageIndex[2]} };
+				currDir = gradientImage->GetPixel(gardientImageindex);
+				if (currDir == brokenDir) {
+					newPoints->InsertNextPoint(currPointCoord[0], currPointCoord[1], currPointCoord[2]);
+					continue;
 				}
+				currDir.Normalize();
+				currDir *= image->GetSpacing()[0] * 0.2f; // The voxel size is defined by the image spacing (the 0.1f is a subvoxel refinement)
+				unsigned short maxValue = 0;
+				int maxIndex = 0;
+				bool printInterp = false;
+				if (i == 500) {
+					printInterp = true;
+					std::cout << "CurrDir : " << currDir << std::endl;
+					std::cout << "CurrPointCoord : " << currPointCoord[0] << " " << currPointCoord[1] << " " << currPointCoord[2] << std::endl;
+				}
+				for (int j = -10; j < 11; j++) {
+					itk::ContinuousIndex<double, 3> interpCoord = 0;
+					interpCoord[0] = gardientImageindex[0] + j * currDir[0];
+					interpCoord[1] = gardientImageindex[1] + j * currDir[1];
+					interpCoord[2] = gardientImageindex[2] + j * currDir[2];
+					double interpValue = bSplineInterpFilter->EvaluateAtContinuousIndex(interpCoord);
+					if (interpValue > maxValue) {
+						maxValue = interpValue;
+						maxIndex = j;
+					}
+					if (printInterp)
+						std::cout << "Interp : " << interpValue << std::endl;
+				}
+				std::array<double, 3> newCoords = imageCoordToPolyDataCoord({ gardientImageindex[0] + maxIndex * currDir[0],gardientImageindex[1] + maxIndex * currDir[1],gardientImageindex[2] + maxIndex * currDir[2] }, image->GetSpacing(), image->GetOrigin());
+				newPoints->InsertNextPoint(newCoords[0], newCoords[1], newCoords[2]);
+				if (maxIndex != 0)
+					modifiedPoints++;
 			}
-			std::array<double, 3> newCoords = imageCoordToPolyDataCoord({gardientImageindex[0]+maxIndex*currDir[0],gardientImageindex[1]+maxIndex*currDir[1],gardientImageindex[2]+maxIndex*currDir[2]}, image->GetSpacing(), image->GetOrigin());
-			newPoints->InsertNextPoint(newCoords[0], newCoords[1], newCoords[2]);
-			if (maxIndex != 0)
-				modifiedPoints++;
+			std::cout << "subVoxelRefinment done Mod points : " << modifiedPoints << std::endl;
+			lifeHackPart1->SetPoints(newPoints);
 		}
-		std::cout << "subVoxelRefinment done Mod points : " << modifiedPoints << std::endl;
-		lifeHackPart1->SetPoints(newPoints);
+		
 		imageDataCorrect->SetInputData(lifeHackPart1);
 		imageDataCorrect->SetTransform(transP3);
 		imageDataCorrect->Update();
-		targetPolyData->DeepCopy(imageDataCorrect->GetOutput());
+		// Smoothing the output (kindatest)
+		vtkSmartPointer<vtkWindowedSincPolyDataFilter> smooth = vtkSmartPointer<vtkWindowedSincPolyDataFilter>::New();
+		smooth->SetInputData(imageDataCorrect->GetOutput());
+		smooth->SetPassBand(0.01);
+		smooth->BoundarySmoothingOff();
+		smooth->FeatureEdgeSmoothingOff();
+		smooth->NonManifoldSmoothingOn();
+		smooth->NormalizeCoordinatesOn();
+		smooth->Update();
+
+		targetPolyData->DeepCopy(smooth->GetOutput());
 		stlWriter->SetFileName("Test.stl");
 		stlWriter->SetInputData(targetPolyData);
 		stlWriter->Write();
