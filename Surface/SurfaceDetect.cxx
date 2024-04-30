@@ -431,6 +431,7 @@ int main()
 						currDir[0] = normalDataDouble[i].GetValue(0);
 						currDir[1] = normalDataDouble[i].GetValue(1);
 						currDir[2] = normalDataDouble[i].GetValue(2);
+						std::cout << currDir[0] << " " << currDir[1] << " " << currDir[2] << std::endl;
 					} else {
 						currDir = gradientVecImage->GetPixel(gardientImageindex);
 					}
