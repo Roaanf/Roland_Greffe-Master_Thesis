@@ -77,6 +77,8 @@ int main()
 	bool writeGradient = false;
 	bool boolPadding = false;
 	bool cropImage = false;
+	bool smoothing = false;
+	bool subVoxRef = false;
 	bool computePointError = true;
 	enum recoAlgoEnum { ExtractSurface, Poisson, PowerCrust, SurfReconst, SurfaceNets, FlyingEdges};
 	recoAlgoEnum reco = SurfaceNets;
@@ -119,7 +121,7 @@ int main()
 
 	if (cropImage) {
 		using CropImageFilterType = itk::CropImageFilter<InputImageType, InputImageType>;
-		InputImageType::SizeType cropUp = {50,50,50 };
+		InputImageType::SizeType cropUp = {50,50,50};
 		InputImageType::SizeType cropDown = { 50,0,50 };
 		auto cropFilter = CropImageFilterType::New();
 		cropFilter->SetInput(image);
@@ -224,7 +226,12 @@ int main()
 			vtkNew<vtkSurfaceNets3D> surfaceNets;
 			surfaceNets->SetInputData(ITKToVTkConverter->GetOutput());
 			surfaceNets->SetValue(0, 255);
-			surfaceNets->SmoothingOff();
+			if (subVoxRef) {
+				surfaceNets->SmoothingOff();
+			}
+			else {
+				surfaceNets->SmoothingOn();
+			}
 			surfaceNets->SetNumberOfIterations(20);
 			surfaceNets->Update();
 			polyDataNotRotated = surfaceNets->GetOutput();
@@ -260,98 +267,102 @@ int main()
 			targetPolyData->DeepCopy(imageDataCorrect->GetOutput());
 		}
 		// Smoothing / BetterPrecision ?
-		// Compute the Gradient Vector image 
-		using GradientFilterType = itk::GradientImageFilter<InputImageType, float>;
-		auto gradientFilter = GradientFilterType::New();
-		gradientFilter->SetInput(image);
-		gradientFilter->Update();
-		auto gradientImage = gradientFilter->GetOutput();
+		// Compute the Gradient Vector image
+		if (subVoxRef) {
+			using GradientFilterType = itk::GradientImageFilter<InputImageType, float>;
+			auto gradientFilter = GradientFilterType::New();
+			gradientFilter->SetInput(image);
+			gradientFilter->Update();
+			auto gradientImage = gradientFilter->GetOutput();
 
-		using InitImageBSplineInterp = itk::BSplineInterpolateImageFunction<InputImageType>;
-		auto bSplineInterpFilter = InitImageBSplineInterp::New();
-		bSplineInterpFilter->SetSplineOrder(3);
-		bSplineInterpFilter->SetInputImage(image);
+			using InitImageBSplineInterp = itk::BSplineInterpolateImageFunction<InputImageType>;
+			auto bSplineInterpFilter = InitImageBSplineInterp::New();
+			bSplineInterpFilter->SetSplineOrder(3);
+			bSplineInterpFilter->SetInputImage(image);
 
-		// Life hack
-		vtkNew<vtkTransform> transP2;
-		transP2->RotateY(90);
-		vtkNew<vtkTransform> transP3;
-		transP3->RotateY(-90);
-		imageDataCorrect->SetInputData(targetPolyData);
-		imageDataCorrect->SetTransform(transP2);
-		imageDataCorrect->Update();
-		vtkNew<vtkPolyData> lifeHackPart1;
-		lifeHackPart1->DeepCopy(imageDataCorrect->GetOutput());
-		// Direction semble bon le pb c'est l'interpolation on dirait ...
-		vtkNew<vtkIdList> listOfPoints;
-		double currPointCoord[3];
-		itk::CovariantVector< float, 3 > currDir;
-		itk::CovariantVector< float, 3 > brokenDir; // BrokenDir
-		brokenDir.Fill(0);
-		
-		for (size_t iter = 0; iter < 1; iter++){
-			std::cout << "Entering loop iter " << iter << std::endl;
-			int nbOfPoints = lifeHackPart1->GetNumberOfPoints();
-			std::cout << nbOfPoints << std::endl;
-			vtkNew<vtkPoints> newPoints;
-			int modifiedPoints = 0;
-			for (int i = 0; i < nbOfPoints; i++) {
-				lifeHackPart1->GetPoint(i, currPointCoord);
-				std::array<int, 3> imageIndex = polyDataCoordToImageCoord({ currPointCoord[0],currPointCoord[1],currPointCoord[2] }, image->GetSpacing(), image->GetOrigin());
-				// gardientImageindex will have the correct position
-				InputImageType::IndexType gardientImageindex{ {imageIndex[0], imageIndex[1], imageIndex[2]} };
-				currDir = gradientImage->GetPixel(gardientImageindex);
-				if (currDir == brokenDir) {
-					newPoints->InsertNextPoint(currPointCoord[0], currPointCoord[1], currPointCoord[2]);
-					continue;
-				}
-				currDir.Normalize();
-				currDir *= image->GetSpacing()[0] * 0.2f; // The voxel size is defined by the image spacing (the 0.1f is a subvoxel refinement)
-				unsigned short maxValue = 0;
-				int maxIndex = 0;
-				bool printInterp = false;
-				if (i == 500) {
-					printInterp = true;
-					std::cout << "CurrDir : " << currDir << std::endl;
-					std::cout << "CurrPointCoord : " << currPointCoord[0] << " " << currPointCoord[1] << " " << currPointCoord[2] << std::endl;
-				}
-				for (int j = -10; j < 11; j++) {
-					itk::ContinuousIndex<double, 3> interpCoord = 0;
-					interpCoord[0] = gardientImageindex[0] + j * currDir[0];
-					interpCoord[1] = gardientImageindex[1] + j * currDir[1];
-					interpCoord[2] = gardientImageindex[2] + j * currDir[2];
-					double interpValue = bSplineInterpFilter->EvaluateAtContinuousIndex(interpCoord);
-					if (interpValue > maxValue) {
-						maxValue = interpValue;
-						maxIndex = j;
+			// Life hack
+			vtkNew<vtkTransform> transP2;
+			transP2->RotateY(90);
+			vtkNew<vtkTransform> transP3;
+			transP3->RotateY(-90);
+			imageDataCorrect->SetInputData(targetPolyData);
+			imageDataCorrect->SetTransform(transP2);
+			imageDataCorrect->Update();
+			vtkNew<vtkPolyData> lifeHackPart1;
+			lifeHackPart1->DeepCopy(imageDataCorrect->GetOutput());
+			// Direction semble bon le pb c'est l'interpolation on dirait ...
+			vtkNew<vtkIdList> listOfPoints;
+			double currPointCoord[3];
+			itk::CovariantVector< float, 3 > currDir;
+			itk::CovariantVector< float, 3 > brokenDir; // BrokenDir
+			brokenDir.Fill(0);
+
+			for (size_t iter = 0; iter < 1; iter++) {
+				std::cout << "Entering loop iter " << iter << std::endl;
+				int nbOfPoints = lifeHackPart1->GetNumberOfPoints();
+				std::cout << nbOfPoints << std::endl;
+				vtkNew<vtkPoints> newPoints;
+				int modifiedPoints = 0;
+				for (int i = 0; i < nbOfPoints; i++) {
+					lifeHackPart1->GetPoint(i, currPointCoord);
+					std::array<int, 3> imageIndex = polyDataCoordToImageCoord({ currPointCoord[0],currPointCoord[1],currPointCoord[2] }, image->GetSpacing(), image->GetOrigin());
+					// gardientImageindex will have the correct position
+					InputImageType::IndexType gardientImageindex{ {imageIndex[0], imageIndex[1], imageIndex[2]} };
+					currDir = gradientImage->GetPixel(gardientImageindex);
+					if (currDir == brokenDir) {
+						newPoints->InsertNextPoint(currPointCoord[0], currPointCoord[1], currPointCoord[2]);
+						continue;
 					}
-					if (printInterp)
-						std::cout << "Interp : " << interpValue << std::endl;
+					currDir.Normalize();
+					currDir *= image->GetSpacing()[0] * 0.2f; // The voxel size is defined by the image spacing (the 0.1f is a subvoxel refinement)
+					unsigned short maxValue = 0;
+					int maxIndex = 0;
+					bool printInterp = false;
+					if (i == 500) {
+						printInterp = true;
+						std::cout << "CurrDir : " << currDir << std::endl;
+						std::cout << "CurrPointCoord : " << currPointCoord[0] << " " << currPointCoord[1] << " " << currPointCoord[2] << std::endl;
+					}
+					for (int j = -10; j < 11; j++) {
+						itk::ContinuousIndex<double, 3> interpCoord = 0;
+						interpCoord[0] = gardientImageindex[0] + j * currDir[0];
+						interpCoord[1] = gardientImageindex[1] + j * currDir[1];
+						interpCoord[2] = gardientImageindex[2] + j * currDir[2];
+						double interpValue = bSplineInterpFilter->EvaluateAtContinuousIndex(interpCoord);
+						if (interpValue > maxValue) {
+							maxValue = interpValue;
+							maxIndex = j;
+						}
+						if (printInterp)
+							std::cout << "Interp : " << interpValue << std::endl;
+					}
+					std::array<double, 3> newCoords = imageCoordToPolyDataCoord({ gardientImageindex[0] + maxIndex * currDir[0],gardientImageindex[1] + maxIndex * currDir[1],gardientImageindex[2] + maxIndex * currDir[2] }, image->GetSpacing(), image->GetOrigin());
+					newPoints->InsertNextPoint(newCoords[0], newCoords[1], newCoords[2]);
+					if (maxIndex != 0)
+						modifiedPoints++;
 				}
-				std::array<double, 3> newCoords = imageCoordToPolyDataCoord({ gardientImageindex[0] + maxIndex * currDir[0],gardientImageindex[1] + maxIndex * currDir[1],gardientImageindex[2] + maxIndex * currDir[2] }, image->GetSpacing(), image->GetOrigin());
-				newPoints->InsertNextPoint(newCoords[0], newCoords[1], newCoords[2]);
-				if (maxIndex != 0)
-					modifiedPoints++;
+				std::cout << "subVoxelRefinment done Mod points : " << modifiedPoints << std::endl;
+				lifeHackPart1->SetPoints(newPoints);
 			}
-			std::cout << "subVoxelRefinment done Mod points : " << modifiedPoints << std::endl;
-			lifeHackPart1->SetPoints(newPoints);
-		}
-		
-		imageDataCorrect->SetInputData(lifeHackPart1);
-		imageDataCorrect->SetTransform(transP3);
-		imageDataCorrect->Update();
-		// Smoothing the output (kindatest)
-		vtkSmartPointer<vtkWindowedSincPolyDataFilter> smooth = vtkSmartPointer<vtkWindowedSincPolyDataFilter>::New();
-		smooth->SetInputData(imageDataCorrect->GetOutput());
-		smooth->SetPassBand(0.01);
-		smooth->BoundarySmoothingOff();
-		smooth->FeatureEdgeSmoothingOff();
-		smooth->NonManifoldSmoothingOn();
-		smooth->NormalizeCoordinatesOn();
-		smooth->Update();
 
-		targetPolyData->DeepCopy(smooth->GetOutput());
-		stlWriter->SetFileName("Test.stl");
+			imageDataCorrect->SetInputData(lifeHackPart1);
+			imageDataCorrect->SetTransform(transP3);
+			imageDataCorrect->Update();
+		}
+		// Smoothing the output (kindatest)
+		if (smoothing && !subVoxRef) { // Makes no sense to smooth without subvox refinment
+			vtkSmartPointer<vtkWindowedSincPolyDataFilter> smooth = vtkSmartPointer<vtkWindowedSincPolyDataFilter>::New();
+			smooth->SetInputData(imageDataCorrect->GetOutput());
+			smooth->SetPassBand(0.01);
+			smooth->BoundarySmoothingOff();
+			smooth->FeatureEdgeSmoothingOff();
+			smooth->NonManifoldSmoothingOn();
+			smooth->NormalizeCoordinatesOn();
+			smooth->Update();
+			targetPolyData->DeepCopy(smooth->GetOutput());
+		}
+
+		stlWriter->SetFileName(stlFilename.c_str());
 		stlWriter->SetInputData(targetPolyData);
 		stlWriter->Write();
 
