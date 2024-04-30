@@ -7,6 +7,7 @@
 #include "itkConstantPadImageFilter.h"
 #include "itkImageToVTKImageFilter.h"
 #include "itkGradientImageFilter.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkBSplineInterpolateImageFunction.h"
 #include "itkBinaryImageToLabelMapFilter.h"
 #include "itkLabelMapToBinaryImageFilter.h"
@@ -57,6 +58,42 @@
 #include <sstream>
 #include <iostream>
 
+// Used to normalize all vectors of a vector image in one pass -> probably a simpler way to do it ?
+template <class TInput, class TOutput>
+class NormalizeVector
+{
+public:
+	NormalizeVector() = default;
+	~NormalizeVector() = default;
+	bool
+		operator!=(const NormalizeVector&) const
+	{
+		return false;
+	}
+	bool
+		operator==(const NormalizeVector& other) const
+	{
+		return !(*this != other);
+	}
+	inline TOutput
+		operator()(const TInput& A) const
+	{
+		using VectorType = itk::Vector<float, 3>;
+		VectorType v;
+		v[0] = A[0];
+		v[1] = A[1];
+		v[2] = A[2];
+		v.Normalize();
+		TOutput    transformedVector;
+		
+		transformedVector[0] = v[0];
+		transformedVector[1] = v[1];
+		transformedVector[2] = v[2];
+
+		return transformedVector;
+	}
+};
+
 std::array<double,3> imageCoordToPolyDataCoord(std::array<float, 3> voxelPos, itk::Vector<double,3> imageSpacing, itk::Point<double,3> imageOrigin) {
 	double coord0 = voxelPos[0] * imageSpacing[0] + imageOrigin[0];
 	double coord1 = -(voxelPos[1] * imageSpacing[1] + imageOrigin[1]);
@@ -77,8 +114,9 @@ int main()
 	bool writeGradient = false;
 	bool boolPadding = false;
 	bool cropImage = false;
+	bool subVoxRef = true;
+	bool gradMagWrite = true;
 	bool smoothing = false;
-	bool subVoxRef = false;
 	bool computePointError = true;
 	enum recoAlgoEnum { ExtractSurface, Poisson, PowerCrust, SurfReconst, SurfaceNets, FlyingEdges};
 	recoAlgoEnum reco = SurfaceNets;
@@ -226,7 +264,7 @@ int main()
 			vtkNew<vtkSurfaceNets3D> surfaceNets;
 			surfaceNets->SetInputData(ITKToVTkConverter->GetOutput());
 			surfaceNets->SetValue(0, 255);
-			if (subVoxRef) {
+			if (subVoxRef && smoothing) {
 				surfaceNets->SmoothingOff();
 			}
 			else {
@@ -275,6 +313,21 @@ int main()
 			gradientFilter->Update();
 			auto gradientImage = gradientFilter->GetOutput();
 
+			if (gradMagWrite) {
+				typedef itk::CovariantVector<float, 3> GradMagVector;
+				typedef itk::Image< GradMagVector, 3> GradientMagnitudeImageType;
+				typedef itk::ImageFileWriter<GradientMagnitudeImageType> GradMagImageWriter;
+				GradMagImageWriter::Pointer gradMagImageWriter = GradMagImageWriter::New();
+				typedef itk::UnaryFunctorImageFilter<GradientMagnitudeImageType, GradientMagnitudeImageType, NormalizeVector<GradMagVector, GradMagVector> > GradImageNormFilter;
+				auto gradImageNormFilter = GradImageNormFilter::New();
+				gradImageNormFilter->SetInput(gradientImage);
+				auto gradMagImageNormalized = gradImageNormFilter->GetOutput();
+				gradMagImageWriter->SetInput(gradMagImageNormalized);
+				gradMagImageWriter->SetFileName("TestGradMag.mhd");
+				gradMagImageWriter->Update();
+				std::cout << "GradImage write done !" << std::endl;
+			}
+
 			using InitImageBSplineInterp = itk::BSplineInterpolateImageFunction<InputImageType>;
 			auto bSplineInterpFilter = InitImageBSplineInterp::New();
 			bSplineInterpFilter->SetSplineOrder(3);
@@ -314,7 +367,7 @@ int main()
 						continue;
 					}
 					currDir.Normalize();
-					currDir *= image->GetSpacing()[0] * 0.2f; // The voxel size is defined by the image spacing (the 0.1f is a subvoxel refinement)
+					currDir *= image->GetSpacing()[0] * 0.08f; // The voxel size is defined by the image spacing (the 0.1f is a subvoxel refinement)
 					unsigned short maxValue = 0;
 					int maxIndex = 0;
 					bool printInterp = false;
@@ -348,9 +401,10 @@ int main()
 			imageDataCorrect->SetInputData(lifeHackPart1);
 			imageDataCorrect->SetTransform(transP3);
 			imageDataCorrect->Update();
+			targetPolyData->DeepCopy(imageDataCorrect->GetOutput());
 		}
 		// Smoothing the output (kindatest)
-		if (smoothing && !subVoxRef) { // Makes no sense to smooth without subvox refinment
+		if (smoothing && subVoxRef) { // Makes no sense to smooth without subvox refinment
 			vtkSmartPointer<vtkWindowedSincPolyDataFilter> smooth = vtkSmartPointer<vtkWindowedSincPolyDataFilter>::New();
 			smooth->SetInputData(imageDataCorrect->GetOutput());
 			smooth->SetPassBand(0.01);
