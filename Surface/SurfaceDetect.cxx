@@ -289,7 +289,7 @@ int main()
 		itk::CovariantVector< float, 3 > brokenDir; // BrokenDir
 		brokenDir.Fill(0);
 		
-		for (size_t iter = 0; iter < 3; iter++){
+		for (size_t iter = 0; iter < 1; iter++){
 			std::cout << "Entering loop iter " << iter << std::endl;
 			int nbOfPoints = lifeHackPart1->GetNumberOfPoints();
 			std::cout << nbOfPoints << std::endl;
