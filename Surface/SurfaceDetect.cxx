@@ -7,6 +7,7 @@
 #include "itkConstantPadImageFilter.h"
 #include "itkThresholdImageFilter.h"
 #include "itkImageToVTKImageFilter.h"
+#include "itkBinaryThresholdImageFilter.h"
 #include "itkGradientImageFilter.h"
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkBSplineInterpolateImageFunction.h"
@@ -22,6 +23,8 @@
 #include <vtkActor.h>
 #include <vtkNamedColors.h>
 #include <vtkNew.h>
+#include <vtkDoubleArray.h>
+#include <vtkPointData.h>
 #include <vtkPolyDataMapper.h>
 #include <vtkFlyingEdges3D.h>
 #include <vtkSmartPointer.h>
@@ -53,6 +56,7 @@
 #include <vtkSurfaceNets3D.h>
 #include <vtkVector.h>
 #include <vtkMath.h>
+#include <vtkPolyDataNormals.h>
 #include <vtkExtractPolyDataGeometry.h>
 #include <vtkConvertToPointCloud.h>
 #include <vtkPolyDataWriter.h>
@@ -118,7 +122,7 @@ int main()
 	bool subVoxRef = true;
 	bool gradMagWrite = false;
 	bool smoothing = false;
-	bool writeOtsu = true;
+	bool writeOtsu = false;
 	bool computePointError = true;
 	enum recoAlgoEnum { ExtractSurface, Poisson, PowerCrust, SurfReconst, SurfaceNets, FlyingEdges};
 	recoAlgoEnum reco = SurfaceNets;
@@ -308,7 +312,8 @@ int main()
 			else {
 				surfaceNets->SmoothingOn();
 			}
-			surfaceNets->SetNumberOfIterations(5);
+			//surfaceNets->SetOutputMeshTypeToTriangles();
+			surfaceNets->SetNumberOfIterations(1);
 			surfaceNets->Update();
 			polyDataNotRotated = surfaceNets->GetOutput();
 			stlFilename = "./Output/" + initialMHDFilename + "SurfaceNets.stl";
@@ -350,13 +355,13 @@ int main()
 			auto thresholdFilter = ThresholdFilterType::New();
 			thresholdFilter->SetOutsideValue(0);
 			thresholdFilter->SetInput(gradientImage);
-			thresholdFilter->ThresholdBelow(60000);
+			thresholdFilter->ThresholdBelow(10000);
 
 			if (writeGradient) {
 				typedef itk::ImageFileWriter<GradientImageType> GradientWriter;
 				GradientWriter::Pointer gradientWriter = GradientWriter::New();
 				gradientWriter->SetInput(thresholdFilter->GetOutput());
-				gradientWriter->SetFileName("TestGrad.mhd");
+				gradientWriter->SetFileName("TestFilteredGrad.mhd");
 				gradientWriter->Update();
 				std::cout << "Gradient writing done !" << std::endl;
 			}
@@ -403,10 +408,15 @@ int main()
 			itk::CovariantVector< float, 3 > currDir;
 			itk::CovariantVector< float, 3 > step;
 			itk::CovariantVector< float, 3 > brokenDir; // BrokenDir
-			double coordToCheck[3] = { -3.671250104904175, 5.300990104675293, -0.0915009006857872 }; // Point on the edge
+			double coordToCheck[3] = { 7.199999809265137, -1.2000000476837158, 9.800000190734863 }; // Point on the edge
 			brokenDir.Fill(0);
-
-			for (size_t iter = 0; iter < 3; iter++) {
+			vtkNew<vtkPolyDataNormals> normals;
+			normals->SetInputData(lifeHackPart1);
+			normals->SetComputePointNormals(true);
+			normals->Update();
+			lifeHackPart1->DeepCopy(normals->GetOutput());
+			vtkDoubleArray* normalDataDouble = dynamic_cast<vtkDoubleArray*>(lifeHackPart1->GetPointData()->GetArray("Normals"));
+			for (size_t iter = 0; iter < 2; iter++) {
 				std::cout << "Entering loop iter " << iter << std::endl;
 				int nbOfPoints = lifeHackPart1->GetNumberOfPoints();
 				std::cout << nbOfPoints << std::endl;
@@ -417,18 +427,24 @@ int main()
 					std::array<int, 3> imageIndex = polyDataCoordToImageCoord({ currPointCoord[0],currPointCoord[1],currPointCoord[2] }, image->GetSpacing(), image->GetOrigin());
 					// gardientImageindex will have the correct position
 					InputImageType::IndexType gardientImageindex{ {imageIndex[0], imageIndex[1], imageIndex[2]} };
-					currDir = gradientVecImage->GetPixel(gardientImageindex);
+					if (iter == 0) {
+						currDir[0] = normalDataDouble[i].GetValue(0);
+						currDir[1] = normalDataDouble[i].GetValue(1);
+						currDir[2] = normalDataDouble[i].GetValue(2);
+					} else {
+						currDir = gradientVecImage->GetPixel(gardientImageindex);
+					}
 					if (currDir == brokenDir) {
 						//std::cout << "Broken Dir Coord : " << currPointCoord[0] << " " << currPointCoord[1] << " " << currPointCoord[2] << std::endl;
 						newPoints->InsertNextPoint(currPointCoord[0], currPointCoord[1], currPointCoord[2]);
 						continue;
 					}
 					currDir.Normalize();
-					step = currDir * 0.5f * (1.0f/(static_cast<float>(iter)+1.0f)); // The voxel size is defined by the image spacing (the 0.1f is a subvoxel refinement)
+					step = currDir * 0.2f * (1.0f/(static_cast<float>(iter)+1.0f)); // The voxel size is defined by the image spacing (the 0.1f is a subvoxel refinement)
 					unsigned short maxValue = 0;
 					int maxIndex = 0;
 					bool printInterp = false;
-					if (/*(currPointCoord[0] <= coordToCheck[0] + 0.05) && (currPointCoord[0] >= coordToCheck[0] - 0.05) && (currPointCoord[1] <= coordToCheck[1] + 0.05) && (currPointCoord[1] >= coordToCheck[1] - 0.05) */ i == 203566) {
+					if ((currPointCoord[0] <= coordToCheck[0] + 0.05) && (currPointCoord[0] >= coordToCheck[0] - 0.05) && (currPointCoord[1] <= coordToCheck[1] + 0.05) && (currPointCoord[1] >= coordToCheck[1] - 0.05)  ) {
 						printInterp = true;
 						std::cout << "Point ID : " << i << std::endl;
 						std::cout << "CurrDir : " << currDir << std::endl;
