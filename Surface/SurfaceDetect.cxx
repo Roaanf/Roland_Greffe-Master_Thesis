@@ -5,6 +5,7 @@
 #include "itkRescaleIntensityImageFilter.h"
 #include "itkMaskImageFilter.h"
 #include "itkConstantPadImageFilter.h"
+#include "itkThresholdImageFilter.h"
 #include "itkImageToVTKImageFilter.h"
 #include "itkGradientImageFilter.h"
 #include "itkUnaryFunctorImageFilter.h"
@@ -115,8 +116,9 @@ int main()
 	bool boolPadding = false;
 	bool cropImage = false;
 	bool subVoxRef = true;
-	bool gradMagWrite = true;
+	bool gradMagWrite = false;
 	bool smoothing = false;
+	bool writeOtsu = true;
 	bool computePointError = true;
 	enum recoAlgoEnum { ExtractSurface, Poisson, PowerCrust, SurfReconst, SurfaceNets, FlyingEdges};
 	recoAlgoEnum reco = SurfaceNets;
@@ -195,6 +197,24 @@ int main()
 	maskFilter->Update();
 	std::cout << "Otsu done !" << std::endl;
 
+	if (writeOtsu) {
+		typedef itk::ImageFileWriter<InputImageType> ImageWriter;
+		ImageWriter::Pointer imageWriter = ImageWriter::New();
+		imageWriter->SetInput(maskFilter->GetOutput());
+		imageWriter->SetFileName("TestOtsu.mhd");
+		imageWriter->Update();
+		std::cout << "Otsu write done !" << std::endl;
+	}
+
+	/*
+	typedef itk::ThresholdImageFilter< InputImageType > ThresholdFilterType;
+	auto thresholdFilter = ThresholdFilterType::New();
+
+	thresholdFilter->SetOutsideValue(0);
+	thresholdFilter->SetInput(maskFilter->GetOutput());
+	thresholdFilter->ThresholdBelow(15000);
+	thresholdFilter->Update();
+	*/
 	using CastFilterType = itk::CastImageFilter<InputImageType, CannyOutputImageType>;
 	auto castFilter = CastFilterType::New();
 	castFilter->SetInput(maskFilter->GetOutput());
@@ -264,7 +284,7 @@ int main()
 			vtkNew<vtkSurfaceNets3D> surfaceNets;
 			surfaceNets->SetInputData(ITKToVTkConverter->GetOutput());
 			surfaceNets->SetValue(0, 255);
-			if (subVoxRef && smoothing) {
+			if (/*subVoxRef && smoothing*/ true) {
 				surfaceNets->SmoothingOff();
 			}
 			else {
@@ -348,6 +368,7 @@ int main()
 			double currPointCoord[3];
 			itk::CovariantVector< float, 3 > currDir;
 			itk::CovariantVector< float, 3 > brokenDir; // BrokenDir
+			double coordToCheck[3] = { 19.868000030517578, 16.100000381469727, -8.300029754638672 }; // Point on the edge
 			brokenDir.Fill(0);
 
 			for (size_t iter = 0; iter < 1; iter++) {
@@ -367,13 +388,16 @@ int main()
 						continue;
 					}
 					currDir.Normalize();
+					currDir.Normalize(); // try to fix weird bug where this needs to be done twice to have the real normalized vector !
 					currDir *= image->GetSpacing()[0] * 0.08f; // The voxel size is defined by the image spacing (the 0.1f is a subvoxel refinement)
 					unsigned short maxValue = 0;
 					int maxIndex = 0;
 					bool printInterp = false;
-					if (i == 500) {
+					if ((currPointCoord[0] <= coordToCheck[0] + 0.001) && (currPointCoord[0] >= coordToCheck[0] - 0.001)) {
 						printInterp = true;
 						std::cout << "CurrDir : " << currDir << std::endl;
+						currDir.Normalize();
+						std::cout << "CurrDir normalized again :" << currDir << std::endl;
 						std::cout << "CurrPointCoord : " << currPointCoord[0] << " " << currPointCoord[1] << " " << currPointCoord[2] << std::endl;
 					}
 					for (int j = -10; j < 11; j++) {
