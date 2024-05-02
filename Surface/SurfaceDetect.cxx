@@ -125,8 +125,8 @@ int main()
 	bool writeOtsu = false;
 	bool computePointError = true;
 	enum recoAlgoEnum { ExtractSurface, Poisson, PowerCrust, SurfReconst, SurfaceNets, FlyingEdges};
-	recoAlgoEnum reco = Poisson;
-    std::string initialMHDFilename = "rekoRolandCropped";
+	recoAlgoEnum reco = SurfaceNets;
+    std::string initialMHDFilename = "Reference";
 
 	typedef unsigned short InputPixelType;
 	typedef itk::Image< InputPixelType, 3 > InputImageType;
@@ -435,7 +435,7 @@ int main()
 						continue;
 					}
 					currDir.Normalize();
-					step = currDir * 0.2f * (1.0f/(static_cast<float>(iter)*20.f+1.0f)); // The voxel size is defined by the image spacing (the 0.1f is a subvoxel refinement)
+					step = currDir * 0.05f * (1.0f/(static_cast<float>(iter)*20.f+1.0f)); // The voxel size is defined by the image spacing (the 0.1f is a subvoxel refinement)
 					float maxValue = 0;
 					int maxIndex = 0;
 					bool printInterp = false;
