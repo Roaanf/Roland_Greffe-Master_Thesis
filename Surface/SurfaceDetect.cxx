@@ -447,7 +447,7 @@ int main()
 					}
 					currDir.Normalize();
 					step = currDir * 0.1f * (1.0f/(static_cast<float>(iter)+1.0f)); // The voxel size is defined by the image spacing (the 0.1f is a subvoxel refinement)
-					int maxValue = 0;
+					float maxValue = 0;
 					int maxIndex = 0;
 					bool printInterp = false;
 					if (i == 15000) {
