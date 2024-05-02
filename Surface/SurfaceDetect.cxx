@@ -23,7 +23,7 @@
 #include <vtkActor.h>
 #include <vtkNamedColors.h>
 #include <vtkNew.h>
-#include <vtkDoubleArray.h>
+#include <vtkFloatArray.h>
 #include <vtkPointData.h>
 #include <vtkPolyDataMapper.h>
 #include <vtkFlyingEdges3D.h>
@@ -99,10 +99,10 @@ public:
 	}
 };
 
-std::array<double,3> imageCoordToPolyDataCoord(std::array<float, 3> voxelPos, itk::Vector<double,3> imageSpacing, itk::Point<double,3> imageOrigin) {
+std::array<double,3> imageCoordToPolyDataCoord(std::array<double, 3> voxelPos, itk::Vector<double,3> imageSpacing, itk::Point<double,3> imageOrigin) {
 	double coord0 = voxelPos[0] * imageSpacing[0] + imageOrigin[0];
 	double coord1 = -(voxelPos[1] * imageSpacing[1] + imageOrigin[1]);
-	double coord2 = -(voxelPos[2] * imageSpacing[2] + imageOrigin[2]);
+	double coord2 = (voxelPos[2] * imageSpacing[2] + imageOrigin[2]);
 	return { coord0 ,coord1 ,coord2 };
 }
 
@@ -413,39 +413,44 @@ int main()
 			vtkNew<vtkPolyDataNormals> normals;
 			normals->SetInputData(lifeHackPart1);
 			normals->SetComputePointNormals(true);
+			normals->SetAutoOrientNormals(true);
+			normals->SetFeatureAngle(75.0);
 			normals->Update();
 			lifeHackPart1->DeepCopy(normals->GetOutput());
-			vtkDoubleArray* normalDataDouble = dynamic_cast<vtkDoubleArray*>(lifeHackPart1->GetPointData()->GetArray("Normals"));
-			for (size_t iter = 0; iter < 2; iter++) {
+			for (size_t iter = 0; iter < 5; iter++) {
 				std::cout << "Entering loop iter " << iter << std::endl;
 				int nbOfPoints = lifeHackPart1->GetNumberOfPoints();
 				std::cout << nbOfPoints << std::endl;
 				vtkNew<vtkPoints> newPoints;
 				int modifiedPoints = 0;
+				vtkFloatArray* normalsData = vtkArrayDownCast<vtkFloatArray>(lifeHackPart1->GetPointData()->GetNormals());
 				for (int i = 0; i < nbOfPoints; i++) {
 					lifeHackPart1->GetPoint(i, currPointCoord);
 					std::array<int, 3> imageIndex = polyDataCoordToImageCoord({ currPointCoord[0],currPointCoord[1],currPointCoord[2] }, image->GetSpacing(), image->GetOrigin());
 					// gardientImageindex will have the correct position
 					InputImageType::IndexType gardientImageindex{ {imageIndex[0], imageIndex[1], imageIndex[2]} };
+					
 					if (iter == 0) {
-						currDir[0] = normalDataDouble[i].GetValue(0);
-						currDir[1] = normalDataDouble[i].GetValue(1);
-						currDir[2] = normalDataDouble[i].GetValue(2);
-						std::cout << currDir[0] << " " << currDir[1] << " " << currDir[2] << std::endl;
-					} else {
+						double* currTuple = normalsData->GetTuple(i);
+						currDir[0] = currTuple[0];
+						currDir[1] = currTuple[1];
+						currDir[2] = currTuple[2];
+					}
+					else {
 						currDir = gradientVecImage->GetPixel(gardientImageindex);
 					}
+					//std::cout << currDir[0] << " " << currDir[1] << " " << currDir[2] << std::endl;
 					if (currDir == brokenDir) {
 						//std::cout << "Broken Dir Coord : " << currPointCoord[0] << " " << currPointCoord[1] << " " << currPointCoord[2] << std::endl;
 						newPoints->InsertNextPoint(currPointCoord[0], currPointCoord[1], currPointCoord[2]);
 						continue;
 					}
 					currDir.Normalize();
-					step = currDir * 0.2f * (1.0f/(static_cast<float>(iter)+1.0f)); // The voxel size is defined by the image spacing (the 0.1f is a subvoxel refinement)
-					unsigned short maxValue = 0;
+					step = currDir * 0.1f * (1.0f/(static_cast<float>(iter)+1.0f)); // The voxel size is defined by the image spacing (the 0.1f is a subvoxel refinement)
+					int maxValue = 0;
 					int maxIndex = 0;
 					bool printInterp = false;
-					if ((currPointCoord[0] <= coordToCheck[0] + 0.05) && (currPointCoord[0] >= coordToCheck[0] - 0.05) && (currPointCoord[1] <= coordToCheck[1] + 0.05) && (currPointCoord[1] >= coordToCheck[1] - 0.05)  ) {
+					if (i == 15000) {
 						printInterp = true;
 						std::cout << "Point ID : " << i << std::endl;
 						std::cout << "CurrDir : " << currDir << std::endl;
@@ -453,21 +458,30 @@ int main()
 						std::cout << "Step : " << step << std::endl;
 						std::cout << "CurrPointCoord : " << currPointCoord[0] << " " << currPointCoord[1] << " " << currPointCoord[2] << std::endl;
 					}
-					for (int j = -5; j < 6; j++) {
+					for (int j = -15; j < 16; j++) {
 						itk::ContinuousIndex<double, 3> interpCoord;
 						interpCoord.Fill(0);
 						interpCoord[0] = gardientImageindex[0] + j * step[0];
 						interpCoord[1] = gardientImageindex[1] + j * step[1];
 						interpCoord[2] = gardientImageindex[2] + j * step[2];
 						double interpValue = bSplineInterpFilter->EvaluateAtContinuousIndex(interpCoord);
-						if (interpValue > maxValue) {
+						if (printInterp)
+							std::cout << interpValue << " " << maxValue << std::endl;
+						
+						if (interpValue > maxValue) { 
 							maxValue = interpValue;
 							maxIndex = j;
 						}
 						if (printInterp)
-							std::cout << "Interp : " << interpValue << std::endl;
+							std::cout << j << " : Interp : " << interpValue << std::endl;
 					}
 					std::array<double, 3> newCoords = imageCoordToPolyDataCoord({ gardientImageindex[0] + maxIndex * step[0],gardientImageindex[1] + maxIndex * step[1],gardientImageindex[2] + maxIndex * step[2] }, image->GetSpacing(), image->GetOrigin());
+					
+					if (printInterp) {
+						std::cout << "New Coord : " << newCoords[0] << " " << newCoords[1] << " " << newCoords[2] << std::endl;
+						std::cout << "Max index : " << maxIndex << std::endl;
+					}
+					
 					newPoints->InsertNextPoint(newCoords[0], newCoords[1], newCoords[2]);
 					if (maxIndex != 0)
 						modifiedPoints++;
