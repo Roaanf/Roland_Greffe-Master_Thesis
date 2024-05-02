@@ -106,10 +106,10 @@ std::array<double,3> imageCoordToPolyDataCoord(std::array<double, 3> voxelPos, i
 	return { coord0 ,coord1 ,coord2 };
 }
 
-std::array<int, 3> polyDataCoordToImageCoord(std::array<double, 3> polyDataPos, itk::Vector<double, 3> imageSpacing, itk::Point<double, 3> imageOrigin) {
-	int coord0 = ceil((polyDataPos[0] - imageOrigin[0]) / imageSpacing[0]);
-	int coord1 = ceil((-polyDataPos[1] - imageOrigin[1]) / imageSpacing[1]);
-	int coord2 = ceil((polyDataPos[2] - imageOrigin[2]) / imageSpacing[2]);
+std::array<double, 3> polyDataCoordToImageCoord(std::array<double, 3> polyDataPos, itk::Vector<double, 3> imageSpacing, itk::Point<double, 3> imageOrigin) {
+	double coord0 = (polyDataPos[0] - imageOrigin[0]) / imageSpacing[0];
+	double coord1 = (-polyDataPos[1] - imageOrigin[1]) / imageSpacing[1];
+	double coord2 = (polyDataPos[2] - imageOrigin[2]) / imageSpacing[2];
 	return { coord0 ,coord1 ,coord2 };
 }
 
@@ -417,7 +417,7 @@ int main()
 			normals->SetFeatureAngle(75.0);
 			normals->Update();
 			lifeHackPart1->DeepCopy(normals->GetOutput());
-			for (size_t iter = 0; iter < 5; iter++) {
+			for (size_t iter = 0; iter < 10; iter++) {
 				std::cout << "Entering loop iter " << iter << std::endl;
 				int nbOfPoints = lifeHackPart1->GetNumberOfPoints();
 				std::cout << nbOfPoints << std::endl;
@@ -426,9 +426,13 @@ int main()
 				vtkFloatArray* normalsData = vtkArrayDownCast<vtkFloatArray>(lifeHackPart1->GetPointData()->GetNormals());
 				for (int i = 0; i < nbOfPoints; i++) {
 					lifeHackPart1->GetPoint(i, currPointCoord);
-					std::array<int, 3> imageIndex = polyDataCoordToImageCoord({ currPointCoord[0],currPointCoord[1],currPointCoord[2] }, image->GetSpacing(), image->GetOrigin());
+					std::array<double, 3> imageIndex = polyDataCoordToImageCoord({ currPointCoord[0],currPointCoord[1],currPointCoord[2] }, image->GetSpacing(), image->GetOrigin());
+					std::array<int, 3> roundedImageIndex;
+					roundedImageIndex[0] = imageIndex[0];
+					roundedImageIndex[1] = imageIndex[1];
+					roundedImageIndex[2] = imageIndex[2];
 					// gardientImageindex will have the correct position
-					InputImageType::IndexType gardientImageindex{ {imageIndex[0], imageIndex[1], imageIndex[2]} };
+					InputImageType::IndexType gardientImageindex{ {roundedImageIndex[0], roundedImageIndex[1], roundedImageIndex[2]} };
 					
 					if (iter == 0) {
 						double* currTuple = normalsData->GetTuple(i);
@@ -446,11 +450,11 @@ int main()
 						continue;
 					}
 					currDir.Normalize();
-					step = currDir * 0.1f * (1.0f/(static_cast<float>(iter)+1.0f)); // The voxel size is defined by the image spacing (the 0.1f is a subvoxel refinement)
+					step = currDir * 0.2f * (1.0f/(static_cast<float>(iter)+1.0f)); // The voxel size is defined by the image spacing (the 0.1f is a subvoxel refinement)
 					float maxValue = 0;
 					int maxIndex = 0;
 					bool printInterp = false;
-					if (i == 15000) {
+					if (i == 8000) {
 						printInterp = true;
 						std::cout << "Point ID : " << i << std::endl;
 						std::cout << "CurrDir : " << currDir << std::endl;
@@ -461,21 +465,22 @@ int main()
 					for (int j = -15; j < 16; j++) {
 						itk::ContinuousIndex<double, 3> interpCoord;
 						interpCoord.Fill(0);
-						interpCoord[0] = gardientImageindex[0] + j * step[0];
-						interpCoord[1] = gardientImageindex[1] + j * step[1];
-						interpCoord[2] = gardientImageindex[2] + j * step[2];
+						interpCoord[0] = imageIndex[0] + j * step[0];
+						interpCoord[1] = imageIndex[1] + j * step[1];
+						interpCoord[2] = imageIndex[2] + j * step[2];
 						double interpValue = bSplineInterpFilter->EvaluateAtContinuousIndex(interpCoord);
-						if (printInterp)
-							std::cout << interpValue << " " << maxValue << std::endl;
 						
 						if (interpValue > maxValue) { 
 							maxValue = interpValue;
 							maxIndex = j;
 						}
-						if (printInterp)
+						if (printInterp) {
 							std::cout << j << " : Interp : " << interpValue << std::endl;
+							std::cout << j << " : InterpCoord : " << interpCoord[0] << " " << interpCoord[1] << " " << interpCoord[2] << std::endl;
+						}
+							
 					}
-					std::array<double, 3> newCoords = imageCoordToPolyDataCoord({ gardientImageindex[0] + maxIndex * step[0],gardientImageindex[1] + maxIndex * step[1],gardientImageindex[2] + maxIndex * step[2] }, image->GetSpacing(), image->GetOrigin());
+					std::array<double, 3> newCoords = imageCoordToPolyDataCoord({ imageIndex[0] + maxIndex * step[0],imageIndex[1] + maxIndex * step[1],imageIndex[2] + maxIndex * step[2] }, image->GetSpacing(), image->GetOrigin());
 					
 					if (printInterp) {
 						std::cout << "New Coord : " << newCoords[0] << " " << newCoords[1] << " " << newCoords[2] << std::endl;
