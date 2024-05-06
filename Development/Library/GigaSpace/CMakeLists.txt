@@ -71,3 +71,7 @@ endif()
 #----------------------------------------------------------------
 
 INCLUDE (GV_CMakeCommon)
+
+message(STATUS "aaaaa")
+message(STATUS "MSVC_VERSION: ${MSVC_VERSION}")
+message(STATUS "MSVC_TOOLSET_VERSION: ${MSVC_TOOLSET_VERSION}")

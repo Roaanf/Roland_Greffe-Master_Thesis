@@ -174,7 +174,7 @@ cd Generated_VC16_x64
 mkdir Library
 cd Library
 rem CMake the application
-cmake -G "Visual Studio 16 2019" ..\..\Development\Library
+cmake -G "Visual Studio 16 2019" -T v142 ..\..\Development\Library
 if NOT ERRORLEVEL 0 pause
 cd %CURRENTSCRIPTPATH%
 pause

@@ -469,7 +469,6 @@ void GsRendererCUDA< TVolumeTreeType, TVolumeTreeCacheType, TSampleShader >
 	CUDAPM_STOP_EVENT( vsrender_copyconsts_frame );
 
 	CUDAPM_START_EVENT_GPU( gv_rendering );
-
 	dim3 blockSize( RenderBlockResolution::x, RenderBlockResolution::y, 1 );
 	dim3 gridSize( iDivUp( _frameSize.x, RenderBlockResolution::x ), iDivUp( _frameSize.y, RenderBlockResolution::y ), 1 );
 	// FUTUR optimization

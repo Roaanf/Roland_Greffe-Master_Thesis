@@ -15,6 +15,7 @@ MESSAGE ( STATUS "-----------------------------------------------------" )
 MESSAGE ( STATUS "- PROJECT GENERATION : GigaVoxels/GigaSpace Library -" )
 MESSAGE ( STATUS "-----------------------------------------------------" )
 
+
 # Project name
 project (Library)
 
@@ -39,3 +40,6 @@ SET (RELEASE_INC_DIR ${GV_RELEASE}/Inc)
 add_subdirectory ("${CMAKE_SOURCE_DIR}/GigaSpace")
 add_subdirectory ("${CMAKE_SOURCE_DIR}/GsGraphics")
 add_subdirectory ("${CMAKE_SOURCE_DIR}/GsCompute")
+
+message(STATUS "MSVC_VERSION: ${MSVC_VERSION}")
+message(STATUS "MSVC_TOOLSET_VERSION: ${MSVC_TOOLSET_VERSION}")

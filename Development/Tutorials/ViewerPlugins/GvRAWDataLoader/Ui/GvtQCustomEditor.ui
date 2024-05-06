@@ -338,16 +338,6 @@ It ranges from 0 to 1.</string>
                   <string>XRay</string>
                 </property>
               </item>
-              <item>
-                <property name="text">
-                  <string>XRay Gradient</string>
-                </property>
-              </item>
-              <item>
-                <property name="text">
-                  <string>XRay Color</string>
-                </property>
-              </item>
             </widget>
           </item>
           <item row="3" column="0">
