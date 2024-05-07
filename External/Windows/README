@@ -19,7 +19,7 @@ CUDPP - CUDA Data Parallel Primitives Library
 http://cudpp.github.io/
 - version 2.1
 
-Tiny XML
+Tiny XML -> Had to be recompiled for new MSCV and CUDA ver
 - website : http://www.grinninglizard.com/tinyxml/
 - TODO : zlib license
 
@@ -35,14 +35,14 @@ Qwt
 http://qwt.sourceforge.net/
 - version 6.0.0
 
-Assimp
+Assimp -> REMOVED
 http://assimp.sourceforge.net/
 - version 3.0
 
-CImg
+CImg -> REMOVED
 - website : http://cimg.eu/
 - version 1.5.0
 The CImg Library is an open-source product distributed under two distinct licenses : the library core itself is dual-licensed and can be governed either by the CeCILL-C License (LGPL-like), or the CeCILL License (GPL-compatible). Most of the other package files are distributed under the CeCILL License. Both are open source licenses, the CeCILL-C being less restrictive than the CeCILL.
 
-Image Magick
+Image Magick -> REMOVED
 - TO DO : check version
