@@ -137,6 +137,7 @@ void GsRendererCUDA< TVolumeTreeType, TVolumeTreeCacheType, TSampleShader >
 	cudaGetDeviceProperties( &deviceProps, gpuGetMaxGflopsDeviceId() );	// TO DO : handle the case where user could want an other device
 	// LOG
 	std::cout << "\nDevice properties" << std::endl;
+	std::cout << "Test" << std::endl;
 	std::cout << "- name : " << deviceProps.name << std::endl;
 	std::cout << "- compute capability : "<< deviceProps.major << "." << deviceProps.minor << std::endl;
 	std::cout << "- compute mode : " << deviceProps.computeMode << std::endl;

@@ -13,7 +13,7 @@
  * 
  * Website : http://gigavoxels.inrialpes.fr/
  *
- * Copyright (C) 2006-2015 INRIA - LJK ( CNRS - Grenoble University )
+ * Copyright (C) 2006-2015 INRIA - LJK ( CNRS - Grenoble University )s
  * - INRIA <http://www.inria.fr/en/>
  * - CNRS  <http://www.cnrs.fr/index.php>
  * - LJK   <http://www-ljk.imag.fr/index_en.php>

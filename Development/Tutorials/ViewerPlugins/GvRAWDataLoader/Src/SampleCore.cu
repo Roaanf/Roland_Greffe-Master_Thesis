@@ -207,7 +207,7 @@ void SampleCore::init()
 	cudaMemGetInfo( &freeGPUMem, &totalGPUMem);
   
 	_brickMemoryPool = (size_t)5000 * (size_t)1024 * (size_t)1024;
-	freeGPUMem *= 0.70;
+	freeGPUMem *= 0.7;
 	_brickMemoryPool = freeGPUMem;
 
 	// Temp fix because we have issue with data pools > 2Go
