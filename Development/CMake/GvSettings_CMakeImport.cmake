@@ -96,10 +96,6 @@ ENDIF ()
 # Required packages
 #----------------------------------------------------------------
 
-IF (POLICY CMP0148)
-	cmake_policy(SET CMP0148 OLD)
-ENDIF ()
-
 # Search for CUDA
 MESSAGE ( STATUS "REQUIRED PACKAGE : CUDA 5.0" )
 find_package (CUDA 5.0 REQUIRED) # TO DO : utiliser FindCUDA à la place

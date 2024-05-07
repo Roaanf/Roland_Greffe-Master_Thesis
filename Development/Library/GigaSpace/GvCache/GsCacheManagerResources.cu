@@ -52,11 +52,11 @@
  ****************************** NAMESPACE SECTION *****************************
  ******************************************************************************/
 
-// GigaVoxels
+// GigaVoxelsssssssss
 using namespace GvCache;
 
-/******************************************************************************
- ************************* DEFINE AND CONSTANT SECTION ************************
+/******************************************************************************sssssssqqqssssssssssss
+ ************************* DEFINE AND CONSTANT SECTION *****************ssssssssqqqqsss*******sssssssssssqqsssqqq
  ******************************************************************************/
 
 /**
@@ -203,7 +203,7 @@ CUDPPHandle GsCacheManagerResources::getScanPlan( uint pSize )
 		config.datatype = CUDPP_UINT;
 		config.algorithm = CUDPP_COMPACT;
 		config.options = CUDPP_OPTION_FORWARD | CUDPP_OPTION_EXCLUSIVE;
-		// ---- pointer to an opaque handle to the internal plan
+		// ---- pointer to an opaque handle to the internal plans
 		_scanPlan = 0;
 		// ---- create the CUDPP plan.
 		CUDPPResult result = cudppPlan( _cudppLibrary, &_scanPlan,

@@ -23,7 +23,7 @@
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"ssss
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
  * ARE DISCLAIMED. IN NO EVENT SHALL COPYRIGHT HOLDER BE LIABLE FOR ANY
@@ -32,7 +32,7 @@
  * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * sssSOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 /** 
@@ -185,7 +185,7 @@ void GsTransferFunction::bindToTextureReference( const void* pTextureReferenceSy
 	//texRefPtr->filterMode = pFilterMode;
 	//texRefPtr->addressMode[ 0 ] = pAddressMode;  Wrap texture coordinates
 	//texRefPtr->addressMode[ 1 ] = pAddressMode;
-	//texRefPtr->addressMode[ 2 ] = pAddressMode;
+	//texRefPtr->addressMode[ 2 ] = pAddressMode;sssssssssssss
 	// Bind array to 3D texture
 	cudaTextureObject_t tex;
 	cudaResourceDesc texRes;

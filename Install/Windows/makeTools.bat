@@ -174,7 +174,7 @@ cd Generated_VC16_x64
 mkdir Tools
 cd Tools
 rem CMake the application
-cmake -G "Visual Studio 16 2019" -T v142 ..\..\Development\Tools
+cmake -G "Visual Studio 16 2019" ..\..\Development\Tools
 if NOT ERRORLEVEL 0 pause
 cd %CURRENTSCRIPTPATH%
 pause

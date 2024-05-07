@@ -1,3 +1,4 @@
+#include "GsIRenderShader.h"
 /*
  * GigaVoxels - GigaSpace
  *

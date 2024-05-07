@@ -5,7 +5,7 @@
  * used for efficient 3D real-time visualization of highly large and detailed
  * sparse volumetric scenes (SVO : Sparse Voxel Octree).
  *
- * [GigaSpace] is a full-customizable out-of-core, on demand prodssssuction, and smart caching library
+ * [GigaSpace] is a full-customizable out-of-core, on demand production, and smart caching library
  * based on user-defined hierachical arbitrary space partitionning, space & brick visitors,
  * and brick producer using arbitrary data types.
  *

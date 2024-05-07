@@ -192,7 +192,7 @@ cd Tutorials
 mkdir ViewerPlugins
 cd ViewerPlugins
 rem CMake the application
-cmake -G "Visual Studio 16 2019" -T v142 ..\..\..\Development\Tutorials\ViewerPlugins
+cmake -G "Visual Studio 16 2019" ..\..\..\Development\Tutorials\ViewerPlugins
 if NOT ERRORLEVEL 0 pause
 cd %CURRENTSCRIPTPATH%
 pause

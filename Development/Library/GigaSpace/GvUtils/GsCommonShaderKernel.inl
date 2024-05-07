@@ -1,3 +1,4 @@
+#include "GsCommonShaderKernel.h"
 /*
  * GigaVoxels - GigaSpace
  *

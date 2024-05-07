@@ -109,7 +109,7 @@ public:
 	 * CUDA block dimension used during rendering (kernel launch).
 	 * Screen is split in 2D blocks of 8 per 8 pixels.
 	 */
-	typedef GvCore::GsVec3D< 8, 4, 1 > RenderBlockResolution;
+	typedef GvCore::GsVec3D< 8, 8, 1 > RenderBlockResolution;
 	// TO DO : Profiling / Optimization
 	// - try to play with differerent sizes of 2D kernel
 	//typedef GvCore::GsVec3D< 16, 8, 1 > RenderBlockResolution;

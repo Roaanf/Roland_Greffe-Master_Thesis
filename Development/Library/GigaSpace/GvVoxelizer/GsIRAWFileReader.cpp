@@ -119,7 +119,7 @@ bool GsIRAWFileReader::read(const size_t brickWidth, const size_t trueX, const s
 }
 
 /******************************************************************************
- * Load/import the scene the scene
+ * Load/import the scene the sceness
  ******************************************************************************/
 bool GsIRAWFileReader::readData(const size_t brickWidth, const size_t trueX, const size_t trueY, const size_t trueZ, const unsigned int radius) // NOT USED 
 {
@@ -128,7 +128,7 @@ bool GsIRAWFileReader::readData(const size_t brickWidth, const size_t trueX, con
 
 /******************************************************************************
  * Apply the mip-mapping algorithmn.
- * Given a pre-filtered voxel scene at a given level of resolution,
+ * Given a pre-filtered voxel scene at a given level of resolution,qs
  * it generates a mip-map pyramid hierarchy of coarser levels (until 0).
  ******************************************************************************/
 bool GsIRAWFileReader::generateMipmapPyramid(GsDataStructureIOHandler* up, unsigned int brickSize)
