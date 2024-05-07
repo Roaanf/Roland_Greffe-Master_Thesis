@@ -7,6 +7,7 @@
 #include "itkConstantPadImageFilter.h"
 #include "itkXorImageFilter.h"
 #include "itkResampleImageFilter.h"
+#include "itkImageDuplicator.h"
 #include "itkThresholdImageFilter.h"
 #include "itkScaleTransform.h"
 #include "itkImageToVTKImageFilter.h"
@@ -244,6 +245,46 @@ int main()
 	MaskImageType::Pointer cannyImage = rescale->GetOutput();
 	std::cout << "Canny done !" << std::endl;
 	
+	typedef itk::Index<3> indexType;
+	using DuplicatorType = itk::ImageDuplicator<MaskImageType>;
+	auto duplicator = DuplicatorType::New();
+	duplicator->SetInputImage(cannyImage);
+	duplicator->Update();
+
+	MaskImageType::Pointer cannyImageBordered = duplicator->GetOutput();
+
+	for (size_t i = 0; i < size[0]; i++) {
+		for (size_t j = 0; j < size[1]; j++) {
+			for (size_t k = 0; k < size[2]; k++) {
+				indexType currIndex;
+				indexType index;
+				currIndex[0] = i;
+				currIndex[1] = j;
+				currIndex[2] = k;
+				if (cannyImage->GetPixel(currIndex) != 0.0f) {
+					for (int l = -2; l < 3; l++){
+						index[0] = currIndex[0] + l;
+						if (((int)currIndex[0] + l < 0)|| ((int)currIndex[0] + l > size[0])) {
+							continue;
+						}
+						for (int m = -2; m < 3; m++) {
+							if (((int)currIndex[1] + m < 0) || ((int)currIndex[1] + m > size[1])) {
+								continue;
+							}
+							index[1] = currIndex[1] + m;
+							for (int n = -2; n < 3; n++) {
+								if (((int)currIndex[2] + n < 0) || ((int)currIndex[2] + n > size[2])) {
+									continue;
+								}
+								index[2] = currIndex[2] + n;
+								cannyImageBordered->SetPixel(index, 255);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 	if (writeCanny) {
 		typedef itk::ImageFileWriter<MaskImageType> ImageWriter;
 		ImageWriter::Pointer imageWriter = ImageWriter::New();
@@ -252,7 +293,6 @@ int main()
 		imageWriter->Update();
 		std::cout << "Canny write done !" << std::endl;
 	}
-
 	std::string stlFilename;
 	std::string compareFileName;
 	vtkNew<vtkPolyData> targetPolyData;
@@ -296,10 +336,23 @@ int main()
 		std::cout << "GradImage write done !" << std::endl;
 	}
 
+	using MaskFilterGradType = itk::MaskImageFilter<GradientImageType, MaskImageType>;
+	auto maskGradFilter = MaskFilterGradType::New();
+	maskGradFilter->SetInput(gradientMagImage);
+	maskGradFilter->SetMaskImage(cannyImageBordered);
+	maskGradFilter->Update();
+
+	typedef itk::ImageFileWriter<GradientImageType> GradientWriter;
+	GradientWriter::Pointer gradientWriter = GradientWriter::New();
+	gradientWriter->SetInput(maskGradFilter->GetOutput());
+	gradientWriter->SetFileName("TestGrad.mhd");
+	gradientWriter->Update();
+	std::cout << "Gradient writing done !" << std::endl;
+
 	using InitImageBSplineInterp = itk::BSplineInterpolateImageFunction<GradientImageType>;
 	auto bSplineInterpFilter = InitImageBSplineInterp::New();
 	bSplineInterpFilter->SetSplineOrder(3);
-	bSplineInterpFilter->SetInputImage(gradientMagImage);
+	bSplineInterpFilter->SetInputImage(maskGradFilter->GetOutput());
 
 	if (reco == SurfaceNets || reco == FlyingEdges) {
 		vtkNew<vtkSTLWriter> stlWriter;
@@ -308,69 +361,8 @@ int main()
 		auto filler = FillerType::New();
 		filler->SetInput(cannyImage);
 		filler->SetForegroundValue(255);
-		typedef itk::ImageFileWriter<MaskImageType> ImageWriter;
-		
 		auto filledImage = filler->GetOutput();
-		/*
-		// Rescale the filler to get a "zone" mask
-		using MetricValueType = double; // ? pourquoi c'est pas float ?
-		using TransformType = itk::ScaleTransform<MetricValueType, 3>;
-		auto scaleTransformUp = TransformType::New();
-		
-		itk::FixedArray<float, 3> scaleUp;
-		scaleUp[0] = 1.04f; // Better if the scalaing makes the number of voxel an integer
-		scaleUp[1] = 1.04f;
-		scaleUp[2] = 1.04f;
-		scaleTransformUp->SetScale(scaleUp);
-		
-		itk::Point<float, 3> center;
-		center[0] = filledImage->GetLargestPossibleRegion().GetSize()[0] / 2;
-		center[1] = filledImage->GetLargestPossibleRegion().GetSize()[1] / 2;
-		center[2] = filledImage->GetLargestPossibleRegion().GetSize()[2] / 2;
-		scaleTransformUp->SetCenter(center);
 
-		using ResampleImageFilterType = itk::ResampleImageFilter<MaskImageType, MaskImageType, MetricValueType>;
-		auto resampleFilterUp = ResampleImageFilterType::New();
-		resampleFilterUp->SetTransform(scaleTransformUp);
-		resampleFilterUp->SetInput(filledImage);
-		resampleFilterUp->SetSize(filledImage->GetLargestPossibleRegion().GetSize());
-		resampleFilterUp->Update();
-
-		auto upImage = resampleFilterUp->GetOutput();
-
-		//scaledown
-		auto scaleTransformDown = TransformType::New();
-		itk::FixedArray<float, 3> scaleDown;
-		scaleDown[0] = 0.96; // Better if the scalaing makes the number of voxel an integer
-		scaleDown[1] = 0.96;
-		scaleDown[2] = 0.96;
-		scaleTransformDown->SetScale(scaleDown);
-		scaleTransformDown->SetCenter(center); // Same center because it's the same input image
-		
-		using ResampleImageFilterType = itk::ResampleImageFilter<MaskImageType, MaskImageType, MetricValueType>;
-		auto resampleFilterDown = ResampleImageFilterType::New();
-		resampleFilterDown->SetTransform(scaleTransformDown);
-		resampleFilterDown->SetInput(filledImage);
-		resampleFilterDown->SetSize(filledImage->GetLargestPossibleRegion().GetSize());
-		resampleFilterDown->Update();
-		
-		auto downImage = resampleFilterDown->GetOutput();
-
-		std::cout << "DownImage :" << downImage->GetLargestPossibleRegion().GetSize() << std::endl;
-		std::cout << "UpImage :" << upImage->GetLargestPossibleRegion().GetSize() << std::endl;
-		using XorImageFilterType = itk::XorImageFilter<MaskImageType>;
-		auto xorFilter = XorImageFilterType::New();
-		xorFilter->SetInput1(upImage);
-		xorFilter->SetInput2(downImage);
-		//xorFilter->Update();
-
-		ImageWriter::Pointer imageWriter = ImageWriter::New();
-		imageWriter->SetInput(downImage);
-		imageWriter->SetFileName("TestFilling.mhd");
-		imageWriter->Update();
-		std::cout << "TestFilling write done !" << std::endl;
-		return true;
-		*/
 		using ITKToVTK = itk::ImageToVTKImageFilter<MaskImageType>;
 		auto ITKToVTkConverter = ITKToVTK::New();
 		ITKToVTkConverter->SetInput(filledImage);
@@ -379,13 +371,7 @@ int main()
 		transP1->Scale(1, -1, 1);
 		transP1->RotateY(-90);
 		vtkNew<vtkTransformPolyDataFilter> imageDataCorrect;
-		/*
-		ImageWriter::Pointer imageWriter = ImageWriter::New();
-		imageWriter->SetInput(filler->GetOutput());
-		imageWriter->SetFileName("TestFill.mhd"); // Seems good -> Not working for complex stuff :(
-		imageWriter->Update();
-		std::cout << "Canny fill write done !" << std::endl;
-		*/
+		
 		if (reco == SurfaceNets) {
 			/*
 			using BinaryImageToLabelMapFilterType = itk::BinaryImageToLabelMapFilter<MaskImageType>;
@@ -567,92 +553,174 @@ int main()
 	}  else {
 
 		typedef itk::Index<3> indexType;
-		std::ofstream myfile;
-		itk::CovariantVector< float, 3 > currDir;
-		itk::CovariantVector< float, 3 > step;
-		itk::CovariantVector< float, 3 > brokenDir; // BrokenDir
-		brokenDir.Fill(0);
-		myfile.open("./Output/" + initialMHDFilename + "PointCloud.txt");
+		
+		vtkNew<vtkPoints> points;
 		for (size_t i = 0; i < size[0]; i++) {
 			for (size_t j = 0; j < size[1]; j++) {
 				for (size_t k = 0; k < size[2]; k++) {
 					indexType currIndex;
+					indexType index;
 					currIndex[0] = i;
 					currIndex[1] = j;
 					currIndex[2] = k;
 					if (cannyImage->GetPixel(currIndex) != 0.0f) {
-						InputImageType::IndexType gardientImageindex{ {currIndex[0], currIndex[1], currIndex[2]} };
-						currDir = gradientVecImage->GetPixel(gardientImageindex);
-						if (currDir == brokenDir) {
-							//std::cout << "Broken Dir Coord : " << currPointCoord[0] << " " << currPointCoord[1] << " " << currPointCoord[2] << std::endl;
+						float xPos = 0.0f;
+						float sum = 0.0f;
+						float sumMul = 0.0f;
+						float value;
+						for (int dx = -1; dx < 2; dx++) {
+							if (i + dx < 0 || i + dx >= size[0]) {
+								index[0] = i;
+							}
+							else {
+								index[0] = i + dx;
+							}
+							index[1] = j;
+							index[2] = k;
+							value = gradientMagImage->GetPixel(index);
+							sum += value;
+							sumMul += value * (dx + 1.5);
+						}
+						xPos = sumMul / sum;
+						xPos += (static_cast<float>(i)) - 1.5;
+						float yPos = 0.0f;
+						sum = 0.0f;
+						sumMul = 0.0f;
+						for (int dy = -1; dy < 2; dy++) {
+							index[0] = i;
+							if (j + dy < 0 || j + dy >= size[1]) {
+								index[1] = j;
+							}
+							else {
+								index[1] = j + dy;
+							}
+							index[2] = k;
+							value = gradientMagImage->GetPixel(index);
+							sum += value;
+							sumMul += value * (dy + 1.5);
+						}
+						yPos = sumMul / sum;
+						yPos += (static_cast<float>(j)) - 1.5;
+						float zPos = 0.0f;;
+						sum = 0.0f;
+						sumMul = 0.0f;
+						for (int dz = -1; dz < 2; dz++) {
+							index[0] = i;
+							index[1] = j;
+							if (k + dz < 0 || k + dz >= size[2]) {
+								index[2] = k;
+							}
+							else {
+								index[2] = k + dz;
+							}
+							value = gradientMagImage->GetPixel(index);
+							sum += value;
+							sumMul += value * (dz + 1.5);
+						}
+						zPos = sumMul / sum;
+						zPos += (static_cast<float>(k)) - 1.5;
+
+						if (xPos < 0 || xPos > size[0]) {
 							continue;
 						}
-						currDir.Normalize();
-						step = currDir * 0.05f; // The voxel size is defined by the image spacing (the 0.1f is a subvoxel refinement)
-						float maxValue = 0;
-						int maxIndex = 0;
-						bool printInterp = false;
-						if (i == 50) {
-							printInterp = true;
-							std::cout << "Point ID : " << i << std::endl;
-							std::cout << "CurrDir : " << currDir << std::endl;
-							std::cout << "Gradient Image Index : " << gardientImageindex << std::endl;
-							std::cout << "Step : " << step << std::endl;
-							std::cout << "CurrPointCoord : " << currIndex[0] << " " << currIndex[1] << " " << currIndex[2] << std::endl;
+						if (yPos < 0 || yPos > size[1]) {
+							continue;
 						}
-						for (int l = -20; l < 21; l++) {
-							itk::ContinuousIndex<double, 3> interpCoord;
-							interpCoord.Fill(0);
-							interpCoord[0] = currIndex[0] + l * step[0];
-							interpCoord[1] = currIndex[1] + l * step[1];
-							interpCoord[2] = currIndex[2] + l * step[2];
-							double interpValue = bSplineInterpFilter->EvaluateAtContinuousIndex(interpCoord);
-
-							if (interpValue > maxValue) {
-								maxValue = interpValue;
-								maxIndex = l;
-							}
-							if (printInterp) {
-								std::cout << l << " : Interp : " << interpValue << std::endl;
-							}
-
+						if (zPos < 0 || zPos > size[2]) {
+							continue;
 						}
-						std::array<double, 3> newCoords = imageCoordToPolyDataCoord({ currIndex[0] + maxIndex * step[0],currIndex[1] + maxIndex * step[1],currIndex[2] + maxIndex * step[2] }, image->GetSpacing(), image->GetOrigin());
-						myfile << newCoords[0] << " " << newCoords[1] << " " << newCoords[2] << "\n";
+						if (isnan(xPos))
+							continue;
+						if (isnan(yPos))
+							continue;
+						if (isnan(zPos))
+							continue;
+
+						float absXPos = xPos * image->GetSpacing()[0] + image->GetOrigin()[0];
+						float absYPos = -(yPos * image->GetSpacing()[1] + image->GetOrigin()[1]); // Pas oublier le - !!!
+						float absZPos = zPos * image->GetSpacing()[2] + image->GetOrigin()[2];
+
+
+						points->InsertNextPoint(absZPos, absYPos, absXPos);
 						//std::cout << "Position : " << xPos << " " << yPos << " " << zPos << std::endl;
 					}
 				}
 			}
 		}
-		myfile.close();
-		std::cout << "Point Writer done" << std::endl;
-
-		vtkNew<vtkNamedColors> colors;
-		vtkNew<vtkRenderer> renderer;
-		vtkNew<vtkRenderWindow> renderWindow;
-		renderWindow->AddRenderer(renderer);
-		renderWindow->SetWindowName("SurfaceCreation");
-		vtkNew<vtkRenderWindowInteractor> renderWindowInteractor;
-		renderWindowInteractor->SetRenderWindow(renderWindow);
-
-		std::string pointCloudFileName = "./Output/" + initialMHDFilename + "PointCloud.txt";
-		std::ifstream filestream(pointCloudFileName.c_str());
-		std::string line;
-		vtkNew<vtkPoints> points;
-
-		while (std::getline(filestream, line)) {
-			double x, y, z;
-			std::stringstream linestream;
-			linestream << line;
-			linestream >> x >> y >> z;
-			points->InsertNextPoint(x, y, z);
-		}
-
-		filestream.close();
 
 		vtkNew<vtkPolyData> polyData;
-
 		polyData->SetPoints(points);
+
+		double currPointCoord[3];
+		itk::CovariantVector< float, 3 > currDir;
+		itk::CovariantVector< float, 3 > step;
+		itk::CovariantVector< float, 3 > brokenDir; // BrokenDir
+		brokenDir.Fill(0);
+
+		for (size_t iter = 0; iter < 6; iter++) {
+			int nbOfPoints = polyData->GetNumberOfPoints();
+			vtkNew<vtkPoints> newPoints;
+			int modifiedPoints = 0;
+			for (int i = 0; i < nbOfPoints; i++) {
+				polyData->GetPoint(i, currPointCoord);
+				std::array<double, 3> imageIndex = polyDataCoordToImageCoord({ currPointCoord[2],currPointCoord[1],currPointCoord[0] }, image->GetSpacing(), image->GetOrigin());
+				std::array<int, 3> roundedImageIndex;
+				roundedImageIndex[0] = imageIndex[0];
+				roundedImageIndex[1] = imageIndex[1];
+				roundedImageIndex[2] = imageIndex[2];
+				// gardientImageindex will have the correct position
+				InputImageType::IndexType gardientImageindex{ {roundedImageIndex[0], roundedImageIndex[1], roundedImageIndex[2]} };
+
+				currDir = gradientVecImage->GetPixel(gardientImageindex);
+				//std::cout << currDir[0] << " " << currDir[1] << " " << currDir[2] << std::endl;
+				if (currDir == brokenDir) {
+					//std::cout << "Broken Dir Coord : " << currPointCoord[0] << " " << currPointCoord[1] << " " << currPointCoord[2] << std::endl;
+					newPoints->InsertNextPoint(currPointCoord[0], currPointCoord[1], currPointCoord[2]);
+					continue;
+				}
+				currDir.Normalize();
+				step = currDir * 0.05f * (1.0f / (static_cast<float>(iter) * 20.f + 1.0f)); // The voxel size is defined by the image spacing (the 0.1f is a subvoxel refinement)
+				float maxValue = 0;
+				int maxIndex = 0;
+				bool printInterp = false;
+				if (i == 8000) {
+					printInterp = true;
+					std::cout << "Point ID : " << i << std::endl;
+					std::cout << "CurrDir : " << currDir << std::endl;
+					std::cout << "Gradient Image Index : " << gardientImageindex << std::endl;
+					std::cout << "Step : " << step << std::endl;
+					std::cout << "CurrPointCoord : " << currPointCoord[0] << " " << currPointCoord[1] << " " << currPointCoord[2] << std::endl;
+				}
+				for (int j = -20; j < 21; j++) {
+					itk::ContinuousIndex<double, 3> interpCoord;
+					interpCoord.Fill(0);
+					interpCoord[0] = imageIndex[0] + j * step[0];
+					interpCoord[1] = imageIndex[1] + j * step[1];
+					interpCoord[2] = imageIndex[2] + j * step[2];
+					double interpValue = bSplineInterpFilter->EvaluateAtContinuousIndex(interpCoord);
+
+					if (interpValue > maxValue) {
+						maxValue = interpValue;
+						maxIndex = j;
+					}
+					if (printInterp) {
+						std::cout << j << " : Interp : " << interpValue << std::endl;
+					}
+
+				}
+				std::array<double, 3> newCoords = imageCoordToPolyDataCoord({ imageIndex[0] + maxIndex * step[0],imageIndex[1] + maxIndex * step[1],imageIndex[2] + maxIndex * step[2] }, image->GetSpacing(), image->GetOrigin());
+
+				if (printInterp) {
+					std::cout << "Max index : " << maxIndex << std::endl;
+				}
+
+				newPoints->InsertNextPoint(newCoords[2], newCoords[1], newCoords[0]);
+				if (maxIndex != 0)
+					modifiedPoints++;
+			}
+			std::cout << "subVoxelRefinment done Mod points : " << modifiedPoints << std::endl;
+			polyData->SetPoints(newPoints);
+		}
 
 		if (computePointError) {
 			// Length of edges
