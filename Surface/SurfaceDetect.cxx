@@ -5,7 +5,10 @@
 #include "itkRescaleIntensityImageFilter.h"
 #include "itkMaskImageFilter.h"
 #include "itkConstantPadImageFilter.h"
+#include "itkXorImageFilter.h"
+#include "itkResampleImageFilter.h"
 #include "itkThresholdImageFilter.h"
+#include "itkScaleTransform.h"
 #include "itkImageToVTKImageFilter.h"
 #include "itkBinaryThresholdImageFilter.h"
 #include "itkGradientImageFilter.h"
@@ -126,7 +129,7 @@ int main()
 	bool computePointError = true;
 	enum recoAlgoEnum { ExtractSurface, Poisson, PowerCrust, SurfReconst, SurfaceNets, FlyingEdges};
 	recoAlgoEnum reco = SurfaceNets;
-    std::string initialMHDFilename = "Reference";
+    std::string initialMHDFilename = "rekoRolandCropped";
 
 	typedef unsigned short InputPixelType;
 	typedef itk::Image< InputPixelType, 3 > InputImageType;
@@ -307,9 +310,70 @@ int main()
 		filler->SetForegroundValue(255);
 		typedef itk::ImageFileWriter<MaskImageType> ImageWriter;
 		
+		auto filledImage = filler->GetOutput();
+		/*
+		// Rescale the filler to get a "zone" mask
+		using MetricValueType = double; // ? pourquoi c'est pas float ?
+		using TransformType = itk::ScaleTransform<MetricValueType, 3>;
+		auto scaleTransformUp = TransformType::New();
+		
+		itk::FixedArray<float, 3> scaleUp;
+		scaleUp[0] = 1.04f; // Better if the scalaing makes the number of voxel an integer
+		scaleUp[1] = 1.04f;
+		scaleUp[2] = 1.04f;
+		scaleTransformUp->SetScale(scaleUp);
+		
+		itk::Point<float, 3> center;
+		center[0] = filledImage->GetLargestPossibleRegion().GetSize()[0] / 2;
+		center[1] = filledImage->GetLargestPossibleRegion().GetSize()[1] / 2;
+		center[2] = filledImage->GetLargestPossibleRegion().GetSize()[2] / 2;
+		scaleTransformUp->SetCenter(center);
+
+		using ResampleImageFilterType = itk::ResampleImageFilter<MaskImageType, MaskImageType, MetricValueType>;
+		auto resampleFilterUp = ResampleImageFilterType::New();
+		resampleFilterUp->SetTransform(scaleTransformUp);
+		resampleFilterUp->SetInput(filledImage);
+		resampleFilterUp->SetSize(filledImage->GetLargestPossibleRegion().GetSize());
+		resampleFilterUp->Update();
+
+		auto upImage = resampleFilterUp->GetOutput();
+
+		//scaledown
+		auto scaleTransformDown = TransformType::New();
+		itk::FixedArray<float, 3> scaleDown;
+		scaleDown[0] = 0.96; // Better if the scalaing makes the number of voxel an integer
+		scaleDown[1] = 0.96;
+		scaleDown[2] = 0.96;
+		scaleTransformDown->SetScale(scaleDown);
+		scaleTransformDown->SetCenter(center); // Same center because it's the same input image
+		
+		using ResampleImageFilterType = itk::ResampleImageFilter<MaskImageType, MaskImageType, MetricValueType>;
+		auto resampleFilterDown = ResampleImageFilterType::New();
+		resampleFilterDown->SetTransform(scaleTransformDown);
+		resampleFilterDown->SetInput(filledImage);
+		resampleFilterDown->SetSize(filledImage->GetLargestPossibleRegion().GetSize());
+		resampleFilterDown->Update();
+		
+		auto downImage = resampleFilterDown->GetOutput();
+
+		std::cout << "DownImage :" << downImage->GetLargestPossibleRegion().GetSize() << std::endl;
+		std::cout << "UpImage :" << upImage->GetLargestPossibleRegion().GetSize() << std::endl;
+		using XorImageFilterType = itk::XorImageFilter<MaskImageType>;
+		auto xorFilter = XorImageFilterType::New();
+		xorFilter->SetInput1(upImage);
+		xorFilter->SetInput2(downImage);
+		//xorFilter->Update();
+
+		ImageWriter::Pointer imageWriter = ImageWriter::New();
+		imageWriter->SetInput(downImage);
+		imageWriter->SetFileName("TestFilling.mhd");
+		imageWriter->Update();
+		std::cout << "TestFilling write done !" << std::endl;
+		return true;
+		*/
 		using ITKToVTK = itk::ImageToVTKImageFilter<MaskImageType>;
 		auto ITKToVTkConverter = ITKToVTK::New();
-		ITKToVTkConverter->SetInput(filler->GetOutput());
+		ITKToVTkConverter->SetInput(filledImage);
 		ITKToVTkConverter->Update();
 		vtkNew<vtkTransform> transP1;
 		transP1->Scale(1, -1, 1);
