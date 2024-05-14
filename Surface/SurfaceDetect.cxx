@@ -763,9 +763,9 @@ int main()
 			// Angles
 			double anglesErrors[3]; // Voir si j'en fais plus ?
 			double realAngles[3] = { 90.0, 90.0, 43.313 };
-			double point1Vec[4][3] = { {20.0, -20.0, -20.0},{-20.0, -20.0, -20.0},{-20.0, -20.0, 20.0},
+			double point1Vec[4][3] = { {-20.0, -20.0, 20.0},{-20.0, -20.0, 20.0},{-20.0, -20.0, 20.0},
 										  {-20.0, 20.0, 20.0} };
-			double point2Vec[4][3] = { {-20.0, -20.0, 20.0},{-20.0, -20.0, 20.0},{-20.0, 20.0, 20.0},
+			double point2Vec[4][3] = { {20.0, -20.0, 20.0},{-20.0, -20.0, -20.0},{-20.0, 20.0, 20.0},
 										  {0.0, 50.0, 0.0} };
 			// Flemme de la boucle polalalalala
 			std::vector<vtkVector3d> vectors;
@@ -783,7 +783,7 @@ int main()
 			}
 
 			anglesErrors[0] = vtkMath::DegreesFromRadians(vtkMath::AngleBetweenVectors(vectors[0].GetData(), vectors[2].GetData())) - realAngles[0];
-			anglesErrors[1] = vtkMath::DegreesFromRadians(vtkMath::AngleBetweenVectors(vectors[1].GetData(), vectors[2].GetData())) - realAngles[1];
+			anglesErrors[1] = vtkMath::DegreesFromRadians(vtkMath::AngleBetweenVectors(vectors[0].GetData(), vectors[1].GetData())) - realAngles[1];
 			anglesErrors[2] = vtkMath::DegreesFromRadians(vtkMath::AngleBetweenVectors(vectors[3].GetData(), vectors[2].GetData())) - realAngles[2];
 
 			std::cout << anglesErrors[0] << " " << anglesErrors[1] << " " << anglesErrors[2] << std::endl;
@@ -982,28 +982,28 @@ int main()
 		// Angles
 		double anglesErrors[3]; // Voir si j'en fais plus ?
 		double realAngles[3] = { 90.0, 90.0, 43.313 };
-		double point1Vec[4][3] = { {20.0, -20.0, -20.0},{-20.0, -20.0, -20.0},{-20.0, -20.0, 20.0},
+		double point1Vec[4][3] = { {-20.0, -20.0, 20.0},{-20.0, -20.0, 20.0},{-20.0, -20.0, 20.0},
 									  {-20.0, 20.0, 20.0} };
-		double point2Vec[4][3] = { {-20.0, -20.0, 20.0},{-20.0, -20.0, 20.0},{-20.0, 20.0, 20.0},
+		double point2Vec[4][3] = { {20.0, -20.0, 20.0},{-20.0, -20.0, -20.0},{-20.0, 20.0, 20.0},
 									  {0.0, 50.0, 0.0} };
 		// Flemme de la boucle polalalalala
 		std::vector<vtkVector3d> vectors;
-		for (size_t i = 0; i < 4; i++) {
-			vtkIdType point1ID = pointLocator->FindClosestPoint(point1Vec[i]);
-			double* point1Point = polyData->GetPoint(point1ID);
-			double point1[3] = { point1Point[0], point1Point[1], point1Point[2] };
-			vtkIdType point2ID = pointLocator->FindClosestPoint(point2Vec[i]);
-			double* point2Point = polyData->GetPoint(point2ID);
-			double point2[3] = { point2Point[0], point2Point[1], point2Point[2] };
-			double diff[3] = { point2[0] - point1[0], point2[1] - point1[1], point2[2] - point1[2] };
-			//create vector
-			vtkVector3d vector = vtkVector3d(diff);
-			vectors.push_back(vector);
-		}
+			for (size_t i = 0; i < 4; i++) {
+				vtkIdType point1ID = pointLocator->FindClosestPoint(point1Vec[i]);
+				double* point1Point = polyData->GetPoint(point1ID);
+				double point1[3] = { point1Point[0], point1Point[1], point1Point[2] };
+				vtkIdType point2ID = pointLocator->FindClosestPoint(point2Vec[i]);
+				double* point2Point = polyData->GetPoint(point2ID);
+				double point2[3] = { point2Point[0], point2Point[1], point2Point[2] };
+				double diff[3] = { point2[0] - point1[0], point2[1] - point1[1], point2[2] - point1[2] };
+				//create vector
+				vtkVector3d vector = vtkVector3d(diff);
+				vectors.push_back(vector);
+			}
 
-		anglesErrors[0] = vtkMath::DegreesFromRadians(vtkMath::AngleBetweenVectors(vectors[0].GetData(), vectors[2].GetData())) - realAngles[0];
-		anglesErrors[1] = vtkMath::DegreesFromRadians(vtkMath::AngleBetweenVectors(vectors[1].GetData(), vectors[2].GetData())) - realAngles[1];
-		anglesErrors[2] = vtkMath::DegreesFromRadians(vtkMath::AngleBetweenVectors(vectors[3].GetData(), vectors[2].GetData())) - realAngles[2];
+			anglesErrors[0] = vtkMath::DegreesFromRadians(vtkMath::AngleBetweenVectors(vectors[0].GetData(), vectors[2].GetData())) - realAngles[0];
+			anglesErrors[1] = vtkMath::DegreesFromRadians(vtkMath::AngleBetweenVectors(vectors[0].GetData(), vectors[1].GetData())) - realAngles[1];
+			anglesErrors[2] = vtkMath::DegreesFromRadians(vtkMath::AngleBetweenVectors(vectors[3].GetData(), vectors[2].GetData())) - realAngles[2];
 
 		std::cout << anglesErrors[0] << " " << anglesErrors[1] << " " << anglesErrors[2] << std::endl;
 		vtkNew<vtkCylinder> cylinder;

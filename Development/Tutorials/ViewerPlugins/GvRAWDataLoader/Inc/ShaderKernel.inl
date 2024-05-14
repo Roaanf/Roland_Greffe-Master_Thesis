@@ -89,7 +89,7 @@ inline void ShaderKernel::runImpl( const BrickSamplerType& brickSampler, const f
 		currMode = cRenderMode;
 	}
 	// Sample data
-	float4 col = brickSampler.template getValue< 0 >( coneAperture );
+	float4 col = brickSampler.template getValue< 0 >( coneAperture ); // here only col.w is useful !
 
 	// Threshold data
 	if ( (col.w < cShaderThresholdLow) || (col.w > cShaderThresholdHigh) ){
