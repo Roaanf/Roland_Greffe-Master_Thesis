@@ -52,6 +52,7 @@
 // STL
 #include <iostream>
 #include <vector>
+#include <chrono>
 
 /******************************************************************************
  ****************************** NAMESPACE SECTION *****************************
@@ -62,6 +63,7 @@ using namespace GvVoxelizer;
 
 // STL
 using namespace std;
+using namespace std::chrono; // Used for benchmark
 
 /******************************************************************************
  ************************* DEFINE AND CONSTANT SECTION ************************
@@ -103,6 +105,7 @@ bool GsIRAWFileReader::read(const size_t brickWidth, const size_t trueX, const s
 
 	std::cout << "- [step 1 / 3] - Read data and write voxels..." << std::endl;
 	// For the RAWReader plugin this calls the readData function of RawFileReader.inl and not the one just below
+	auto start = high_resolution_clock::now();
 	result = readData(brickWidth, trueX, trueY, trueZ, radius);	
 
 	std::cout << "- [step 2 / 3] - Update borders..." << std::endl;
@@ -114,7 +117,9 @@ bool GsIRAWFileReader::read(const size_t brickWidth, const size_t trueX, const s
 
 	std::cout << "- [step 3 / 3] - Mipmap pyramid generation..." << std::endl;
 	result = generateMipmapPyramid(_dataStructureIOHandler, brickWidth);
-
+	auto stop = high_resolution_clock::now();
+	auto duration = duration_cast<milliseconds>(stop - start);
+	std::cout << "Conversion time : " << duration.count() << std::endl;
 	return result;
 }
 

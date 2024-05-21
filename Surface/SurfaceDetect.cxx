@@ -36,6 +36,7 @@
 #include <vtkProperty.h>
 #include <vtkRenderWindow.h>
 #include <vtkRenderWindowInteractor.h>
+#include <vtkFillHolesFilter.h>
 #include <vtkPCANormalEstimation.h>
 #include <vtkSignedDistance.h>
 #include <vtkPoissonReconstruction.h>
@@ -119,18 +120,22 @@ std::array<double, 3> polyDataCoordToImageCoord(std::array<double, 3> polyDataPo
 
 int main()
 {
-	bool writeCanny = false;
+	bool writeCanny = true;
 	bool writeGradient = false;
 	bool boolPadding = false;
 	bool cropImage = false;
 	bool subVoxRef = true;
 	bool gradMagWrite = false;
-	bool smoothing = false;
+	bool smoothing = true;
 	bool writeOtsu = false;
 	bool computePointError = true;
+	bool cropPossibleGradientSearchSpace = true;
 	enum recoAlgoEnum { ExtractSurface, Poisson, PowerCrust, SurfReconst, SurfaceNets, FlyingEdges};
 	recoAlgoEnum reco = SurfaceNets;
     std::string initialMHDFilename = "rekoRolandCropped";
+
+	if (initialMHDFilename == "Reference")
+		cropPossibleGradientSearchSpace = false;
 
 	typedef unsigned short InputPixelType;
 	typedef itk::Image< InputPixelType, 3 > InputImageType;
@@ -230,8 +235,15 @@ int main()
 	typedef itk::CannyEdgeDetectionImageFilter<CannyOutputImageType, CannyOutputImageType> CannyFilter;
 	CannyFilter::Pointer canny = CannyFilter::New();
 	canny->SetInput(castFilter->GetOutput());
-	canny->SetLowerThreshold(800.0f); // 800
-	canny->SetUpperThreshold(2500.0f); // 2500
+	if (initialMHDFilename == "Reference") {
+		canny->SetLowerThreshold(0.1f);
+		canny->SetUpperThreshold(0.9f);
+	}
+	else {
+		canny->SetLowerThreshold(800.f); // 800
+		canny->SetUpperThreshold(2500.f); // 2500
+	}
+	
 	std::cout << "Threshold : " << canny->GetLowerThreshold() << " " << canny->GetUpperThreshold() << std::endl;
 	canny->SetVariance(0.1);
 
@@ -253,31 +265,33 @@ int main()
 
 	MaskImageType::Pointer cannyImageBordered = duplicator->GetOutput();
 
-	for (size_t i = 0; i < size[0]; i++) {
-		for (size_t j = 0; j < size[1]; j++) {
-			for (size_t k = 0; k < size[2]; k++) {
-				indexType currIndex;
-				indexType index;
-				currIndex[0] = i;
-				currIndex[1] = j;
-				currIndex[2] = k;
-				if (cannyImage->GetPixel(currIndex) != 0.0f) {
-					for (int l = -2; l < 3; l++){
-						index[0] = currIndex[0] + l;
-						if (((int)currIndex[0] + l < 0)|| ((int)currIndex[0] + l > size[0])) {
-							continue;
-						}
-						for (int m = -2; m < 3; m++) {
-							if (((int)currIndex[1] + m < 0) || ((int)currIndex[1] + m > size[1])) {
+	if (cropPossibleGradientSearchSpace){
+		for (size_t i = 0; i < size[0]; i++) {
+			for (size_t j = 0; j < size[1]; j++) {
+				for (size_t k = 0; k < size[2]; k++) {
+					indexType currIndex;
+					indexType index;
+					currIndex[0] = i;
+					currIndex[1] = j;
+					currIndex[2] = k;
+					if (cannyImage->GetPixel(currIndex) != 0.0f) {
+						for (int l = -2; l < 3; l++){
+							index[0] = currIndex[0] + l;
+							if (((int)currIndex[0] + l < 0)|| ((int)currIndex[0] + l > size[0])) {
 								continue;
 							}
-							index[1] = currIndex[1] + m;
-							for (int n = -2; n < 3; n++) {
-								if (((int)currIndex[2] + n < 0) || ((int)currIndex[2] + n > size[2])) {
+							for (int m = -2; m < 3; m++) {
+								if (((int)currIndex[1] + m < 0) || ((int)currIndex[1] + m > size[1])) {
 									continue;
 								}
-								index[2] = currIndex[2] + n;
-								cannyImageBordered->SetPixel(index, 255);
+								index[1] = currIndex[1] + m;
+								for (int n = -2; n < 3; n++) {
+									if (((int)currIndex[2] + n < 0) || ((int)currIndex[2] + n > size[2])) {
+										continue;
+									}
+									index[2] = currIndex[2] + n;
+									cannyImageBordered->SetPixel(index, 255);
+								}
 							}
 						}
 					}
@@ -295,6 +309,7 @@ int main()
 	}
 	std::string stlFilename;
 	std::string compareFileName;
+	std::string errorFilename;
 	vtkNew<vtkPolyData> targetPolyData;
 
 	typedef itk::Image<float, 3> GradientImageType;
@@ -338,21 +353,25 @@ int main()
 
 	using MaskFilterGradType = itk::MaskImageFilter<GradientImageType, MaskImageType>;
 	auto maskGradFilter = MaskFilterGradType::New();
-	maskGradFilter->SetInput(gradientMagImage);
-	maskGradFilter->SetMaskImage(cannyImageBordered);
-	maskGradFilter->Update();
-
-	typedef itk::ImageFileWriter<GradientImageType> GradientWriter;
-	GradientWriter::Pointer gradientWriter = GradientWriter::New();
-	gradientWriter->SetInput(maskGradFilter->GetOutput());
-	gradientWriter->SetFileName("TestGrad.mhd");
-	gradientWriter->Update();
-	std::cout << "Gradient writing done !" << std::endl;
+	if (cropPossibleGradientSearchSpace) {
+		maskGradFilter->SetInput(gradientMagImage);
+		maskGradFilter->SetMaskImage(cannyImageBordered);
+		maskGradFilter->Update();
+		typedef itk::ImageFileWriter<GradientImageType> GradientWriter;
+		GradientWriter::Pointer gradientWriter = GradientWriter::New();
+		gradientWriter->SetInput(maskGradFilter->GetOutput());
+		gradientWriter->SetFileName("TestGrad.mhd");
+		gradientWriter->Update();
+		std::cout << "Gradient writing done !" << std::endl;
+	}
 
 	using InitImageBSplineInterp = itk::BSplineInterpolateImageFunction<GradientImageType>;
 	auto bSplineInterpFilter = InitImageBSplineInterp::New();
 	bSplineInterpFilter->SetSplineOrder(3);
-	bSplineInterpFilter->SetInputImage(maskGradFilter->GetOutput());
+	if (cropPossibleGradientSearchSpace)
+		bSplineInterpFilter->SetInputImage(maskGradFilter->GetOutput());
+	else
+		bSplineInterpFilter->SetInputImage(gradientMagImage);
 
 	if (reco == SurfaceNets || reco == FlyingEdges) {
 		vtkNew<vtkSTLWriter> stlWriter;
@@ -392,8 +411,9 @@ int main()
 			surfaceNets->SetNumberOfIterations(1);
 			surfaceNets->Update();
 			polyDataNotRotated = surfaceNets->GetOutput();
-			stlFilename = "./Output/" + initialMHDFilename + "SurfaceNets.stl";
-			compareFileName = "./Output/" + initialMHDFilename + "CompSurfaceNets.vtk";
+			stlFilename = "./Output/SurfaceNets/" + initialMHDFilename + ".stl";
+			compareFileName = "./Output/SurfaceNets/" + initialMHDFilename + "Comp.vtk";
+			errorFilename = "./Output/SurfaceNets/" + initialMHDFilename + "Errors.txt";
 			imageDataCorrect->SetInputData(polyDataNotRotated);
 			imageDataCorrect->SetTransform(transP1);
 			imageDataCorrect->Update();
@@ -413,8 +433,9 @@ int main()
 			flyingEdges->ComputeGradientsOn();
 			flyingEdges->Update();
 			polyDataNotRotated = flyingEdges->GetOutput();
-			stlFilename = "./Output/" + initialMHDFilename + "FlyingEdges.stl";
-			compareFileName = "./Output/" + initialMHDFilename + "CompFlyingEdges.vtk";
+			stlFilename = "./Output/FlyingEdges/" + initialMHDFilename + ".stl";
+			compareFileName = "./Output/FlyingEdges/" + initialMHDFilename + "Comp.vtk";
+			errorFilename = "./Output/FlyingEdges/" + initialMHDFilename + "Errors.txt";
 			imageDataCorrect->SetInputData(polyDataNotRotated);
 			imageDataCorrect->SetTransform(transP1);
 			imageDataCorrect->Update();
@@ -537,13 +558,14 @@ int main()
 		if (smoothing && subVoxRef) { // Makes no sense to smooth without subvox refinment
 			vtkSmartPointer<vtkWindowedSincPolyDataFilter> smooth = vtkSmartPointer<vtkWindowedSincPolyDataFilter>::New();
 			smooth->SetInputData(imageDataCorrect->GetOutput());
-			smooth->SetPassBand(0.01);
+			smooth->SetPassBand(0.1);
 			smooth->BoundarySmoothingOff();
 			smooth->FeatureEdgeSmoothingOff();
 			smooth->NonManifoldSmoothingOn();
 			smooth->NormalizeCoordinatesOn();
 			smooth->Update();
 			targetPolyData->DeepCopy(smooth->GetOutput());
+			
 		}
 
 		stlWriter->SetFileName(stlFilename.c_str());
@@ -564,90 +586,21 @@ int main()
 					currIndex[1] = j;
 					currIndex[2] = k;
 					if (cannyImage->GetPixel(currIndex) != 0.0f) {
-						float xPos = 0.0f;
-						float sum = 0.0f;
-						float sumMul = 0.0f;
-						float value;
-						for (int dx = -1; dx < 2; dx++) {
-							if (i + dx < 0 || i + dx >= size[0]) {
-								index[0] = i;
-							}
-							else {
-								index[0] = i + dx;
-							}
-							index[1] = j;
-							index[2] = k;
-							value = gradientMagImage->GetPixel(index);
-							sum += value;
-							sumMul += value * (dx + 1.5);
-						}
-						xPos = sumMul / sum;
-						xPos += (static_cast<float>(i)) - 1.5;
-						float yPos = 0.0f;
-						sum = 0.0f;
-						sumMul = 0.0f;
-						for (int dy = -1; dy < 2; dy++) {
-							index[0] = i;
-							if (j + dy < 0 || j + dy >= size[1]) {
-								index[1] = j;
-							}
-							else {
-								index[1] = j + dy;
-							}
-							index[2] = k;
-							value = gradientMagImage->GetPixel(index);
-							sum += value;
-							sumMul += value * (dy + 1.5);
-						}
-						yPos = sumMul / sum;
-						yPos += (static_cast<float>(j)) - 1.5;
-						float zPos = 0.0f;;
-						sum = 0.0f;
-						sumMul = 0.0f;
-						for (int dz = -1; dz < 2; dz++) {
-							index[0] = i;
-							index[1] = j;
-							if (k + dz < 0 || k + dz >= size[2]) {
-								index[2] = k;
-							}
-							else {
-								index[2] = k + dz;
-							}
-							value = gradientMagImage->GetPixel(index);
-							sum += value;
-							sumMul += value * (dz + 1.5);
-						}
-						zPos = sumMul / sum;
-						zPos += (static_cast<float>(k)) - 1.5;
 
-						if (xPos < 0 || xPos > size[0]) {
-							continue;
-						}
-						if (yPos < 0 || yPos > size[1]) {
-							continue;
-						}
-						if (zPos < 0 || zPos > size[2]) {
-							continue;
-						}
-						if (isnan(xPos))
-							continue;
-						if (isnan(yPos))
-							continue;
-						if (isnan(zPos))
-							continue;
-
-						float absXPos = xPos * image->GetSpacing()[0] + image->GetOrigin()[0];
-						float absYPos = -(yPos * image->GetSpacing()[1] + image->GetOrigin()[1]); // Pas oublier le - !!!
-						float absZPos = zPos * image->GetSpacing()[2] + image->GetOrigin()[2];
-
+						float absXPos = (currIndex[0]) * image->GetSpacing()[0] + image->GetOrigin()[0] ;
+						float absYPos = -((currIndex[1]) * image->GetSpacing()[1] + image->GetOrigin()[1]); // Pas oublier le - !!!
+						float absZPos = (currIndex[2]) * image->GetSpacing()[2] + image->GetOrigin()[2];
 
 						points->InsertNextPoint(absZPos, absYPos, absXPos);
+						errorFilename = "./Output/PointsError" + initialMHDFilename +".txt";
 						//std::cout << "Position : " << xPos << " " << yPos << " " << zPos << std::endl;
 					}
 				}
 			}
 		}
 
+		std::ofstream pointCloud;
+		pointCloud.open("./Output/PointCloud" + initialMHDFilename + ".txt");
 		vtkNew<vtkPolyData> polyData;
 		polyData->SetPoints(points);
 
@@ -657,73 +610,82 @@ int main()
 		itk::CovariantVector< float, 3 > brokenDir; // BrokenDir
 		brokenDir.Fill(0);
 
-		for (size_t iter = 0; iter < 6; iter++) {
-			int nbOfPoints = polyData->GetNumberOfPoints();
-			vtkNew<vtkPoints> newPoints;
-			int modifiedPoints = 0;
-			for (int i = 0; i < nbOfPoints; i++) {
-				polyData->GetPoint(i, currPointCoord);
-				std::array<double, 3> imageIndex = polyDataCoordToImageCoord({ currPointCoord[2],currPointCoord[1],currPointCoord[0] }, image->GetSpacing(), image->GetOrigin());
-				std::array<int, 3> roundedImageIndex;
-				roundedImageIndex[0] = imageIndex[0];
-				roundedImageIndex[1] = imageIndex[1];
-				roundedImageIndex[2] = imageIndex[2];
-				// gardientImageindex will have the correct position
-				InputImageType::IndexType gardientImageindex{ {roundedImageIndex[0], roundedImageIndex[1], roundedImageIndex[2]} };
+		if (true) {
+			for (size_t iter = 0; iter < 6; iter++) {
+				int nbOfPoints = polyData->GetNumberOfPoints();
+				vtkNew<vtkPoints> newPoints;
+				int modifiedPoints = 0;
+				for (int i = 0; i < nbOfPoints; i++) {
+					polyData->GetPoint(i, currPointCoord);
+					std::array<double, 3> imageIndex = polyDataCoordToImageCoord({ currPointCoord[2],currPointCoord[1],currPointCoord[0] }, image->GetSpacing(), image->GetOrigin());
+					std::array<int, 3> roundedImageIndex;
+					roundedImageIndex[0] = imageIndex[0];
+					roundedImageIndex[1] = imageIndex[1];
+					roundedImageIndex[2] = imageIndex[2];
+					// gardientImageindex will have the correct position
+					InputImageType::IndexType gardientImageindex{ {roundedImageIndex[0], roundedImageIndex[1], roundedImageIndex[2]} };
 
-				currDir = gradientVecImage->GetPixel(gardientImageindex);
-				//std::cout << currDir[0] << " " << currDir[1] << " " << currDir[2] << std::endl;
-				if (currDir == brokenDir) {
-					//std::cout << "Broken Dir Coord : " << currPointCoord[0] << " " << currPointCoord[1] << " " << currPointCoord[2] << std::endl;
-					newPoints->InsertNextPoint(currPointCoord[0], currPointCoord[1], currPointCoord[2]);
-					continue;
-				}
-				currDir.Normalize();
-				step = currDir * 0.05f * (1.0f / (static_cast<float>(iter) * 20.f + 1.0f)); // The voxel size is defined by the image spacing (the 0.1f is a subvoxel refinement)
-				float maxValue = 0;
-				int maxIndex = 0;
-				bool printInterp = false;
-				if (i == 8000) {
-					printInterp = true;
-					std::cout << "Point ID : " << i << std::endl;
-					std::cout << "CurrDir : " << currDir << std::endl;
-					std::cout << "Gradient Image Index : " << gardientImageindex << std::endl;
-					std::cout << "Step : " << step << std::endl;
-					std::cout << "CurrPointCoord : " << currPointCoord[0] << " " << currPointCoord[1] << " " << currPointCoord[2] << std::endl;
-				}
-				for (int j = -20; j < 21; j++) {
-					itk::ContinuousIndex<double, 3> interpCoord;
-					interpCoord.Fill(0);
-					interpCoord[0] = imageIndex[0] + j * step[0];
-					interpCoord[1] = imageIndex[1] + j * step[1];
-					interpCoord[2] = imageIndex[2] + j * step[2];
-					double interpValue = bSplineInterpFilter->EvaluateAtContinuousIndex(interpCoord);
-
-					if (interpValue > maxValue) {
-						maxValue = interpValue;
-						maxIndex = j;
+					currDir = gradientVecImage->GetPixel(gardientImageindex);
+					//std::cout << currDir[0] << " " << currDir[1] << " " << currDir[2] << std::endl;
+					if (currDir == brokenDir) {
+						//std::cout << "Broken Dir Coord : " << currPointCoord[0] << " " << currPointCoord[1] << " " << currPointCoord[2] << std::endl;
+						newPoints->InsertNextPoint(currPointCoord[0], currPointCoord[1], currPointCoord[2]);
+						continue;
 					}
+					currDir.Normalize();
+					step = currDir * 0.05f * (1.0f / (static_cast<float>(iter) * 20.f + 1.0f)); // The voxel size is defined by the image spacing (the 0.1f is a subvoxel refinement)
+					float maxValue = 0;
+					int maxIndex = 0;
+					bool printInterp = false;
+					if (i == 8000) {
+						printInterp = true;
+						std::cout << "Point ID : " << i << std::endl;
+						std::cout << "CurrDir : " << currDir << std::endl;
+						std::cout << "Gradient Image Index : " << gardientImageindex << std::endl;
+						std::cout << "Step : " << step << std::endl;
+						std::cout << "CurrPointCoord : " << currPointCoord[0] << " " << currPointCoord[1] << " " << currPointCoord[2] << std::endl;
+					}
+					for (int j = -20; j < 21; j++) {
+						itk::ContinuousIndex<double, 3> interpCoord;
+						interpCoord.Fill(0);
+						interpCoord[0] = imageIndex[0] + j * step[0];
+						interpCoord[1] = imageIndex[1] + j * step[1];
+						interpCoord[2] = imageIndex[2] + j * step[2];
+						double interpValue = bSplineInterpFilter->EvaluateAtContinuousIndex(interpCoord);
+
+						if (interpValue > maxValue) {
+							maxValue = interpValue;
+							maxIndex = j;
+						}
+						if (printInterp) {
+							std::cout << j << " : Interp : " << interpValue << std::endl;
+						}
+
+					}
+					std::array<double, 3> newCoords = imageCoordToPolyDataCoord({ imageIndex[0] + maxIndex * step[0],imageIndex[1] + maxIndex * step[1],imageIndex[2] + maxIndex * step[2] }, image->GetSpacing(), image->GetOrigin());
+
 					if (printInterp) {
-						std::cout << j << " : Interp : " << interpValue << std::endl;
+						std::cout << "Max index : " << maxIndex << std::endl;
 					}
 
+					newPoints->InsertNextPoint(newCoords[2], newCoords[1], newCoords[0]);
+					if (maxIndex != 0)
+						modifiedPoints++;
 				}
-				std::array<double, 3> newCoords = imageCoordToPolyDataCoord({ imageIndex[0] + maxIndex * step[0],imageIndex[1] + maxIndex * step[1],imageIndex[2] + maxIndex * step[2] }, image->GetSpacing(), image->GetOrigin());
-
-				if (printInterp) {
-					std::cout << "Max index : " << maxIndex << std::endl;
-				}
-
-				newPoints->InsertNextPoint(newCoords[2], newCoords[1], newCoords[0]);
-				if (maxIndex != 0)
-					modifiedPoints++;
+				std::cout << "subVoxelRefinment done Mod points : " << modifiedPoints << std::endl;
+				polyData->SetPoints(newPoints);
 			}
-			std::cout << "subVoxelRefinment done Mod points : " << modifiedPoints << std::endl;
-			polyData->SetPoints(newPoints);
+		}
+
+		for (size_t i = 0; i < polyData->GetNumberOfPoints(); i++){
+			polyData->GetPoint(i, currPointCoord);
+			pointCloud << currPointCoord[0] << " " << currPointCoord[1] << " " << currPointCoord[2] << "\n";
 		}
 
 		if (computePointError) {
 			// Length of edges
+			std::ofstream errorFile;
+			errorFile.open(errorFilename);
 			vtkNew<vtkStaticPointLocator> pointLocator;
 			pointLocator->SetDataSet(polyData);
 			pointLocator->BuildLocator();
@@ -741,6 +703,10 @@ int main()
 										  {20.0, -20.0, -20.0},{20.0, -20.0, 20.0},{20.0, -20.0, -20.0},
 										  {-20.0, 20.0, 20.0},{-20.0, 20.0, -20.0},{20.0, 20.0, -20.0},{20.0, 20.0, 20.0} };
 			double distancesError[16];
+			double mean = 0;
+			double min = 5000;
+			double max = 0;
+			double stddev = 0;
 			// Loop through all 16 outer edges
 			for (size_t i = 0; i < 16; i++) {
 				vtkIdType point1ID = pointLocator->FindClosestPoint(point1Coord[i]);
@@ -758,8 +724,23 @@ int main()
 					distancesError[i] = abs(distance - 41.2309);
 				}
 				std::cout << distancesError[i] << " ";
+				errorFile << distancesError[i] << " ";
+				mean += distancesError[i];
+				if (distancesError[i] < min)
+					min = distancesError[i];
+				if (distancesError[i] > max)
+					max = distancesError[i];
 			}
+			mean = mean / 16.0;
 			std::cout << std::endl;
+			errorFile << "\n";
+			for (size_t i = 0; i < 16; ++i) {
+				stddev += pow(distancesError[i] - mean, 2);
+			}
+			errorFile << "Mean : " << mean << "\n";
+			errorFile << "Min : " << min << "\n";
+			errorFile << "Max : " << max << "\n";
+			errorFile << "StdDev : " << stddev << "\n";
 			// Angles
 			double anglesErrors[3]; // Voir si j'en fais plus ?
 			double realAngles[3] = { 90.0, 90.0, 43.313 };
@@ -787,6 +768,8 @@ int main()
 			anglesErrors[2] = vtkMath::DegreesFromRadians(vtkMath::AngleBetweenVectors(vectors[3].GetData(), vectors[2].GetData())) - realAngles[2];
 
 			std::cout << anglesErrors[0] << " " << anglesErrors[1] << " " << anglesErrors[2] << std::endl;
+			errorFile << anglesErrors[0] << " " << anglesErrors[1] << " " << anglesErrors[2] << "\n";
+			errorFile.close();
 
 			vtkNew<vtkCylinder> cylinder;
 			cylinder->SetCenter(-20.0, 0.0, 0.0);
@@ -856,8 +839,9 @@ int main()
 				surfaceExtract->SetRadius(radius * .99);
 				surfaceExtract->Update();
 				targetPolyData->DeepCopy(surfaceExtract->GetOutput());
-				stlFilename = "./Output/" + initialMHDFilename + "ExtractSurface.stl";
-				compareFileName = "./Output/" + initialMHDFilename + "CompExtractSurface.vtk";
+				stlFilename = "./Output/ExtractSurface/" + initialMHDFilename + ".stl";
+				compareFileName = "./Output/ExtractSurface/" + initialMHDFilename + "Comp.vtk";
+				errorFilename = "./Output/ExtractSurface/" + initialMHDFilename + "Errors.txt";
 				stlWriter->SetFileName(stlFilename.c_str());
 				stlWriter->SetInputConnection(surfaceExtract->GetOutputPort());
 				stlWriter->Write();
@@ -869,8 +853,9 @@ int main()
 				surfacePois->SetInputConnection(normals->GetOutputPort());
 				surfacePois->Update();
 				targetPolyData->DeepCopy(surfacePois->GetOutput());
-				stlFilename = "./Output/" + initialMHDFilename + "Poisson.stl";
-				compareFileName = "./Output/" + initialMHDFilename + "CompPoisson.vtk";
+				stlFilename = "./Output/Poisson/" + initialMHDFilename + ".stl";
+				compareFileName = "./Output/Poisson/" + initialMHDFilename + "Comp.vtk";
+				errorFilename = "./Output/Poisson/" + initialMHDFilename + "Errors.txt";
 				stlWriter->SetFileName(stlFilename.c_str());
 				stlWriter->SetInputConnection(surfacePois->GetOutputPort());
 				stlWriter->Write();
@@ -879,8 +864,9 @@ int main()
 			case PowerCrust: {
 				vtkSmartPointer<vtkPowerCrustSurfaceReconstruction> surfacePowerCrust = vtkSmartPointer<vtkPowerCrustSurfaceReconstruction>::New();
 				surfacePowerCrust->SetInputData(polyData);
-				stlFilename = "./Output/" + initialMHDFilename + "PowerCrust.stl";
-				compareFileName = "./Output/" + initialMHDFilename + "CompPowerCrust.vtk";
+				stlFilename = "./Output/PowerCrust/" + initialMHDFilename + "PowerCrust.stl";
+				compareFileName = "./Output/PowerCrust/" + initialMHDFilename + "CompPowerCrust.vtk";
+				errorFilename = "./Output/PowerCrust/" + initialMHDFilename + "Errors.txt";
 				surfacePowerCrust->Update();
 				targetPolyData->DeepCopy(surfacePowerCrust->GetOutput());
 				stlWriter->SetFileName(stlFilename.c_str());
@@ -907,8 +893,9 @@ int main()
 				surface->ReverseNormalsOn();
 				surface->Update();
 				targetPolyData->DeepCopy(surface->GetOutput());
-				stlFilename = "./Output/" + initialMHDFilename + "SurfaceExtractFilter.stl";
-				compareFileName = "./Output/" + initialMHDFilename + "CompSurfaceExtractFilter.vtk";
+				stlFilename = "./Output/SurfReconst/" + initialMHDFilename + "SurfaceExtractFilter.stl";
+				compareFileName = "./Output/SurfReconst/" + initialMHDFilename + "CompSurfaceExtractFilter.vtk";
+				errorFilename = "./Output/SurfReconst/" + initialMHDFilename + "Errors.txt";
 				stlWriter->SetFileName(stlFilename.c_str());
 				stlWriter->SetInputConnection(surface->GetOutputPort());
 				stlWriter->Write();
@@ -942,10 +929,16 @@ int main()
 
 	if (computePointError) {
 		// Length of edges
+		std::ofstream errorFile;
+		errorFile.open(errorFilename);
 		vtkNew<vtkStaticPointLocator> pointLocator;
 		vtkPolyData* polyData = targetPolyData;
 		pointLocator->SetDataSet(polyData);
 		pointLocator->BuildLocator();
+		double mean = 0;
+		double min = 5000;
+		double max = 0;
+		double stddev = 0;
 
 		// Hardcoded array because flemme
 		double point1Coord[16][3] = { {-20.0, 20.0, 20.0},{-20.0, 20.0, 20.0},{-20.0, 20.0, 20.0},
@@ -977,8 +970,23 @@ int main()
 				distancesError[i] = abs(distance - 41.2309);
 			}
 			std::cout << distancesError[i] << " ";
+			errorFile << distancesError[i] << " ";
+			mean += distancesError[i];
+			if (distancesError[i] < min)
+				min = distancesError[i];
+			if (distancesError[i] > max)
+				max = distancesError[i];
 		}
+		mean = mean / 16.0;
 		std::cout << std::endl;
+		errorFile << "\n";
+		for (size_t i = 0; i < 16; ++i) {
+			stddev += pow(distancesError[i] - mean, 2);
+		}
+		errorFile << "Mean : " << mean << "\n";
+		errorFile << "Min : " << min << "\n";
+		errorFile << "Max : " << max << "\n";
+		errorFile << "StdDev : " << stddev << "\n";
 		// Angles
 		double anglesErrors[3]; // Voir si j'en fais plus ?
 		double realAngles[3] = { 90.0, 90.0, 43.313 };
@@ -1006,6 +1014,7 @@ int main()
 			anglesErrors[2] = vtkMath::DegreesFromRadians(vtkMath::AngleBetweenVectors(vectors[3].GetData(), vectors[2].GetData())) - realAngles[2];
 
 		std::cout << anglesErrors[0] << " " << anglesErrors[1] << " " << anglesErrors[2] << std::endl;
+		errorFile << anglesErrors[0] << " " << anglesErrors[1] << " " << anglesErrors[2] << "\n";
 		vtkNew<vtkCylinder> cylinder;
 		cylinder->SetCenter(-20.0, 0.0, 0.0);
 		cylinder->SetRadius(10.15);
