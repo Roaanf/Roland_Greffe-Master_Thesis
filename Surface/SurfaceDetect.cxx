@@ -124,14 +124,14 @@ int main()
 	bool writeGradient = false;
 	bool boolPadding = false;
 	bool cropImage = false;
-	bool subVoxRef = true;
+	bool subVoxRef = false;
 	bool gradMagWrite = false;
 	bool smoothing = true;
 	bool writeOtsu = false;
 	bool computePointError = true;
 	bool cropPossibleGradientSearchSpace = true;
 	enum recoAlgoEnum { ExtractSurface, Poisson, PowerCrust, SurfReconst, SurfaceNets, FlyingEdges};
-	recoAlgoEnum reco = SurfaceNets;
+	recoAlgoEnum reco = FlyingEdges;
     std::string initialMHDFilename = "rekoRolandCropped";
 
 	if (initialMHDFilename == "Reference")
@@ -401,14 +401,8 @@ int main()
 			vtkNew<vtkSurfaceNets3D> surfaceNets;
 			surfaceNets->SetInputData(ITKToVTkConverter->GetOutput());
 			surfaceNets->SetValue(0, 255);
-			if (/*subVoxRef && smoothing*/ false) {
-				surfaceNets->SmoothingOff();
-			}
-			else {
-				surfaceNets->SmoothingOn();
-			}
+			surfaceNets->SmoothingOff();
 			//surfaceNets->SetOutputMeshTypeToTriangles();
-			surfaceNets->SetNumberOfIterations(1);
 			surfaceNets->Update();
 			polyDataNotRotated = surfaceNets->GetOutput();
 			stlFilename = "./Output/SurfaceNets/" + initialMHDFilename + ".stl";
@@ -444,6 +438,21 @@ int main()
 			stlWriter->Write();
 			targetPolyData->DeepCopy(imageDataCorrect->GetOutput());
 		}
+
+		// Smoothing the output (kindatest)
+		if (smoothing) { // Makes no sense to smooth without subvox refinment
+			vtkSmartPointer<vtkWindowedSincPolyDataFilter> smooth = vtkSmartPointer<vtkWindowedSincPolyDataFilter>::New();
+			smooth->SetInputData(imageDataCorrect->GetOutput());
+			smooth->SetPassBand(0.01);
+			smooth->BoundarySmoothingOff();
+			smooth->SetNumberOfIterations(20);
+			smooth->FeatureEdgeSmoothingOff();
+			smooth->NonManifoldSmoothingOn();
+			smooth->NormalizeCoordinatesOn();
+			smooth->Update();
+			targetPolyData->DeepCopy(smooth->GetOutput());
+		}
+
 		// Smoothing / BetterPrecision ?
 		// Compute the Gradient Vector image
 		if (subVoxRef) {
@@ -554,19 +563,7 @@ int main()
 			imageDataCorrect->Update();
 			targetPolyData->DeepCopy(imageDataCorrect->GetOutput());
 		}
-		// Smoothing the output (kindatest)
-		if (smoothing && subVoxRef) { // Makes no sense to smooth without subvox refinment
-			vtkSmartPointer<vtkWindowedSincPolyDataFilter> smooth = vtkSmartPointer<vtkWindowedSincPolyDataFilter>::New();
-			smooth->SetInputData(imageDataCorrect->GetOutput());
-			smooth->SetPassBand(0.1);
-			smooth->BoundarySmoothingOff();
-			smooth->FeatureEdgeSmoothingOff();
-			smooth->NonManifoldSmoothingOn();
-			smooth->NormalizeCoordinatesOn();
-			smooth->Update();
-			targetPolyData->DeepCopy(smooth->GetOutput());
-			
-		}
+		
 
 		stlWriter->SetFileName(stlFilename.c_str());
 		stlWriter->SetInputData(targetPolyData);
