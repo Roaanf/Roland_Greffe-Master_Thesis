@@ -179,7 +179,6 @@ bool GsDeviceManager::initialize()
 
 	// Architecture(s) report
 	std::cout << "\nThe GigaVoxels-GigaSpace Engine requires devices with at least compute capability " << GV_REQUIRED_COMPUTE_CAPABILITY_MAJOR << "." << GV_REQUIRED_COMPUTE_CAPABILITY_MINOR << std::endl;
-	std::cout << "\nCounter Strike 2 <3" << std::endl;
 	for ( int i = 0; i < getNbDevices(); i++ )
 	{
 		getDevice( i )->printInfo();
