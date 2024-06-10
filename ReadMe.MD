@@ -11,6 +11,7 @@ It was tested for CUDA 11.2 and Visual Studio 2019.
 - Development : Contains the source code of the GigaVoxel software
 - External : Contains binaries of external libraries used by the library
 - Install : Contains the installation scripts used to setup the compiling
+Note: The "SurfaceComp", "SurfaceCreation" and "SurfaceDetection" folders are older version of the Surface Extraction part of the thesis that are only kept for history.
 
 ## Original README.txt
 
