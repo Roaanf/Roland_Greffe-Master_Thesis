@@ -317,6 +317,7 @@ void GsCacheElementManager< TId, ElementRes, AddressType, PageTableArrayType, Pa
 	GvCore::Array3D< uint > tmpelemaddress( make_uint3( _elemsCacheSize.x * _elemsCacheSize.y * _elemsCacheSize.z, 1, 1 ) );
 	uint3 pos;
 	uint index = 0;
+	uint packedAddr;
 	for ( pos.z = 0; pos.z < _elemsCacheSize.z; pos.z++ )
 	for ( pos.y = 0; pos.y < _elemsCacheSize.y; pos.y++ )
 	for ( pos.x = 0; pos.x < _elemsCacheSize.x; pos.x++ )

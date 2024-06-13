@@ -401,20 +401,14 @@ Data/3DModels/
 Data/Voxels/
 Data/SkyBox/
 Data/Terrain/
+External/Windows/x64/cudpp/lib/cudpp64d.dll
 Distributions/
-#External/
-#Install/
 Release/
 Release - Copie/
 Generated_VC12_x64/
 Generated_VC16_x64/
 Generated_VC19_x64/
 Generated_VC22_x64/
-External/Windows/x64/cudpp/lib/cudpp64.dll
-External/Windows/x64/cudpp/lib/cudpp64d.dll
-Generated_VC16_x64/Tutorials/ViewerPlugins/GvRAWDataLoader/GvRAWDataLoader.vcxproj
-Generated_VC16_x64/Tutorials/ViewerPlugins/GvRAWDataLoader/CMakeFiles/GvRAWDataLoader.dir/Src/GvRAWDataLoader_generated_SampleCore.cu.obj.depend
-Generated_VC16_x64/Tutorials/ViewerPlugins/CMakeCache.txt
 SurfaceCreation/build/
 SurfaceDetection/build/
 SurfaceComp/build/

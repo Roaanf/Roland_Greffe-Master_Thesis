@@ -32,13 +32,6 @@ xcopy /c /y /d "%GS_DATA%\Settings\GigaSpace.xml" "%GV_RELEASE%\Bin\Settings"
 xcopy /c /y /d "%GS_DATA%\Settings\GsViewer.xml" "%GV_RELEASE%\Bin\Settings"
 
 rem **************************************************************************
-rem Scripts
-rem **************************************************************************
-
-xcopy /y /c /d "Tools\launchViewerDebug.bat" "%GV_RELEASE%\Bin"
-xcopy /y /c /d "Tools\launchViewerRelease.bat" "%GV_RELEASE%\Bin"
-
-rem **************************************************************************
 rem cudpp
 rem **************************************************************************
 
@@ -74,8 +67,8 @@ rem xcopy /y /c /d "%GV_EXTERNAL%\assimp\bin\Assimp32.dll" "%GV_RELEASE%\Bin"
 rem xcopy /y /c /d "%GV_EXTERNAL%\assimp\bin\Assimp32d.dll" "%GV_RELEASE%\Bin"
 rem xcopy /y /c /d "%GV_EXTERNAL%\assimp\bin\Assimp64.dll" "%GV_RELEASE%\Bin" 
 rem xcopy /y /c /d "%GV_EXTERNAL%\assimp\bin\Assimp64d.dll" "%GV_RELEASE%\Bin" 
-xcopy /y /c /d "%GV_EXTERNAL%\assimp\bin\assimp.dll" "%GV_RELEASE%\Bin" 
-xcopy /y /c /d "%GV_EXTERNAL%\assimp\bin\assimpd.dll" "%GV_RELEASE%\Bin" 
+rem xcopy /y /c /d "%GV_EXTERNAL%\assimp\bin\assimp.dll" "%GV_RELEASE%\Bin" 
+rem xcopy /y /c /d "%GV_EXTERNAL%\assimp\bin\assimpd.dll" "%GV_RELEASE%\Bin" 
 
 rem **************************************************************************
 rem QGLViewer
