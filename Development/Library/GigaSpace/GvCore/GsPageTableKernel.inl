@@ -280,7 +280,7 @@ __forceinline__ void PageTableBricksKernel< NodeTileRes, ChildAddressType, Child
 ::setPointerImpl( uint elemAddress, ElemAddressType elemPointer, uint3 res,uint flags )
 {
 	// XXX: Should be removed
-	ElemAddressType brickPointer = elemPointer; // Warning: fixed border size !	faut surement l'enlever je crois
+	ElemAddressType brickPointer = elemPointer; // Warning: fixed border size !	
 
 	PackedChildAddressType packedChildAddress	= childArray.get( elemAddress );
 	ElemPackedAddressType packedBrickAddress	= DataAddressType::packAddress( brickPointer / res );

@@ -139,7 +139,7 @@ void GsQualityRendererCUDA< TVolumeTreeType, TVolumeTreeCacheType, TSampleShader
 	cudaDeviceProp deviceProps;
 	cudaGetDeviceProperties( &deviceProps, gpuGetMaxGflopsDeviceId() );	// TO DO : handle the case where user could want an other device
 	// LOG
-	std::cout << "FEUR OU QUOI HAHAHAHA" << std::endl;
+	std::cout << "\nQuality Renderer" << std::endl;
 	std::cout << "\nDevice properties" << std::endl;
 	std::cout << "- name : " << deviceProps.name << std::endl;
 	std::cout << "- compute capability : "<< deviceProps.major << "." << deviceProps.minor << std::endl;

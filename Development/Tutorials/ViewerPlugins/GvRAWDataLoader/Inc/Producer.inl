@@ -175,8 +175,6 @@ void Producer< TDataStructureType, TDataProductionManager >
 	_dataLoader = srcProducer;
 }
 
-// TODO : These are unused should clean
-
 template<typename TDataStructureType, typename TDataProductionManager>
 inline void Producer<TDataStructureType, TDataProductionManager>::setLowThreshold(float low)
 {
